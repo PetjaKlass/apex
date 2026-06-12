@@ -137,8 +137,11 @@
       "noAccount": "No account yet?",
       "hasAccount": "Already have an account?",
       "forgot": "Forgot password?",
-      "comingSoon": "Authentication goes live in Phase 08 — this page is the prepared shell.",
-      "legalHint": "By continuing you accept our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+      "comingSoon": "Connected to Supabase — sessions on this site are isolated until Phase 13 deployment (ADR 0013).",
+      "legalHint": "By continuing you accept our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>.",
+      "successSignIn": "Signed in. The app handoff goes live with deployment (Phase 13).",
+      "successConfirm": "Check your inbox to confirm your email.",
+      "successReset": "If the address exists, a reset link is on its way."
     },
     "legal": {
       "imprint": "Imprint",
@@ -158,5 +161,22 @@
       "tagline": "The Life Operating System.",
       "language": "Language"
     }
+  },
+  "auth": {
+    "signInTitle": "Welcome back.",
+    "signUpTitle": "Create your account.",
+    "resetTitle": "Reset password",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "signOut": "Sign out",
+    "reset": "Send reset link",
+    "forgot": "Forgot password?",
+    "hasAccount": "Already have an account? Sign in",
+    "welcomeBack": "Welcome back.",
+    "confirmationSent": "Check your inbox — confirm your email to continue.",
+    "resetSent": "If the address exists, a reset link is on its way."
   }
 }

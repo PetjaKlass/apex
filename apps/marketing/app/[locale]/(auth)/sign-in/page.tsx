@@ -3,7 +3,8 @@ import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { use } from 'react';
 import { Link } from '@/i18n/navigation';
-import { AuthShell, Field, SubmitButton } from '../auth-shell';
+import { AuthForm } from '@/components/auth-form';
+import { AuthShell } from '../auth-shell';
 
 export const metadata: Metadata = { title: 'Apex — Sign in' };
 
@@ -23,16 +24,12 @@ export default function SignInPage({ params }: { params: Promise<{ locale: strin
         </>
       }
     >
-      <form className="space-y-4">
-        <Field label={t('email')} type="email" autoComplete="email" />
-        <Field label={t('password')} type="password" autoComplete="current-password" />
-        <SubmitButton label={t('signIn')} />
-        <p className="text-center">
-          <Link href="/reset-password" className="text-fg-3 hover:text-fg-1 text-xs">
-            {t('forgot')}
-          </Link>
-        </p>
-      </form>
+      <AuthForm mode="sign-in" />
+      <p className="mt-4 text-center">
+        <Link href="/reset-password" className="text-fg-3 hover:text-fg-1 text-xs">
+          {t('forgot')}
+        </Link>
+      </p>
     </AuthShell>
   );
 }

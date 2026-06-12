@@ -137,8 +137,11 @@
       "noAccount": "Noch kein Konto?",
       "hasAccount": "Schon ein Konto?",
       "forgot": "Passwort vergessen?",
-      "comingSoon": "Die Anmeldung geht in Phase 08 live — diese Seite ist die vorbereitete Hülle.",
-      "legalHint": "Mit dem Fortfahren akzeptierst du unsere <terms>AGB</terms> und <privacy>Datenschutzerklärung</privacy>."
+      "comingSoon": "Mit Supabase verbunden — Sessions auf dieser Seite bleiben bis zum Phase-13-Deployment isoliert (ADR 0013).",
+      "legalHint": "Mit dem Fortfahren akzeptierst du unsere <terms>AGB</terms> und <privacy>Datenschutzerklärung</privacy>.",
+      "successSignIn": "Angemeldet. Der App-Handoff geht mit dem Deployment live (Phase 13).",
+      "successConfirm": "Prüfe dein Postfach und bestätige deine E-Mail.",
+      "successReset": "Falls die Adresse existiert, ist ein Reset-Link unterwegs."
     },
     "legal": {
       "imprint": "Impressum",
@@ -158,5 +161,22 @@
       "tagline": "Das Life Operating System.",
       "language": "Sprache"
     }
+  },
+  "auth": {
+    "signInTitle": "Willkommen zurück.",
+    "signUpTitle": "Konto erstellen.",
+    "resetTitle": "Passwort zurücksetzen",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "passwordHint": "Mindestens 8 Zeichen.",
+    "signIn": "Anmelden",
+    "signUp": "Konto erstellen",
+    "signOut": "Abmelden",
+    "reset": "Reset-Link senden",
+    "forgot": "Passwort vergessen?",
+    "hasAccount": "Schon ein Konto? Anmelden",
+    "welcomeBack": "Willkommen zurück.",
+    "confirmationSent": "Prüfe dein Postfach — bestätige deine E-Mail, um fortzufahren.",
+    "resetSent": "Falls die Adresse existiert, ist ein Reset-Link unterwegs."
   }
 }

@@ -11,7 +11,7 @@ build/
 out/
 
 # Environment & Secrets
-.env
+.env.local
 .env.local
 .env*.local
 **/github-token.txt
