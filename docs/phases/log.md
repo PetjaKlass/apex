@@ -356,3 +356,11 @@
 - **Lektion (in CLAUDE.md verankert):** Prettier-Umformatierung ließ einen JSX-Patch STILL fehlschlagen (Marker mehrzeilig geworden; Folge: Import/State da, JSX fehlte, 24 Unused-Warnings + unveränderte Export-Größe als Symptome). Neue Regel: vor jedem Patch Datei lesen + assert auf Marker.
 - **Deps:** expo-linear-gradient@~56.0.4 (bundled-Version), @apex/design-tokens als ui-Dependency (Bridge-Defaults)
 - **Verifiziert:** typecheck 5/5 ✓ · lint 0 Warnings ✓ · ui-Test ✓ · expo export /dev/components 54KB mit allen neuen Sektionen ✓
+
+## Phase 06 — Foundation Components 3: Feedback & Layout (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** Modal (dialog/sheet/drawer auf Pop-Ebene: panelStrong + Web-Blur/nativ opak per Blur-Budget, r32, shadow-pop; Sheet mit Grabber + Swipe-down via PanResponder; ESC + Backdrop außer blocking; Eintritt 250ms spring scale/translate, KEINE Modal-Stacks) · ToastProvider/useToast (5 Typen, max 5, Prioritäten error>warning>xp>info, Auto-Dismiss 3/5/4/3/3s, Hover-Pause mit ECHTER Restzeit, persistent-Errors, XP-Count-up 500ms mono+tnum, setSuppressed()-Puffer-API für Focus-Mode §16 mit 200ms-Stagger-Flush) · Tooltip (web-only, 600ms Delay, Intent-Continuity <200ms via Modul-Timestamp, nativ = Passthrough) · ProgressBar (5px Gradient…aktuell flat accent, indeterminate 30%-Segment 1.4s, web width-Transition als dokumentierte §8-Ausnahme) + ProgressRing (SVG, 12-Uhr, round caps, Center-Wert mono) · Skeleton-Compound (Container/Avatar/Text/Card; EIN Shimmer pro Seite via SkeletonProvider-shared Animated.Value + LinearGradient-Sweep; reduced-motion → statisch via AccessibilityInfo)
+- **Wiring:** _layout: UiColors → SkeletonProvider → ToastProvider; Demo um „Toast + Modal" und „Progress + Skeleton" erweitert (persistenter Error, +25-XP-Count-up, 3 Modal-Varianten, Tooltip-Hinweis, Skeleton-Toggle)
+- **Bewusste Vereinfachungen (Polish-Backlog):** Web-Fokus-Trap im Modal minimal (ESC+aria; voller Tab-Zyklus später) · Bar-Fill flat statt Verlauf (LinearGradient-in-Klassen folgt) · echter Native-Blur (expo-blur) bewusst nicht eingeführt — panelStrong opak ist der designierte Fallback
+- **Verifiziert:** typecheck 5/5 ✓ · lint clean ✓ · expo export /dev/components 61KB mit „Toast + Modal"/„Error (persistent)"/„Quartalsziel" ✓ — Foundation-Komponenten (15/15) KOMPLETT

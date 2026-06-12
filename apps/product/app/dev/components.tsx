@@ -17,6 +17,12 @@ import {
   Tag,
   Textarea,
   Toggle,
+  Modal,
+  ProgressBar,
+  ProgressRing,
+  Skeleton,
+  Tooltip,
+  useToast,
 } from '@apex/ui';
 import { useTheme } from '@/lib/theme';
 
@@ -33,6 +39,9 @@ export default function ComponentsTestScreen() {
   const [prio, setPrio] = useState<string | null>('med');
   const [notes, setNotes] = useState('');
   const [area, setArea] = useState<string | null>(null);
+  const toast = useToast();
+  const [modal, setModal] = useState<null | 'dialog' | 'sheet' | 'drawer'>(null);
+  const [showSkeleton, setShowSkeleton] = useState(false);
   const someChecked = Object.values(checks).some(Boolean);
   const allChecked = Object.values(checks).every(Boolean);
 
@@ -297,6 +306,114 @@ export default function ComponentsTestScreen() {
             <Count count={2} variant="unseen-dot" />
           </View>
         </Card>
+
+        <Card header="Toast + Modal" hint="Phase 06">
+          <View className="flex-row flex-wrap gap-3">
+            <Button
+              variant="secondary"
+              onPress={() => toast.show({ type: 'success', message: 'Gespeichert.' })}
+            >
+              Success
+            </Button>
+            <Button
+              variant="secondary"
+              onPress={() =>
+                toast.show({
+                  type: 'error',
+                  message: 'Konnte nicht speichern.',
+                  sub: 'persistent: bleibt bis zum Schließen',
+                  persistent: true,
+                })
+              }
+            >
+              Error (persistent)
+            </Button>
+            <Button
+              variant="primary"
+              onPress={() => toast.show({ type: 'xp', xp: 25, message: 'Aufgabe abgeschlossen' })}
+            >
+              +25 XP
+            </Button>
+          </View>
+          <View className="border-border mt-4 flex-row flex-wrap gap-3 border-t pt-4">
+            <Button variant="secondary" onPress={() => setModal('dialog')}>
+              Dialog
+            </Button>
+            <Button variant="secondary" onPress={() => setModal('sheet')}>
+              Sheet
+            </Button>
+            <Button variant="secondary" onPress={() => setModal('drawer')}>
+              Drawer
+            </Button>
+            <Tooltip label="Tooltips nur auf Web-Hover/Fokus — nie Touch (§20).">
+              <Button variant="ghost" onPress={() => {}}>
+                Hover mich (Web)
+              </Button>
+            </Tooltip>
+          </View>
+        </Card>
+
+        <Card header="Progress + Skeleton">
+          <View className="gap-4">
+            <ProgressBar value={68} showValue label="Quartalsziel" />
+            <ProgressBar indeterminate label="Lädt" />
+            <View className="flex-row items-center gap-6">
+              <ProgressRing value={72} label="Level-Fortschritt" />
+              <ProgressRing value={31} size={48} strokeWidth={5} showValue={false} label="Klein" />
+              <Button variant="ghost" onPress={() => setShowSkeleton((v) => !v)}>
+                {`Skeleton ${showSkeleton ? 'aus' : 'an'}`}
+              </Button>
+            </View>
+            {showSkeleton && (
+              <View className="gap-3">
+                <Skeleton.Container>
+                  <Skeleton.Avatar size={32} />
+                  <Skeleton.Text lines={2} width="60%" />
+                </Skeleton.Container>
+                <Skeleton.Card height={72} />
+              </View>
+            )}
+          </View>
+        </Card>
+
+        <Modal
+          visible={modal !== null}
+          variant={modal ?? 'dialog'}
+          title={
+            modal === 'drawer'
+              ? 'Einstellungen'
+              : modal === 'sheet'
+                ? 'Schnellaktion'
+                : 'Aufgabe löschen?'
+          }
+          onClose={() => setModal(null)}
+          footer={
+            modal === 'dialog' ? (
+              <View className="flex-row justify-end gap-3">
+                <Button variant="ghost" onPress={() => setModal(null)}>
+                  Abbrechen
+                </Button>
+                <Button
+                  variant="primary"
+                  onPress={() => {
+                    setModal(null);
+                    toast.show({ type: 'info', message: 'Nur eine Demo.' });
+                  }}
+                >
+                  Löschen
+                </Button>
+              </View>
+            ) : undefined
+          }
+        >
+          <Text className="text-fg-2 text-sm">
+            {modal === 'sheet'
+              ? 'Bottom-Sheet mit Grabber — nach unten wischen schließt (nativ).'
+              : modal === 'drawer'
+                ? 'Drawer von rechts, 400px — für Settings-Panels.'
+                : 'Diese Aufgabe wird endgültig gelöscht. (Pop-Ebene: panelStrong, r32, ESC/Backdrop schließt.)'}
+          </Text>
+        </Modal>
 
         <Pressable
           onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
