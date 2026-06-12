@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+.next/
+.expo/
+.turbo/
+dist/
+build/
+out/
+
+# Environment & Secrets
+.env
+.env.local
+.env*.local
+**/github-token.txt
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Native (von EAS prebuild generiert)
+ios/
+android/
+*.keystore
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+.cache/
+*.pem
+.vercel/
+
+# Expo
+.expo-shared/
+expo-env.d.ts

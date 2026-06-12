@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark" data-accent="gold">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Apex — Design Preview</title>
+<!-- Typografie gemäß design-system.md: Cabinet Grotesk (Display) · Inter (UI) · JetBrains Mono (Zahlen) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   APEX DESIGN TOKENS — 1:1 aus design-system.md
+   ================================================================ */
+:root{
+  /* Spacing (8px-Grid) */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px;
+  --s-8:32px; --s-10:40px; --s-12:48px; --s-16:64px;
+  /* Radius */
+  --r-xs:4px; --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:24px; --r-full:9999px;
+  /* Typografie */
+  --f-display:'Cabinet Grotesk','Space Grotesk',system-ui,sans-serif;
+  --f-ui:'Inter',system-ui,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,monospace;
+  /* Layout */
+  --sidebar-w:clamp(220px,17vw,260px); --sidebar-collapsed:64px;
+  --topbar-h:56px; --tabbar-h:64px;
+  /* Motion */
+  --ease-spring:cubic-bezier(0.16,1,0.3,1);
+  --ease-springy:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-out:cubic-bezier(0.4,0,0.2,1);
+  --d-fast:150ms; --d-base:250ms; --d-slow:400ms;
+  /* Status (universell, themen-unabhängig) */
+  --success:#3A7D58; --warning:#B87A22; --danger:#A84444; --info:#4A7FA5; --onhold:#6B6B7B;
+  /* Z-Index */
+  --z-sticky:100; --z-overlay:300; --z-modal:400; --z-toast:500;
+}
+/* ---------- Akzente (5 Presets) ---------- */
+[data-accent="gold"]    {--accent:#C9993A; --accent-bright:#E8B84B;}
+[data-accent="silver"]  {--accent:#8B9AAB; --accent-bright:#A8B8C8;}
+[data-accent="rose"]    {--accent:#C4707A; --accent-bright:#E08890;}
+[data-accent="sapphire"]{--accent:#4A7FA5; --accent-bright:#6099C0;}
+[data-accent="emerald"] {--accent:#3A7D58; --accent-bright:#50A070;}
+:root{
+  --accent-dim:color-mix(in srgb,var(--accent) 14%,transparent);
+  --accent-glow:color-mix(in srgb,var(--accent) 7%,transparent);
+  --accent-border:color-mix(in srgb,var(--accent) 28%,transparent);
+}
+/* ---------- Dark Theme (Default): warme Schwarztöne ---------- */
+[data-theme="dark"]{
+  --bg-base:#080706; --bg-raised:#0F0E0C; --bg-overlay:#181612;
+  --bg-subtle:#1E1C18; --bg-hover:#252219; --bg-pressed:#2C291F;
+  --border:rgba(255,251,240,.07); --border-strong:rgba(255,251,240,.12); --border-focus:rgba(255,251,240,.20);
+  --text-1:rgba(255,251,240,.92); --text-2:rgba(255,251,240,.52);
+  --text-3:rgba(255,251,240,.28); --text-disabled:rgba(255,251,240,.14);
+  --text-inverse:rgba(10,8,6,.92);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.5);
+  --shadow:0 4px 16px rgba(0,0,0,.6),0 1px 3px rgba(0,0,0,.4);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.7),0 4px 12px rgba(0,0,0,.5);
+  --status-dim:12%;
+  color-scheme:dark;
+}
+/* ---------- Light Theme: warmes Off-White ---------- */
+[data-theme="light"]{
+  --bg-base:#F5F3EE; --bg-raised:#FFFFFF; --bg-overlay:#F0EDE6;
+  --bg-subtle:#E8E4DB; --bg-hover:#DDD9CF; --bg-pressed:#D2CDC2;
+  --border:rgba(0,0,0,.08); --border-strong:rgba(0,0,0,.14); --border-focus:rgba(0,0,0,.24);
+  --text-1:rgba(10,8,6,.92); --text-2:rgba(10,8,6,.56);
+  --text-3:rgba(10,8,6,.36); --text-disabled:rgba(10,8,6,.20);
+  --text-inverse:rgba(255,251,240,.95);
+  --shadow-sm:0 1px 2px rgba(20,15,5,.08);
+  --shadow:0 4px 16px rgba(20,15,5,.10),0 1px 3px rgba(20,15,5,.06);
+  --shadow-lg:0 16px 48px rgba(20,15,5,.14),0 4px 12px rgba(20,15,5,.08);
+  color-scheme:light;
+}
+
+/* ================================================================
+   BASIS
+   ================================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--f-ui); font-size:15px; line-height:1.5;
+  background:var(--bg-base); color:var(--text-1);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition:background-color var(--d-base) var(--ease-out),color var(--d-base) var(--ease-out);
+}
+::selection{background:var(--accent-dim)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent-bright);outline-offset:2px;border-radius:var(--r-xs)}
+svg{flex:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms!important;transition-duration:1ms!important}
+}
+
+/* ================================================================
+   APP SHELL
+   ================================================================ */
+.app{display:flex;height:100dvh;overflow:hidden}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width:var(--sidebar-w);flex:none;display:flex;flex-direction:column;
+  border-right:1px solid var(--border);background:var(--bg-base);
+  padding:var(--s-4) var(--s-3);gap:var(--s-1);
+  transition:width var(--d-base) var(--ease-spring),opacity var(--d-base) var(--ease-out);
+}
+.brand{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) var(--s-3) var(--s-5)}
+.brand-mark{width:28px;height:28px;border-radius:var(--r-sm);background:var(--accent-dim);
+  display:grid;place-items:center;color:var(--accent-bright)}
+.brand-name{font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:-.01em}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;
+  color:var(--text-3);padding:var(--s-4) var(--s-3) var(--s-2)}
+.nav-item{
+  display:flex;align-items:center;gap:var(--s-3);width:100%;
+  padding:var(--s-2) var(--s-3);border-radius:var(--r-sm);
+  font-size:13px;font-weight:500;letter-spacing:-.01em;color:var(--text-2);
+  transition:background-color var(--d-fast) var(--ease-out),color var(--d-fast) var(--ease-out);
+}
+.nav-item:hover{background:var(--bg-hover);color:var(--text-1)}
+.nav-item[aria-current="page"]{background:var(--accent-dim);color:var(--accent-bright)}
+.nav-item .badge-count{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+.sidebar-footer{margin-top:auto;border-top:1px solid var(--border);padding-top:var(--s-3)}
+.workspace-pill{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) var(--s-3);
+  border-radius:var(--r-sm);width:100%;transition:background-color var(--d-fast) var(--ease-out)}
+.workspace-pill:hover{background:var(--bg-hover)}
+.ws-avatar{width:26px;height:26px;border-radius:var(--r-sm);background:var(--bg-subtle);
+  display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--text-2)}
+.ws-meta{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
+.ws-name{font-size:13px;font-weight:500}
+.ws-plan{font-size:11px;color:var(--text-3)}
+
+/* ---------- Main / Topbar ---------- */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{
+  height:var(--topbar-h);flex:none;display:flex;align-items:center;gap:var(--s-3);
+  padding:0 var(--s-6);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:var(--z-sticky);background:color-mix(in srgb,var(--bg-base) 92%,transparent);
+  backdrop-filter:blur(12px);
+}
+.topbar-title{font-size:13px;font-weight:500;color:var(--text-2)}
+.search{
+  display:flex;align-items:center;gap:var(--s-2);margin-left:auto;
+  background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:6px var(--s-3);font-size:13px;color:var(--text-3);min-width:180px;
+  transition:border-color var(--d-fast) var(--ease-out);
+}
+.search:hover{border-color:var(--border-strong)}
+.search kbd{margin-left:auto;font-family:var(--f-mono);font-size:10px;border:1px solid var(--border-strong);
+  border-radius:var(--r-xs);padding:1px 5px;color:var(--text-3)}
+.icon-btn{width:32px;height:32px;display:grid;place-items:center;border-radius:var(--r-sm);
+  color:var(--text-2);transition:background-color var(--d-fast) var(--ease-out),color var(--d-fast) var(--ease-out)}
+.icon-btn:hover{background:var(--bg-hover);color:var(--text-1)}
+.accent-dots{display:flex;gap:6px;align-items:center;padding:0 var(--s-2)}
+.accent-dot{width:14px;height:14px;border-radius:var(--r-full);border:1px solid var(--border-strong);
+  transition:transform var(--d-fast) var(--ease-springy),box-shadow var(--d-fast) var(--ease-out)}
+.accent-dot:hover{transform:scale(1.2)}
+.accent-dot[aria-pressed="true"]{box-shadow:0 0 0 2px var(--bg-base),0 0 0 4px var(--accent)}
+.avatar{width:30px;height:30px;border-radius:var(--r-full);background:var(--accent-dim);
+  color:var(--accent-bright);display:grid;place-items:center;font-size:11px;font-weight:600}
+
+/* ---------- Page ---------- */
+.page{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bg-pressed) transparent}
+.page-inner{max-width:1240px;margin:0 auto;padding:var(--s-8) var(--s-6) var(--s-16)}
+.view{display:none}
+.view.active{display:block;animation:viewIn var(--d-base) var(--ease-spring)}
+@keyframes viewIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ================================================================
+   KOMPONENTEN
+   ================================================================ */
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-3)}
+.page-h1{font-family:var(--f-display);font-size:32px;font-weight:700;letter-spacing:-.02em;margin:var(--s-2) 0 var(--s-1)}
+.page-sub{color:var(--text-2);font-size:15px}
+.section-h{font-family:var(--f-display);font-size:18px;font-weight:600;letter-spacing:-.01em;
+  display:flex;align-items:baseline;gap:var(--s-3);margin:0 0 var(--s-4)}
+.section-h .hint{font-family:var(--f-ui);font-size:12px;font-weight:400;color:var(--text-3)}
+
+.card{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--r);
+  padding:clamp(16px,1.4vw,24px);
+  transition:transform var(--d-fast) var(--ease-out),border-color var(--d-fast) var(--ease-out),box-shadow var(--d-fast) var(--ease-out)}
+.card.hoverable:hover{transform:translateY(-1px);border-color:var(--border-strong);box-shadow:var(--shadow-sm)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
+  font-size:13px;font-weight:500;letter-spacing:-.01em;border-radius:var(--r-sm);
+  padding:0 var(--s-4);height:36px;
+  transition:background-color var(--d-fast) var(--ease-out),transform 100ms linear,color var(--d-fast) var(--ease-out),border-color var(--d-fast) var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:var(--text-inverse)}
+.btn-primary:hover{background:var(--accent-bright)}
+.btn-secondary{background:var(--bg-subtle);border:1px solid var(--border);color:var(--text-1)}
+.btn-secondary:hover{background:var(--bg-hover);border-color:var(--border-strong)}
+.btn-ghost{color:var(--text-2)}
+.btn-ghost:hover{background:var(--bg-hover);color:var(--text-1)}
+.btn-danger-ghost{color:var(--danger)}
+.btn-danger-ghost:hover{background:color-mix(in srgb,var(--danger) 12%,transparent)}
+.btn-sm{height:30px;padding:0 var(--s-3);font-size:12px}
+.btn-lg{height:44px;padding:0 var(--s-6);font-size:14px;border-radius:var(--r)}
+
+/* Badges / Chips */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;
+  border-radius:var(--r-full);padding:2px 9px;border:1px solid var(--border);color:var(--text-2);background:transparent}
+.chip .dot{width:7px;height:7px;border-radius:var(--r-full)}
+.chip-accent{background:var(--accent-dim);border-color:transparent;color:var(--accent-bright)}
+.chip-status{border-color:transparent}
+.tag{display:inline-flex;font-size:11px;font-weight:500;border-radius:var(--r-xs);
+  padding:2px 7px;background:var(--bg-subtle);color:var(--text-2)}
+
+/* Progress */
+.progress{height:4px;background:var(--bg-subtle);border-radius:var(--r-full);overflow:hidden}
+.progress>span{display:block;height:100%;background:var(--accent);border-radius:var(--r-full);
+  transition:width var(--d-slow) var(--ease-spring)}
+
+/* ================================================================
+   DASHBOARD
+   ================================================================ */
+.dash-grid{display:grid;grid-template-columns:1fr 360px;gap:var(--s-6);margin-top:var(--s-8)}
+.dash-col{display:flex;flex-direction:column;gap:var(--s-6);min-width:0}
+
+/* OBT Hero */
+.obt{position:relative;overflow:hidden;background:var(--bg-raised);border:1px solid var(--accent-border);
+  border-radius:var(--r-lg);padding:var(--s-6)}
+.obt::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(600px 200px at 0% 0%,var(--accent-glow),transparent 70%);pointer-events:none}
+.obt-title{font-family:var(--f-display);font-size:24px;font-weight:700;letter-spacing:-.02em;margin:var(--s-3) 0 var(--s-2)}
+.obt-meta{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-bottom:var(--s-5)}
+.obt-actions{display:flex;gap:var(--s-3)}
+.obt.done .obt-title{color:var(--text-3);text-decoration:line-through;text-decoration-color:var(--text-3)}
+
+/* Momentum */
+.momentum{display:flex;align-items:center;gap:var(--s-6)}
+.momentum-ring{position:relative;width:124px;height:124px;flex:none}
+.momentum-ring svg{transform:rotate(-90deg)}
+.momentum-ring .track{stroke:var(--bg-subtle)}
+.momentum-ring .fill{stroke:url(#momGrad);stroke-linecap:round;
+  transition:stroke-dashoffset 1s var(--ease-spring)}
+.momentum-num{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--f-display);font-weight:800;font-size:32px;letter-spacing:-.04em;
+  color:var(--accent-bright);font-feature-settings:"tnum"}
+.momentum-info{display:flex;flex-direction:column;gap:var(--s-2)}
+.momentum-level{font-family:var(--f-display);font-size:18px;font-weight:600;letter-spacing:-.01em}
+.momentum-next{font-size:12px;color:var(--text-3)}
+.mono{font-family:var(--f-mono);font-feature-settings:"tnum"}
+
+/* Task Row */
+.task-list{display:flex;flex-direction:column}
+.task-row{display:flex;align-items:flex-start;gap:var(--s-3);padding:var(--s-3) var(--s-2);
+  border-radius:var(--r-sm);cursor:pointer;
+  transition:background-color var(--d-fast) var(--ease-out)}
+.task-row:hover{background:var(--bg-hover)}
+.task-row + .task-row{border-top:1px solid var(--border)}
+.task-check{width:18px;height:18px;flex:none;margin-top:2px;border-radius:6px;
+  border:1.5px solid var(--border-strong);display:grid;place-items:center;color:transparent;
+  transition:all 200ms var(--ease-springy)}
+.task-check:hover{border-color:var(--accent)}
+.task-row.done .task-check{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.task-body{min-width:0;flex:1}
+.task-title{font-size:14px;font-weight:500;letter-spacing:-.005em;
+  transition:color var(--d-base) var(--ease-out)}
+.task-row.done .task-title{color:var(--text-3);text-decoration:line-through;text-decoration-color:var(--text-disabled)}
+.task-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-top:4px;font-size:11px;color:var(--text-3)}
+.task-meta .sep{opacity:.5}
+.prio{display:inline-flex;align-items:center;gap:4px;font-weight:500}
+.prio-high{color:var(--danger)} .prio-med{color:var(--warning)} .prio-low{color:var(--text-3)}
+.due{display:inline-flex;align-items:center;gap:4px}
+.due.today{color:var(--accent-bright)}
+.obt-flag{display:inline-flex;align-items:center;gap:4px;color:var(--accent-bright);font-weight:600;
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.task-row.completing{animation:taskDone 600ms var(--ease-spring)}
+@keyframes taskDone{0%{background:var(--accent-dim)}100%{background:transparent}}
+
+/* Habits */
+.habit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--s-4)}
+.habit-card{display:flex;flex-direction:column;gap:var(--s-4)}
+.habit-head{display:flex;align-items:flex-start;gap:var(--s-3)}
+.habit-icon{width:36px;height:36px;border-radius:var(--r-sm);background:var(--bg-subtle);
+  display:grid;place-items:center;color:var(--text-2)}
+.habit-name{font-size:14px;font-weight:600;letter-spacing:-.005em}
+.habit-identity{font-size:12px;color:var(--text-3);font-style:normal}
+.streak{margin-left:auto;display:flex;align-items:center;gap:4px;color:var(--warning);
+  font-family:var(--f-mono);font-size:13px;font-weight:600}
+.week-grid{display:flex;gap:6px}
+.week-cell{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px;color:var(--text-3);
+  letter-spacing:.06em}
+.week-dot{width:100%;aspect-ratio:1;max-width:28px;border-radius:7px;background:var(--bg-subtle);
+  border:1px solid var(--border);transition:all 200ms var(--ease-springy)}
+.week-dot.hit{background:var(--accent-dim);border-color:var(--accent-border)}
+.week-dot.today{border-color:var(--accent);border-style:dashed}
+.week-dot.today.hit{background:var(--accent);border-style:solid}
+.habit-action{align-self:flex-start}
+.habit-card.celebrate .habit-icon{animation:pulse 600ms var(--ease-springy)}
+@keyframes pulse{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+/* Heatmap */
+.heatmap{display:grid;grid-template-columns:repeat(18,1fr);gap:3px}
+.heatmap i{aspect-ratio:1;border-radius:3px;background:var(--bg-subtle)}
+.heatmap i.l1{background:color-mix(in srgb,var(--accent) 18%,var(--bg-subtle))}
+.heatmap i.l2{background:color-mix(in srgb,var(--accent) 42%,var(--bg-subtle))}
+.heatmap i.l3{background:color-mix(in srgb,var(--accent) 72%,var(--bg-subtle))}
+
+/* Goals */
+.goal-row{display:flex;flex-direction:column;gap:var(--s-2);padding:var(--s-3) 0}
+.goal-row + .goal-row{border-top:1px solid var(--border)}
+.goal-top{display:flex;align-items:baseline;gap:var(--s-3)}
+.goal-name{font-size:13px;font-weight:500}
+.goal-pct{margin-left:auto;font-family:var(--f-mono);font-size:12px;color:var(--text-2)}
+
+/* Ritual / Journal */
+.ritual-row{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) 0;font-size:13px}
+.ritual-state{width:8px;height:8px;border-radius:var(--r-full)}
+.ritual-state.done{background:var(--success)}
+.ritual-state.open{background:var(--text-disabled)}
+.ritual-time{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+
+/* ================================================================
+   FOKUS (Cinema Mode)
+   ================================================================ */
+.focus-stage{min-height:calc(100dvh - var(--topbar-h) - 120px);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:var(--s-8);text-align:center;position:relative}
+.focus-stage::before{content:'';position:absolute;inset:-40px;pointer-events:none;
+  background:radial-gradient(700px 480px at 50% 38%,var(--accent-glow),transparent 70%)}
+.focus-ring{position:relative;width:min(320px,72vw);aspect-ratio:1}
+.focus-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.focus-ring .track{stroke:var(--bg-subtle)}
+.focus-ring .fill{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.focus-time{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--f-display);font-weight:800;font-size:clamp(44px,8vw,64px);letter-spacing:-.04em;
+  font-feature-settings:"tnum"}
+.focus-task{font-size:15px;color:var(--text-2)}
+.focus-task strong{color:var(--text-1);font-weight:600}
+.focus-controls{display:flex;gap:var(--s-3);align-items:center}
+.app.cinema .sidebar,.app.cinema .topbar{opacity:.06;pointer-events:none}
+.app.cinema .sidebar{width:var(--sidebar-collapsed)}
+
+/* ================================================================
+   MODAL (Task-Detail mit Notion-artigen Eigenschaften)
+   ================================================================ */
+.modal-backdrop{position:fixed;inset:0;z-index:var(--z-modal);display:none;
+  background:color-mix(in srgb,var(--bg-base) 55%,transparent);backdrop-filter:blur(8px)}
+.modal-backdrop.open{display:grid;place-items:center;animation:fadeIn var(--d-base) var(--ease-out)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{width:min(640px,calc(100vw - 32px));max-height:min(82dvh,760px);overflow-y:auto;
+  background:var(--bg-overlay);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);
+  padding:var(--s-8);animation:modalIn var(--d-base) var(--ease-spring)}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.modal-head{display:flex;align-items:flex-start;gap:var(--s-4);margin-bottom:var(--s-6)}
+.modal-title{font-family:var(--f-display);font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.modal-close{margin-left:auto}
+.prop-grid{display:grid;grid-template-columns:140px 1fr;row-gap:var(--s-3);column-gap:var(--s-4);
+  align-items:center;margin-bottom:var(--s-6)}
+.prop-label{display:flex;align-items:center;gap:var(--s-2);font-size:12px;color:var(--text-3)}
+.prop-value{display:flex;flex-wrap:wrap;gap:var(--s-2);font-size:13px;align-items:center;min-height:26px}
+.desc-block{background:var(--bg-subtle);border-radius:var(--r-sm);padding:var(--s-4);
+  font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:var(--s-6)}
+.subtask{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) 0;font-size:13px}
+.subtask + .subtask{border-top:1px solid var(--border)}
+.modal-foot{margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--border);
+  display:flex;align-items:center;font-size:11px;color:var(--text-3)}
+.modal-foot .btn{margin-left:auto}
+
+/* ================================================================
+   TOASTS (inkl. XP-Variante)
+   ================================================================ */
+.toast-root{position:fixed;top:calc(var(--s-4) + env(safe-area-inset-top,0px));right:var(--s-4);
+  z-index:var(--z-toast);display:flex;flex-direction:column;gap:var(--s-2);align-items:flex-end}
+.toast{display:flex;align-items:center;gap:var(--s-3);background:var(--bg-overlay);
+  border:1px solid var(--border-strong);border-radius:var(--r);padding:var(--s-3) var(--s-4);
+  box-shadow:var(--shadow-lg);font-size:13px;min-width:240px;
+  animation:toastIn 300ms var(--ease-spring)}
+.toast.leaving{animation:toastOut 300ms var(--ease-out) forwards}
+@keyframes toastIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(24px)}}
+.toast-xp{border-color:var(--accent-border);background:linear-gradient(135deg,var(--accent-glow),var(--bg-overlay) 60%)}
+.toast-xp .xp-num{font-family:var(--f-mono);font-weight:600;color:var(--accent-bright);font-feature-settings:"tnum"}
+.toast-icon{color:var(--accent-bright)}
+.toast-success .toast-icon{color:var(--success)}
+.toast-text{display:flex;flex-direction:column;line-height:1.35}
+.toast-text small{color:var(--text-3);font-size:11px}
+
+/* ================================================================
+   DESIGNSYSTEM-REFERENZ-VIEW
+   ================================================================ */
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--s-6);margin-top:var(--s-6)}
+.swatch-row{display:flex;gap:var(--s-2);flex-wrap:wrap}
+.swatch{width:44px;height:44px;border-radius:var(--r-sm);border:1px solid var(--border-strong)}
+.swatch-label{font-family:var(--f-mono);font-size:10px;color:var(--text-3);margin-top:4px;text-align:center}
+.type-row{display:flex;flex-direction:column;gap:var(--s-3)}
+.input-demo{width:100%;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:9px var(--s-3);font:inherit;font-size:13px;color:var(--text-1);
+  transition:border-color var(--d-fast) var(--ease-out)}
+.input-demo::placeholder{color:var(--text-3)}
+.input-demo:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.toggle-demo{width:40px;height:24px;border-radius:var(--r-full);background:var(--bg-pressed);position:relative;
+  transition:background-color var(--d-fast) var(--ease-out)}
+.toggle-demo::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:var(--r-full);
+  background:var(--text-1);transition:transform 200ms var(--ease-springy)}
+.toggle-demo[aria-checked="true"]{background:var(--accent)}
+.toggle-demo[aria-checked="true"]::after{transform:translateX(16px);background:var(--text-inverse)}
+.empty-demo{display:flex;flex-direction:column;align-items:center;gap:var(--s-3);text-align:center;padding:var(--s-8) var(--s-4)}
+.empty-demo svg{color:var(--text-3)}
+.empty-title{font-family:var(--f-display);font-size:18px;font-weight:600}
+.empty-sub{font-size:13px;color:var(--text-2)}
+
+/* ================================================================
+   MOBILE TABBAR + RESPONSIVE
+   ================================================================ */
+.tabbar{display:none}
+@media (max-width:1023px){
+  .sidebar{width:var(--sidebar-collapsed);padding:var(--s-4) var(--s-2)}
+  .sidebar .brand-name,.sidebar .nav-item span,.sidebar .nav-section,
+  .sidebar .badge-count,.sidebar .ws-meta{display:none}
+  .nav-item{justify-content:center;padding:var(--s-3)}
+  .workspace-pill{justify-content:center}
+  .dash-grid{grid-template-columns:1fr}
+}
+@media (max-width:767px){
+  .sidebar{display:none}
+  .topbar{padding:0 var(--s-4)}
+  .search{display:none}
+  .page-inner{padding:var(--s-6) var(--s-4) calc(var(--tabbar-h) + var(--s-12))}
+  .page-h1{font-size:26px}
+  .obt-title{font-size:20px}
+  .tabbar{
+    display:flex;position:fixed;left:0;right:0;bottom:0;height:calc(var(--tabbar-h) + env(safe-area-inset-bottom,0px));
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    background:color-mix(in srgb,var(--bg-base) 94%,transparent);backdrop-filter:blur(16px);
+    border-top:1px solid var(--border);z-index:var(--z-sticky);
+  }
+  .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    font-size:10px;font-weight:500;color:var(--text-3);letter-spacing:.01em}
+  .tab-item[aria-current="page"]{color:var(--accent-bright)}
+  .modal{width:100vw;max-height:92dvh;border-radius:var(--r-lg) var(--r-lg) 0 0;align-self:end;padding:var(--s-6)}
+  .modal-backdrop.open{place-items:end center}
+  .prop-grid{grid-template-columns:120px 1fr}
+  .momentum{gap:var(--s-4)}
+  .toast-root{left:var(--s-4);align-items:stretch}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="momGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C9993A"/><stop offset="100%" stop-color="#E8B84B"/>
+    </linearGradient>
+    <!-- Icon-Sprites: Lucide-Stil, 1.5 Stroke -->
+    <symbol id="i-peak" viewBox="0 0 24 24"><path d="M4 19 L10.5 7 L13.5 12.5 L16 8.5 L20 19 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="13.5" y="3.5" width="7" height="5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="13.5" y="11.5" width="7" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3.5" y="15.5" width="7" height="5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m8.5 12 2.5 2.5 5-5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2.5 20 5.5 17 8.5 M20 5.5 H7.5 A4 4 0 0 0 3.5 9.5 V11 M7 21.5 4 18.5 7 15.5 M4 18.5 H16.5 A4 4 0 0 0 20.5 14.5 V13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 10v3.5l2.5 1.5 M9.5 2.5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4.75" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-scope" viewBox="0 0 24 24"><path d="m4 13 9.5-7.5 3 4L7 17Z M14.5 6.5l2-1.5 3 4-2 1.5 M7 17l-2.5 4.5 M9.5 15.5 11 21.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4.5 19a2.5 2.5 0 0 1 2.5-2.5h12.5V3H7A2.5 2.5 0 0 0 4.5 5.5Z M4.5 19A2.5 2.5 0 0 0 7 21.5h12.5V16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><circle cx="7" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2.8v2.4m0 13.6v2.4M4.2 12H2.8m18.4 0h-1.4M5.5 5.5l1.7 1.7m9.6 9.6 1.7 1.7m0-13-1.7 1.7M7.2 16.8 5.5 18.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m20.5 20.5-4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 15 18 9 M10 20a2.2 2.2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2.5v2m0 15v2M4.8 4.8l1.4 1.4m11.6 11.6 1.4 1.4m0-14.4-1.4 1.4M6.2 17.8l-1.4 1.4M2.5 12h2m15 0h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4.5 M5 4.5C8 2.5 11 6.5 14 5c2-1 3.5-1.5 5-1v9c-1.5-.5-3 0-5 1-3 1.5-6-2.5-9-.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 2.8V6m8-3.2V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="m3 11.5 8.5 8.5a2 2 0 0 0 2.8 0l6.2-6.2a2 2 0 0 0 0-2.8L12 2.5H4.5a1.5 1.5 0 0 0-1.5 1.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2.5 4.5 13.5h6L11 21.5l8.5-11h-6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 21.5c4 0 6.5-2.6 6.5-6.2 0-3.4-2.3-5.5-4-8.3-.4 2-1.3 2.9-2.5 3.7C10.6 8 10.2 5 10.5 2.5 7 5 5.5 9 5.5 12.5c0 5 2.5 9 6.5 9Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7A2.5 2.5 0 0 1 6 4.5h3.5l2 2.5H18A2.5 2.5 0 0 1 20.5 9.5V17A2.5 2.5 0 0 1 18 19.5H6A2.5 2.5 0 0 1 3.5 17Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2" fill="currentColor"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+    <symbol id="i-rain" viewBox="0 0 24 24"><path d="M17.5 11.5a4.5 4.5 0 0 0-.4-9A6 6 0 0 0 5.7 5.6 4 4 0 0 0 6.5 13.5h11Z M8 16l-1 3m5-3-1 3m5-3-1 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l2.5-7 4 14 2.5-7H21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M12 9V3.5 M9.5 6 12 3.5 14.5 6 M5 18.5a7 7 0 0 1 14 0 M2.5 21.5h19 M3 14.5l1.8.8m16.2-.8-1.8.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" aria-label="Hauptnavigation">
+    <div class="brand">
+      <div class="brand-mark"><svg width="17" height="17"><use href="#i-peak"/></svg></div>
+      <span class="brand-name">APEX</span>
+    </div>
+    <button class="nav-item" data-nav="dashboard" aria-current="page"><svg width="17" height="17"><use href="#i-dash"/></svg><span>Dashboard</span></button>
+    <button class="nav-item" data-nav="tasks"><svg width="17" height="17"><use href="#i-check-sq"/></svg><span>Aufgaben</span><i class="badge-count">4</i></button>
+    <button class="nav-item" data-nav="habits"><svg width="17" height="17"><use href="#i-repeat"/></svg><span>Gewohnheiten</span></button>
+    <button class="nav-item" data-nav="focus"><svg width="17" height="17"><use href="#i-timer"/></svg><span>Fokus</span></button>
+    <div class="nav-section">Richtung</div>
+    <button class="nav-item" data-soon="Ziele"><svg width="17" height="17"><use href="#i-target"/></svg><span>Ziele</span></button>
+    <button class="nav-item" data-soon="Vision"><svg width="17" height="17"><use href="#i-scope"/></svg><span>Vision</span></button>
+    <div class="nav-section">Reflexion</div>
+    <button class="nav-item" data-soon="Journal"><svg width="17" height="17"><use href="#i-pen"/></svg><span>Journal</span></button>
+    <button class="nav-item" data-soon="Wissen"><svg width="17" height="17"><use href="#i-book"/></svg><span>Wissen</span></button>
+    <div class="nav-section">Referenz</div>
+    <button class="nav-item" data-nav="system"><svg width="17" height="17"><use href="#i-grid"/></svg><span>Designsystem</span></button>
+    <div class="sidebar-footer">
+      <button class="workspace-pill">
+        <span class="ws-avatar">PK</span>
+        <span class="ws-meta"><span class="ws-name">Petja — Solo</span><span class="ws-plan">Solo Pro</span></span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <header class="topbar">
+      <span class="topbar-title" id="topbarTitle">Dashboard</span>
+      <button class="search" aria-label="Suche öffnen">
+        <svg width="14" height="14"><use href="#i-search"/></svg>
+        Suchen oder Befehl…
+        <kbd>⌘K</kbd>
+      </button>
+      <div class="accent-dots" role="group" aria-label="Akzentfarbe">
+        <button class="accent-dot" style="background:#C9993A" data-accent-pick="gold" aria-pressed="true" aria-label="Gold"></button>
+        <button class="accent-dot" style="background:#8B9AAB" data-accent-pick="silver" aria-pressed="false" aria-label="Silber"></button>
+        <button class="accent-dot" style="background:#C4707A" data-accent-pick="rose" aria-pressed="false" aria-label="Rosé"></button>
+        <button class="accent-dot" style="background:#4A7FA5" data-accent-pick="sapphire" aria-pressed="false" aria-label="Saphir"></button>
+        <button class="accent-dot" style="background:#3A7D58" data-accent-pick="emerald" aria-pressed="false" aria-label="Smaragd"></button>
+      </div>
+      <button class="icon-btn" id="themeToggle" aria-label="Theme wechseln"><svg width="17" height="17"><use href="#i-sun"/></svg></button>
+      <button class="icon-btn" aria-label="Benachrichtigungen"><svg width="17" height="17"><use href="#i-bell"/></svg></button>
+      <div class="avatar" aria-hidden="true">PK</div>
+    </header>
+
+    <main class="page">
+      <div class="page-inner">
+
+        <!-- ======== VIEW: DASHBOARD ======== -->
+        <section class="view active" id="view-dashboard">
+          <p class="eyebrow">Mittwoch, 10. Juni 2026</p>
+          <h1 class="page-h1">Guten Morgen, Petja.</h1>
+          <p class="page-sub">Stiller Tag. Ein Fokus — der Rest kann warten.</p>
+
+          <div class="dash-grid">
+            <div class="dash-col">
+
+              <div class="obt" id="obtCard">
+                <span class="eyebrow" style="color:var(--accent-bright)">One Big Thing</span>
+                <h2 class="obt-title">PowerSync Sync-Rules deployen und adversarial testen</h2>
+                <div class="obt-meta">
+                  <span class="chip"><svg width="11" height="11"><use href="#i-folder"/></svg>Apex — Phase 09</span>
+                  <span class="chip"><span class="dot" style="background:var(--accent)"></span>Business</span>
+                  <span class="chip"><svg width="11" height="11"><use href="#i-clock"/></svg>90 min</span>
+                </div>
+                <div class="obt-actions">
+                  <button class="btn btn-primary" data-nav="focus"><svg width="15" height="15"><use href="#i-timer"/></svg>Fokus starten</button>
+                  <button class="btn btn-secondary" id="obtDone">Erledigt</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Heute <span class="hint">4 Aufgaben · 1 erledigt</span></h3>
+                <div class="task-list" id="taskListToday"></div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Gewohnheiten heute <span class="hint">2 von 3</span></h3>
+                <div class="habit-grid" id="habitGridDash"></div>
+              </div>
+            </div>
+
+            <div class="dash-col">
+              <div class="card hoverable">
+                <h3 class="section-h">Momentum</h3>
+                <div class="momentum">
+                  <div class="momentum-ring">
+                    <svg width="124" height="124" viewBox="0 0 124 124">
+                      <circle class="track" cx="62" cy="62" r="55" fill="none" stroke-width="7"/>
+                      <circle class="fill" cx="62" cy="62" r="55" fill="none" stroke-width="7"
+                        stroke-dasharray="345.6" stroke-dashoffset="96.8"/>
+                    </svg>
+                    <span class="momentum-num" id="momentumNum">847</span>
+                  </div>
+                  <div class="momentum-info">
+                    <span class="momentum-level">Level 12 — Operator</span>
+                    <div class="progress" style="width:140px"><span style="width:72%"></span></div>
+                    <span class="momentum-next mono">2.840 / 3.200 XP bis Level 13</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Quartalsziele <span class="hint">Q2 — noch 20 Tage</span></h3>
+                <div class="goal-row">
+                  <div class="goal-top"><span class="goal-name">Apex Alpha live + 30 Tage Dogfooding</span><span class="goal-pct">68 %</span></div>
+                  <div class="progress"><span style="width:68%"></span></div>
+                </div>
+                <div class="goal-row">
+                  <div class="goal-top"><span class="goal-name">12 kg Marathon-Trainingsvolumen pro Woche</span><span class="goal-pct">45 %</span></div>
+                  <div class="progress"><span style="width:45%"></span></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Rituale</h3>
+                <div class="ritual-row">
+                  <span class="ritual-state done"></span> Morgenritual
+                  <span class="ritual-time">06:32</span>
+                </div>
+                <div class="ritual-row">
+                  <span class="ritual-state open"></span> Abendritual
+                  <span class="ritual-time">offen</span>
+                </div>
+              </div>
+
+              <div class="card hoverable">
+                <h3 class="section-h">Journal</h3>
+                <p style="font-size:13px;color:var(--text-2);margin-bottom:var(--s-4)">
+                  Der Abend gehört der Reflexion. Was war heute der beste Moment?
+                </p>
+                <button class="btn btn-secondary btn-sm"><svg width="13" height="13"><use href="#i-pen"/></svg>Eintrag beginnen</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======== VIEW: AUFGABEN ======== -->
+        <section class="view" id="view-tasks">
+          <div style="display:flex;align-items:flex-end;gap:var(--s-4);flex-wrap:wrap">
+            <div>
+              <p class="eyebrow">Ausführung</p>
+              <h1 class="page-h1">Aufgaben</h1>
+            </div>
+            <button class="btn btn-primary" style="margin-left:auto"><svg width="15" height="15"><use href="#i-plus"/></svg>Neue Aufgabe</button>
+          </div>
+          <div style="display:flex;gap:var(--s-2);margin:var(--s-5) 0 var(--s-6);flex-wrap:wrap">
+            <button class="chip chip-accent">Heute · 4</button>
+            <button class="chip">Diese Woche · 12</button>
+            <button class="chip">Inbox · 3</button>
+            <button class="chip">Alle · 47</button>
+            <button class="chip"><svg width="11" height="11"><use href="#i-tag"/></svg>Tags</button>
+          </div>
+          <div class="card">
+            <h3 class="section-h">Heute</h3>
+            <div class="task-list" id="taskListFull"></div>
+          </div>
+          <div class="card" style="margin-top:var(--s-6)">
+            <h3 class="section-h">Morgen</h3>
+            <div class="task-list" id="taskListTomorrow"></div>
+          </div>
+          <p style="margin-top:var(--s-4);font-size:12px;color:var(--text-3)">
+            Eine Aufgabe anklicken öffnet das Detail mit allen Eigenschaften (Deadline, Bereich, Tags, Priorität, Energie, Schätzung …).
+          </p>
+        </section>
+
+        <!-- ======== VIEW: GEWOHNHEITEN ======== -->
+        <section class="view" id="view-habits">
+          <p class="eyebrow">Identität</p>
+          <h1 class="page-h1">Gewohnheiten</h1>
+          <p class="page-sub">Du bist, was du wiederholst.</p>
+          <div class="habit-grid" style="margin-top:var(--s-8)" id="habitGridFull"></div>
+          <div class="card" style="margin-top:var(--s-6)">
+            <h3 class="section-h">Letzte 90 Tage <span class="hint">Lesen — 87 % Trefferquote</span></h3>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+        </section>
+
+        <!-- ======== VIEW: FOKUS (Cinema) ======== -->
+        <section class="view" id="view-focus">
+          <div class="focus-stage">
+            <p class="eyebrow" style="letter-spacing:.14em">Deep-Work-Session</p>
+            <div class="focus-ring">
+              <svg viewBox="0 0 320 320">
+                <circle class="track" cx="160" cy="160" r="148" fill="none" stroke-width="6"/>
+                <circle class="fill" id="focusFill" cx="160" cy="160" r="148" fill="none" stroke-width="6"
+                  stroke-dasharray="929.9" stroke-dashoffset="232.5"/>
+              </svg>
+              <span class="focus-time" id="focusTime">37:30</span>
+            </div>
+            <p class="focus-task">Arbeitet an: <strong>PowerSync Sync-Rules deployen</strong></p>
+            <div class="focus-controls">
+              <button class="btn btn-secondary btn-lg" id="focusPause"><svg width="16" height="16"><use href="#i-pause"/></svg>Pause</button>
+              <button class="btn btn-ghost" id="focusEnd">Session beenden</button>
+              <span class="chip"><svg width="11" height="11"><use href="#i-rain"/></svg>Regen</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======== VIEW: DESIGNSYSTEM ======== -->
+        <section class="view" id="view-system">
+          <p class="eyebrow">Referenz</p>
+          <h1 class="page-h1">Designsystem</h1>
+          <p class="page-sub">Lebende Referenz der Tokens und Komponenten — Theme und Akzent oben rechts umschalten.</p>
+
+          <div class="spec-grid">
+            <div class="card">
+              <h3 class="section-h">Flächen-Ebenen</h3>
+              <div class="swatch-row">
+                <div><div class="swatch" style="background:var(--bg-base)"></div><div class="swatch-label">base</div></div>
+                <div><div class="swatch" style="background:var(--bg-raised)"></div><div class="swatch-label">raised</div></div>
+                <div><div class="swatch" style="background:var(--bg-overlay)"></div><div class="swatch-label">overlay</div></div>
+                <div><div class="swatch" style="background:var(--bg-subtle)"></div><div class="swatch-label">subtle</div></div>
+                <div><div class="swatch" style="background:var(--bg-hover)"></div><div class="swatch-label">hover</div></div>
+              </div>
+              <h3 class="section-h" style="margin-top:var(--s-6)">Status</h3>
+              <div class="swatch-row">
+                <div><div class="swatch" style="background:var(--success)"></div><div class="swatch-label">success</div></div>
+                <div><div class="swatch" style="background:var(--warning)"></div><div class="swatch-label">warning</div></div>
+                <div><div class="swatch" style="background:var(--danger)"></div><div class="swatch-label">danger</div></div>
+                <div><div class="swatch" style="background:var(--info)"></div><div class="swatch-label">info</div></div>
+                <div><div class="swatch" style="background:var(--accent)"></div><div class="swatch-label">accent</div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="section-h">Typografie</h3>
+              <div class="type-row">
+                <span style="font-family:var(--f-display);font-size:32px;font-weight:700;letter-spacing:-.02em">Seitentitel 32</span>
+                <span style="font-family:var(--f-display);font-size:24px;font-weight:600;letter-spacing:-.01em">Abschnitt 24</span>
+                <span style="font-size:15px">Fließtext 15 — Apex liest sich ruhig und präzise.</span>
+                <span style="font-size:13px;color:var(--text-2)">UI-Label 13 — sekundär</span>
+                <span class="eyebrow">Eyebrow 10 — Großbuchstaben</span>
+                <span class="mono" style="font-size:15px">1.234 / 88:12 — JetBrains Mono (tnum)</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="section-h">Buttons</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--s-3);align-items:center">
+                <button class="btn btn-primary">Primär</button>
+                <button class="btn btn-secondary">Sekundär</button>
+                <button class="btn btn-ghost">Ghost</button>
+                <button class="btn btn-danger-ghost">Löschen</button>
+                <button class="btn btn-primary" disabled style="opacity:.4;cursor:not-allowed">Inaktiv</button>
+              </div>
+              <h3 class="section-h" style="margin-top:var(--s-6)">Eingaben</h3>
+              <div style="display:flex;flex-direction:column;gap:var(--s-3)">
+                <input class="input-demo" placeholder="Aufgabe benennen…">
+                <div style="display:flex;align-items:center;gap:var(--s-3)">
+                  <button class="toggle-demo" role="switch" aria-checked="true" onclick="this.setAttribute('aria-checked',this.getAttribute('aria-checked')==='true'?'false':'true')"></button>
+                  <span style="font-size:13px">Haptisches Feedback</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="section-h">Chips · Tags · Badges</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--s-2)">
+                <span class="chip chip-accent">Aktiv</span>
+                <span class="chip"><span class="dot" style="background:var(--accent)"></span>Business</span>
+                <span class="chip"><span class="dot" style="background:var(--info)"></span>Gesundheit</span>
+                <span class="chip chip-status" style="background:color-mix(in srgb,var(--success) 12%,transparent);color:var(--success)">Im Plan</span>
+                <span class="chip chip-status" style="background:color-mix(in srgb,var(--warning) 12%,transparent);color:var(--warning)">Fällig bald</span>
+                <span class="tag">deep-work</span>
+                <span class="tag">infrastruktur</span>
+              </div>
+              <h3 class="section-h" style="margin-top:var(--s-6)">Empty State</h3>
+              <div class="empty-demo">
+                <svg width="40" height="40"><use href="#i-sunrise"/></svg>
+                <span class="empty-title">Der Kopf ist frei.</span>
+                <span class="empty-sub">Nichts in der Inbox. Zurück zum Wesentlichen.</span>
+                <button class="btn btn-secondary btn-sm">Zum One Big Thing</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ MOBILE TABBAR ============ -->
+  <nav class="tabbar" aria-label="Tab-Navigation">
+    <button class="tab-item" data-nav="dashboard" aria-current="page"><svg width="20" height="20"><use href="#i-dash"/></svg>Heute</button>
+    <button class="tab-item" data-nav="tasks"><svg width="20" height="20"><use href="#i-check-sq"/></svg>Aufgaben</button>
+    <button class="tab-item" data-nav="habits"><svg width="20" height="20"><use href="#i-repeat"/></svg>Habits</button>
+    <button class="tab-item" data-nav="focus"><svg width="20" height="20"><use href="#i-timer"/></svg>Fokus</button>
+    <button class="tab-item" data-nav="system"><svg width="20" height="20"><use href="#i-grid"/></svg>System</button>
+  </nav>
+</div>
+
+<!-- ============ TASK-DETAIL-MODAL ============ -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <div>
+        <span class="obt-flag"><svg width="11" height="11"><use href="#i-dot"/></svg>One Big Thing</span>
+        <h2 class="modal-title" id="modalTitle">PowerSync Sync-Rules deployen und adversarial testen</h2>
+      </div>
+      <button class="icon-btn modal-close" id="modalClose" aria-label="Schließen"><svg width="16" height="16"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="prop-grid">
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-dot"/></svg>Status</span>
+      <span class="prop-value"><span class="chip chip-status" style="background:color-mix(in srgb,var(--info) 12%,transparent);color:var(--info)">In Arbeit</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-flag"/></svg>Priorität</span>
+      <span class="prop-value"><span class="prio prio-high"><svg width="12" height="12"><use href="#i-flag"/></svg>Hoch</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-grid"/></svg>Bereich</span>
+      <span class="prop-value"><span class="chip"><span class="dot" style="background:var(--accent)"></span>Business</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-folder"/></svg>Projekt</span>
+      <span class="prop-value">Apex — Phase 09</span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-cal"/></svg>Deadline</span>
+      <span class="prop-value"><span class="due today"><svg width="12" height="12"><use href="#i-cal"/></svg>Heute, 10. Juni</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-zap"/></svg>Energie</span>
+      <span class="prop-value">Hoch — Deep Work</span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-clock"/></svg>Schätzung</span>
+      <span class="prop-value mono">90 min</span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-tag"/></svg>Tags</span>
+      <span class="prop-value"><span class="tag">deep-work</span><span class="tag">infrastruktur</span><span class="tag">sicherheit</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-repeat"/></svg>Wiederholung</span>
+      <span class="prop-value" style="color:var(--text-3)">Keine</span>
+    </div>
+    <div class="desc-block">
+      Sync-Rules aus <span class="mono" style="font-size:12px">data-model.md</span> in der PowerSync-Konsole deployen.
+      Danach die fünf Adversarial-Tests aus Phase 09 EXPANDED ausführen — Bucket-Isolation ist nicht verhandelbar.
+    </div>
+    <h3 class="section-h" style="font-size:14px">Teilaufgaben <span class="hint">1 / 3</span></h3>
+    <div class="subtask"><span class="task-check" style="background:var(--accent);border-color:var(--accent);color:var(--text-inverse)"><svg width="11" height="11"><use href="#i-check"/></svg></span><s style="color:var(--text-3)">Sync-Rules YAML validieren</s></div>
+    <div class="subtask"><span class="task-check"></span>Deploy auf Dev-Instanz</div>
+    <div class="subtask"><span class="task-check"></span>Adversarial-Tests 1–5 dokumentieren</div>
+    <div class="modal-foot">
+      Erstellt gestern · Geändert vor 2 Std
+      <button class="btn btn-primary btn-sm" id="modalComplete">Erledigt</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-root" id="toastRoot" aria-live="polite"></div>
+
+<script>
+/* ================================================================
+   APEX PREVIEW — Interaktion (nur Demo-Logik, kein Framework)
+   ================================================================ */
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+
+/* ---------- Demo-Daten ---------- */
+const TASKS=[
+ {id:1,title:'PowerSync Sync-Rules deployen und adversarial testen',obt:true,prio:'high',area:['Business','var(--accent)'],tags:['deep-work','infrastruktur'],due:'Heute',today:true,est:'90 min',project:'Apex — Phase 09'},
+ {id:2,title:'AVV mit Supabase und PowerSync abschließen',prio:'high',area:['Business','var(--accent)'],tags:['dsgvo'],due:'Heute',today:true,est:'20 min',project:'Apex — Compliance'},
+ {id:3,title:'Intervall-Lauf 6 × 800 m',prio:'med',area:['Gesundheit','var(--info)'],tags:['marathon'],due:'Heute',today:true,est:'50 min',project:'Marathon-Block 2'},
+ {id:4,title:'Wochenrechnung an Klient K. senden',prio:'low',area:['Finanzen','var(--success)'],tags:['admin'],due:'Heute',today:true,est:'10 min',done:true,project:'petjaklass.dev'},
+];
+const TASKS_TOMORROW=[
+ {id:5,title:'Phase 10 — App-Shell-Spec lesen und Fragen notieren',prio:'med',area:['Business','var(--accent)'],tags:['planung'],due:'Morgen',est:'30 min',project:'Apex — Phase 10'},
+ {id:6,title:'Mama anrufen',prio:'med',area:['Beziehungen','var(--rose,#C4707A)'],tags:[],due:'Morgen',est:'15 min',project:''},
+];
+const HABITS=[
+ {id:1,name:'Lesen — 20 Seiten',identity:'Ich bin jemand, der jeden Tag lernt.',icon:'i-book',streak:34,week:[1,1,1,0,1,1,'today']},
+ {id:2,name:'Laufen',identity:'Ich bin jemand, der seinen Körper trainiert.',icon:'i-activity',streak:12,week:[1,0,1,1,0,1,'today']},
+ {id:3,name:'Morgenritual vor 7 Uhr',identity:'Ich gehöre mir, bevor der Tag mir gehört.',icon:'i-sunrise',streak:21,week:[1,1,1,1,1,1,'today-hit']},
+];
+
+/* ---------- Task-Row-Renderer ---------- */
+const ICONS={high:'#i-flag',med:'#i-flag',low:'#i-flag'};
+const PRIO_LABEL={high:['prio-high','Hoch'],med:['prio-med','Mittel'],low:['prio-low','Niedrig']};
+function taskRow(t){
+  const row=document.createElement('div');
+  row.className='task-row'+(t.done?' done':'');
+  row.setAttribute('role','button');row.tabIndex=0;
+  const [pc,pl]=PRIO_LABEL[t.prio];
+  row.innerHTML=`
+    <span class="task-check" aria-label="Aufgabe abschließen">${t.done?'<svg width="11" height="11"><use href="#i-check"/></svg>':''}</span>
+    <span class="task-body">
+      <span class="task-title">${t.title}</span>
+      <span class="task-meta">
+        ${t.obt?'<span class="obt-flag"><svg width="10" height="10"><use href="#i-dot"/></svg>OBT</span><span class="sep">·</span>':''}
+        <span class="prio ${pc}"><svg width="11" height="11"><use href="${ICONS[t.prio]}"/></svg>${pl}</span>
+        <span class="sep">·</span>
+        <span style="display:inline-flex;align-items:center;gap:4px"><span class="dot" style="width:7px;height:7px;border-radius:99px;background:${t.area[1]};display:inline-block"></span>${t.area[0]}</span>
+        ${t.tags.map(x=>`<span class="tag">${x}</span>`).join('')}
+        <span class="sep">·</span>
+        <span class="due ${t.today?'today':''}"><svg width="11" height="11"><use href="#i-cal"/></svg>${t.due}</span>
+        <span class="sep">·</span><span class="mono">${t.est}</span>
+      </span>
+    </span>`;
+  row.querySelector('.task-check').addEventListener('click',e=>{e.stopPropagation();completeTask(row,t);});
+  row.addEventListener('click',()=>openModal());
+  row.addEventListener('keydown',e=>{if(e.key==='Enter')openModal();});
+  return row;
+}
+function renderTasks(){
+  const today=TASKS,tomorrow=TASKS_TOMORROW;
+  const mount=(el,list)=>{el.innerHTML='';list.forEach(t=>el.appendChild(taskRow(t)));};
+  mount($('#taskListToday'),today.filter(t=>!t.done).slice(0,3).concat(today.filter(t=>t.done)));
+  mount($('#taskListFull'),today);
+  mount($('#taskListTomorrow'),tomorrow);
+}
+function completeTask(row,t){
+  if(row.classList.contains('done'))return;
+  row.classList.add('done','completing');
+  row.querySelector('.task-check').innerHTML='<svg width="11" height="11"><use href="#i-check"/></svg>';
+  toastXP(t.obt?50:25,t.title);
+  bumpMomentum(t.obt?12:5);
+}
+
+/* ---------- Habits ---------- */
+const DAYS=['M','D','M','D','F','S','S'];
+function habitCard(h,compact=false){
+  const el=document.createElement('div');
+  el.className='card habit-card';
+  const dots=h.week.map((w,i)=>{
+    const today=(w==='today'||w==='today-hit');
+    const hit=(w===1||w==='today-hit');
+    return `<span class="week-cell">${compact?'':DAYS[i]}<span class="week-dot ${hit?'hit':''} ${today?'today':''}"></span></span>`;
+  }).join('');
+  const doneToday=h.week[6]==='today-hit';
+  el.innerHTML=`
+    <div class="habit-head">
+      <span class="habit-icon"><svg width="17" height="17"><use href="#${h.icon}"/></svg></span>
+      <span>
+        <div class="habit-name">${h.name}</div>
+        <div class="habit-identity">${h.identity}</div>
+      </span>
+      <span class="streak"><svg width="13" height="13"><use href="#i-flame"/></svg><span class="streak-n">${h.streak}</span></span>
+    </div>
+    <div class="week-grid">${dots}</div>
+    <button class="btn ${doneToday?'btn-ghost':'btn-secondary'} btn-sm habit-action">${doneToday?'Heute erledigt':'Abschließen'}</button>`;
+  const btn=el.querySelector('.habit-action');
+  btn.addEventListener('click',()=>{
+    if(btn.textContent==='Heute erledigt')return;
+    const lastDot=el.querySelectorAll('.week-dot')[6];
+    lastDot.classList.add('hit');lastDot.style.background='var(--accent)';
+    const n=el.querySelector('.streak-n');n.textContent=+n.textContent+1;
+    btn.textContent='Heute erledigt';btn.classList.replace('btn-secondary','btn-ghost');
+    el.classList.add('celebrate');setTimeout(()=>el.classList.remove('celebrate'),700);
+    toastXP(15,h.name,'Du bist jemand, der dranbleibt.');
+  });
+  return el;
+}
+function renderHabits(){
+  const dash=$('#habitGridDash'),full=$('#habitGridFull');
+  dash.innerHTML='';full.innerHTML='';
+  HABITS.slice(0,2).forEach(h=>dash.appendChild(habitCard(structuredClone(h),true)));
+  HABITS.forEach(h=>full.appendChild(habitCard(structuredClone(h))));
+}
+/* Heatmap (90 Tage, deterministisch generiert) */
+(function(){
+  const hm=$('#heatmap');let seed=42;
+  const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
+  for(let i=0;i<90;i++){
+    const v=rnd();const cell=document.createElement('i');
+    if(v>.78)cell.className='l3';else if(v>.5)cell.className='l2';else if(v>.25)cell.className='l1';
+    hm.appendChild(cell);
+  }
+})();
+
+/* ---------- Momentum ---------- */
+let momentum=847;
+function bumpMomentum(d){
+  momentum+=d;const el=$('#momentumNum');
+  el.style.transition='transform 200ms var(--ease-springy)';el.style.transform='scale(1.08)';
+  setTimeout(()=>{el.textContent=momentum;el.style.transform='scale(1)';},120);
+}
+
+/* ---------- Toasts ---------- */
+function toastXP(xp,title,sub){
+  const root=$('#toastRoot');
+  const t=document.createElement('div');t.className='toast toast-xp';
+  t.innerHTML=`<span class="toast-icon"><svg width="16" height="16"><use href="#i-zap"/></svg></span>
+    <span class="toast-text"><span><span class="xp-num">+0 XP</span></span><small>${sub??title}</small></span>`;
+  root.appendChild(t);
+  const numEl=t.querySelector('.xp-num');const t0=performance.now();
+  const tick=now=>{const p=Math.min((now-t0)/500,1);
+    numEl.textContent='+'+Math.round(xp*(p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2))+' XP';
+    if(p<1)requestAnimationFrame(tick);};
+  requestAnimationFrame(tick);
+  setTimeout(()=>{t.classList.add('leaving');setTimeout(()=>t.remove(),320);},2600);
+  while(root.children.length>5)root.firstChild.remove();
+}
+
+/* ---------- Navigation ---------- */
+const TITLES={dashboard:'Dashboard',tasks:'Aufgaben',habits:'Gewohnheiten',focus:'Fokus',system:'Designsystem'};
+function go(view){
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+view));
+  $$('[data-nav]').forEach(b=>{
+    const isNav=b.classList.contains('nav-item')||b.classList.contains('tab-item');
+    if(isNav)b.toggleAttribute('aria-current',false),b.removeAttribute('aria-current');
+  });
+  $$(`.nav-item[data-nav="${view}"],.tab-item[data-nav="${view}"]`).forEach(b=>b.setAttribute('aria-current','page'));
+  $('#topbarTitle').textContent=TITLES[view]??'Dashboard';
+  $('#app').classList.toggle('cinema',view==='focus');
+  if(view==='focus')startFocus();else stopFocus();
+  $('.page').scrollTo({top:0});
+}
+$$('[data-nav]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.nav)));
+/* Platzhalter-Navigation (im Prototyp nicht ausgebaut) */
+function toastInfo(msg){
+  const root=$('#toastRoot');const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<span class="toast-icon" style="color:var(--info)"><svg width="16" height="16"><use href="#i-dot"/></svg></span>
+    <span class="toast-text"><span>${msg}</span><small>Im Prototyp angedeutet, nicht ausgebaut.</small></span>`;
+  root.appendChild(t);setTimeout(()=>{t.classList.add('leaving');setTimeout(()=>t.remove(),320)},2400);
+}
+$$('[data-soon]').forEach(b=>b.addEventListener('click',()=>toastInfo(b.dataset.soon)));
+
+/* ---------- Theme & Akzent ---------- */
+$('#themeToggle').addEventListener('click',()=>{
+  const html=document.documentElement;
+  const next=html.dataset.theme==='dark'?'light':'dark';
+  html.dataset.theme=next;
+  $('#themeToggle').innerHTML=`<svg width="17" height="17"><use href="#${next==='dark'?'i-sun':'i-moon'}"/></svg>`;
+});
+$$('[data-accent-pick]').forEach(d=>d.addEventListener('click',()=>{
+  document.documentElement.dataset.accent=d.dataset.accentPick;
+  $$('[data-accent-pick]').forEach(x=>x.setAttribute('aria-pressed',x===d));
+}));
+
+/* ---------- Modal ---------- */
+const backdrop=$('#modalBackdrop');
+function openModal(){backdrop.classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(){backdrop.classList.remove('open');document.body.style.overflow='';}
+$('#modalClose').addEventListener('click',closeModal);
+backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();}});
+$('#modalComplete').addEventListener('click',()=>{closeModal();
+  const first=$('#taskListFull .task-row');if(first&&!first.classList.contains('done'))completeTask(first,TASKS[0]);
+  $('#obtCard').classList.add('done');
+});
+$('#obtDone').addEventListener('click',()=>{
+  const card=$('#obtCard');if(card.classList.contains('done'))return;
+  card.classList.add('done');toastXP(50,'One Big Thing','Der Tag hat sein Zentrum.');bumpMomentum(12);
+});
+
+/* ---------- Fokus-Timer (Demo: läuft echt) ---------- */
+const TOTAL=50*60;let remaining=37*60+30,focusInt=null,paused=false;
+function renderFocus(){
+  const m=String(Math.floor(remaining/60)).padStart(2,'0'),s=String(remaining%60).padStart(2,'0');
+  $('#focusTime').textContent=`${m}:${s}`;
+  $('#focusFill').style.strokeDashoffset=(929.9*(1-remaining/TOTAL)).toFixed(1);
+}
+function

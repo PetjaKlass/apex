@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light" data-accent="gold">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Apex — Design Preview v2 (Apple-like)</title>
+<!-- Typografie: Cabinet Grotesk (Display) · Inter (UI) · JetBrains Mono (Zahlen) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   APEX v2 — "Floating Glass" (Apple-like Refinement)
+   Richtung: schwebende Panels, große Radien, Frosted-Blur,
+   weiche Tiefe, ruhige Neutraltöne, Gold als einziger Farbimpuls.
+   ================================================================ */
+:root{
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px;
+  --s-8:32px; --s-10:40px; --s-12:48px; --s-16:64px;
+  /* Radius-Skala v2: deutlich größer (Apple-like) */
+  --r-xs:6px; --r-sm:10px; --r:14px; --r-lg:20px; --r-xl:26px; --r-2xl:32px; --r-full:9999px;
+  --f-display:'Cabinet Grotesk','Inter',system-ui,sans-serif;
+  --f-ui:'Inter',-apple-system,'SF Pro Text',system-ui,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,monospace;
+  --topbar-h:60px;
+  --ease-spring:cubic-bezier(0.16,1,0.3,1);
+  --ease-springy:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-out:cubic-bezier(0.4,0,0.2,1);
+  --d-fast:150ms; --d-base:250ms; --d-slow:400ms;
+  --success:#34A065; --warning:#C98B2E; --danger:#C25555; --info:#5588B5; --onhold:#7B7B88;
+  --z-sticky:100; --z-modal:400; --z-toast:500;
+}
+[data-accent="gold"]    {--accent:#C9993A; --accent-bright:#E2B153;}
+[data-accent="silver"]  {--accent:#8B9AAB; --accent-bright:#A8B8C8;}
+[data-accent="rose"]    {--accent:#C4707A; --accent-bright:#E08890;}
+[data-accent="sapphire"]{--accent:#4A7FA5; --accent-bright:#6099C0;}
+[data-accent="emerald"] {--accent:#3A7D58; --accent-bright:#50A070;}
+:root{
+  --accent-dim:color-mix(in srgb,var(--accent) 13%,transparent);
+  --accent-glow:color-mix(in srgb,var(--accent) 8%,transparent);
+  --accent-border:color-mix(in srgb,var(--accent) 30%,transparent);
+}
+
+/* ---------- LIGHT (Default v2): Greige-Canvas + weiße Frosted-Panels ---------- */
+[data-theme="light"]{
+  --canvas:#ECEAE6;
+  --canvas-blob-1:color-mix(in srgb,var(--accent) 10%,transparent);
+  --canvas-blob-2:rgba(120,130,160,.10);
+  --panel:rgba(255,255,255,.62);
+  --panel-strong:rgba(255,255,255,.78);
+  --panel-border:rgba(255,255,255,.65);
+  --card:#FFFFFF;
+  --card-glass:rgba(255,255,255,.55);
+  --bg-subtle:#F2F0EB;
+  --bg-hover:rgba(20,18,12,.045);
+  --bg-pressed:rgba(20,18,12,.08);
+  --border:rgba(20,18,12,.07);
+  --border-strong:rgba(20,18,12,.13);
+  --text-1:#1B1A17;
+  --text-2:rgba(27,26,23,.64);   /* AA-fest: .55 fiel bei 12-13px unter 4.5:1 */
+  --text-3:rgba(27,26,23,.44);
+  --text-disabled:rgba(27,26,23,.22);
+  --text-inverse:rgba(255,252,245,.95);
+  --edge:inset 0 1px 0 rgba(255,255,255,.85);
+  --shadow-panel:0 18px 50px rgba(25,22,15,.10),0 2px 10px rgba(25,22,15,.05);
+  --shadow-card:0 2px 10px rgba(25,22,15,.05),0 10px 30px rgba(25,22,15,.06);
+  --shadow-pop:0 28px 80px rgba(25,22,15,.20),0 6px 20px rgba(25,22,15,.10);
+  /* Kontrast-Karte (OBT): dunkle Karte auf hellem Canvas */
+  --hero-bg:#16150F;
+  --hero-text:rgba(255,250,238,.95);
+  --hero-text-2:rgba(255,250,238,.55);
+  --hero-border:rgba(255,255,255,.08);
+  color-scheme:light;
+}
+/* ---------- DARK: tiefes Graphit, Glas mit Lichtkante, Gold-Glow ---------- */
+[data-theme="dark"]{
+  --canvas:#08080A;
+  --canvas-blob-1:color-mix(in srgb,var(--accent) 14%,transparent);
+  --canvas-blob-2:rgba(90,100,140,.12);
+  --panel:rgba(255,255,255,.045);
+  --panel-strong:rgba(24,24,28,.72);
+  --panel-border:rgba(255,255,255,.09);
+  --card:#141417;                 /* OPAK — Karten sind nie transparent (Hierarchie bleibt klar, Regel aus design-system v4) */
+  --card-glass:rgba(255,255,255,.04);
+  --bg-subtle:rgba(255,255,255,.055);
+  --bg-hover:rgba(255,255,255,.07);
+  --bg-pressed:rgba(255,255,255,.11);
+  --border:rgba(255,255,255,.075);
+  --border-strong:rgba(255,255,255,.14);
+  --text-1:rgba(248,247,244,.93);
+  --text-2:rgba(248,247,244,.62);  /* AA-fest */
+  --text-3:rgba(248,247,244,.38);
+  --text-disabled:rgba(248,247,244,.16);
+  --text-inverse:rgba(14,13,10,.94);
+  --edge:inset 0 1px 0 rgba(255,255,255,.07);
+  --shadow-panel:0 24px 70px rgba(0,0,0,.55),0 2px 10px rgba(0,0,0,.4);
+  --shadow-card:0 1px 2px rgba(0,0,0,.35),0 12px 32px rgba(0,0,0,.30);
+  --shadow-pop:0 36px 100px rgba(0,0,0,.7),0 8px 24px rgba(0,0,0,.5);
+  --hero-bg:linear-gradient(135deg,color-mix(in srgb,var(--accent) 16%,#121214),#101013 55%);
+  --hero-text:rgba(250,248,244,.94);
+  --hero-text-2:rgba(250,248,244,.55);
+  --hero-border:var(--accent-border);
+  color-scheme:dark;
+}
+
+/* ================================================================
+   BASIS + CANVAS
+   ================================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--f-ui);font-size:15px;line-height:1.5;
+  color:var(--text-1);background:var(--canvas);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  transition:background-color var(--d-base) var(--ease-out),color var(--d-base) var(--ease-out);
+  overflow:hidden;
+}
+/* Ambient-Hintergrund: zwei sehr weiche Farbflächen */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 500px at 85% -10%,var(--canvas-blob-1),transparent 65%),
+    radial-gradient(800px 600px at -10% 100%,var(--canvas-blob-2),transparent 60%);}
+::selection{background:var(--accent-dim)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent-bright);outline-offset:2px;border-radius:var(--r-xs)}
+svg{flex:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms!important;transition-duration:1ms!important}}
+
+/* ================================================================
+   FLOATING SHELL: Sidebar-Panel + Content-Panel schweben auf Canvas
+   ================================================================ */
+.app{position:relative;z-index:1;display:flex;gap:var(--s-4);height:100dvh;padding:var(--s-4)}
+
+.sidebar{
+  width:clamp(230px,17vw,264px);flex:none;display:flex;flex-direction:column;gap:2px;
+  background:var(--panel);backdrop-filter:blur(28px) saturate(1.5);
+  border:1px solid var(--panel-border);border-radius:var(--r-xl);
+  box-shadow:var(--shadow-panel),var(--edge);
+  padding:var(--s-4) var(--s-3);
+  transition:width var(--d-base) var(--ease-spring);
+}
+.traffic{display:flex;gap:7px;padding:var(--s-1) var(--s-3) var(--s-4)}
+.traffic i{width:11px;height:11px;border-radius:50%;opacity:.92}
+.traffic i:nth-child(1){background:#FF5F57}.traffic i:nth-child(2){background:#FEBC2E}.traffic i:nth-child(3){background:#28C840}
+.brand{display:flex;align-items:center;gap:var(--s-3);padding:0 var(--s-3) var(--s-5)}
+.brand-mark{width:30px;height:30px;border-radius:var(--r-sm);display:grid;place-items:center;
+  color:var(--text-inverse);background:linear-gradient(145deg,var(--accent-bright),var(--accent));
+  box-shadow:0 4px 12px var(--accent-glow),var(--edge)}
+.brand-name{font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:-.01em}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-3);padding:var(--s-4) var(--s-3) var(--s-2)}
+.nav-item{display:flex;align-items:center;gap:var(--s-3);width:100%;
+  padding:9px var(--s-3);border-radius:13px; /* konzentrisch: Panel 26 − Padding 12 ≈ 13-14 */
+  font-size:13px;font-weight:500;letter-spacing:-.01em;color:var(--text-2);
+  transition:background-color var(--d-fast) var(--ease-out),color var(--d-fast) var(--ease-out),box-shadow var(--d-fast) var(--ease-out)}
+.nav-item:hover{background:var(--bg-hover);color:var(--text-1)}
+.nav-item[aria-current="page"]{background:var(--card);color:var(--text-1);box-shadow:var(--shadow-card),var(--edge)}
+.nav-item[aria-current="page"] svg{color:var(--accent)}
+.nav-item .badge-count{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+.sidebar-footer{margin-top:auto;padding-top:var(--s-3)}
+.workspace-pill{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) var(--s-3);width:100%;
+  border-radius:var(--r);background:var(--card-glass);border:1px solid var(--border);box-shadow:var(--edge);
+  transition:background-color var(--d-fast) var(--ease-out)}
+.workspace-pill:hover{background:var(--bg-hover)}
+.ws-avatar{width:28px;height:28px;border-radius:var(--r-full);background:var(--accent-dim);color:var(--accent);
+  display:grid;place-items:center;font-size:11px;font-weight:600}
+.ws-meta{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
+.ws-name{font-size:13px;font-weight:500}
+.ws-plan{font-size:11px;color:var(--text-3)}
+
+/* ---------- Content-Panel ---------- */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;
+  background:var(--panel);backdrop-filter:blur(28px) saturate(1.5);
+  border:1px solid var(--panel-border);border-radius:var(--r-xl);
+  box-shadow:var(--shadow-panel),var(--edge);overflow:hidden}
+.topbar{height:var(--topbar-h);flex:none;display:flex;align-items:center;gap:var(--s-3);
+  padding:0 var(--s-6);border-bottom:1px solid var(--border)}
+.topbar-title{font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--text-2)}
+.search{display:flex;align-items:center;gap:var(--s-2);margin-left:auto;min-width:200px;
+  background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--r-full);
+  padding:7px var(--s-4);font-size:13px;color:var(--text-3);box-shadow:var(--edge);
+  transition:border-color var(--d-fast) var(--ease-out),background-color var(--d-fast) var(--ease-out)}
+.search:hover{border-color:var(--border-strong)}
+.search kbd{margin-left:auto;font-family:var(--f-mono);font-size:10px;border:1px solid var(--border-strong);border-radius:6px;padding:1px 6px;color:var(--text-3)}
+.icon-btn{width:34px;height:34px;display:grid;place-items:center;border-radius:var(--r-full);color:var(--text-2);
+  background:var(--card-glass);border:1px solid var(--border);box-shadow:var(--edge);
+  transition:background-color var(--d-fast) var(--ease-out),color var(--d-fast) var(--ease-out),transform 100ms linear}
+.icon-btn:hover{background:var(--bg-hover);color:var(--text-1)}
+.icon-btn:active{transform:scale(.94)}
+/* Sync-Status: stilles Signal für Offline-First (Klick: Demo-Toggle) */
+.sync-chip{gap:7px;cursor:pointer}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--success);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--success) 16%,transparent);
+  animation:syncPulse 2.6s ease-in-out infinite}
+@keyframes syncPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.sync-chip.offline .sync-dot{background:var(--text-3);box-shadow:none;animation:none}
+.accent-dots{display:flex;gap:7px;align-items:center;padding:0 var(--s-2)}
+.accent-dot{width:15px;height:15px;border-radius:50%;border:1px solid rgba(0,0,0,.12);
+  transition:transform var(--d-fast) var(--ease-springy),box-shadow var(--d-fast) var(--ease-out)}
+.accent-dot:hover{transform:scale(1.2)}
+.accent-dot[aria-pressed="true"]{box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--accent)}
+.avatar{width:32px;height:32px;border-radius:var(--r-full);display:grid;place-items:center;font-size:11px;font-weight:600;
+  color:var(--text-inverse);background:linear-gradient(145deg,var(--accent-bright),var(--accent));box-shadow:var(--edge)}
+
+.page{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
+.page-inner{max-width:1240px;margin:0 auto;padding:var(--s-8) var(--s-6) var(--s-16)}
+.view{display:none}
+.view.active{display:block;animation:viewIn var(--d-base) var(--ease-spring)}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px) scale(.995)}to{opacity:1;transform:none}}
+
+/* ================================================================
+   TYPO + BASIS-KOMPONENTEN
+   ================================================================ */
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-3)}
+.page-h1{font-family:var(--f-display);font-size:34px;font-weight:700;letter-spacing:-.025em;margin:var(--s-2) 0 var(--s-1)}
+.page-sub{color:var(--text-2);font-size:15px}
+.section-h{font-family:var(--f-ui);font-size:15px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:var(--s-3);margin:0 0 var(--s-4)}
+.section-h .hint{font-size:12px;font-weight:400;color:var(--text-3)}
+.section-h .right{margin-left:auto}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:clamp(16px,1.5vw,24px);box-shadow:var(--shadow-card),var(--edge);
+  transition:transform var(--d-fast) var(--ease-out),box-shadow var(--d-fast) var(--ease-out)}
+/* Borders sind ein Dark-Mode-Werkzeug: im Light trägt der Schatten die Kante (Apple-Prinzip) */
+[data-theme="light"] .card{border-color:transparent}
+.card.hoverable:hover{transform:translateY(-2px);box-shadow:var(--shadow-panel),var(--edge)}
+
+/* Buttons: Pill-Form */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
+  font-size:13px;font-weight:600;letter-spacing:-.01em;border-radius:var(--r-full);
+  padding:0 var(--s-5);height:38px;
+  transition:background-color var(--d-fast) var(--ease-out),transform 100ms linear,box-shadow var(--d-fast) var(--ease-out),color var(--d-fast) var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-primary{color:var(--text-inverse);background:linear-gradient(145deg,var(--accent-bright),var(--accent));
+  box-shadow:0 6px 18px var(--accent-glow),var(--edge)}
+.btn-primary:hover{filter:brightness(1.05)}
+.btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text-1);box-shadow:var(--shadow-card),var(--edge)}
+.btn-secondary:hover{background:var(--bg-hover)}
+.btn-ghost{color:var(--text-2)}
+.btn-ghost:hover{background:var(--bg-hover);color:var(--text-1)}
+.btn-danger-ghost{color:var(--danger)}
+.btn-danger-ghost:hover{background:color-mix(in srgb,var(--danger) 10%,transparent)}
+.btn-sm{height:32px;padding:0 var(--s-4);font-size:12px}
+.btn-lg{height:46px;padding:0 var(--s-8);font-size:14px}
+
+/* Chips / Tags / Delta */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;border-radius:var(--r-full);
+  padding:3px 10px;border:1px solid var(--border);color:var(--text-2);background:var(--card-glass);box-shadow:var(--edge)}
+.chip .dot{width:7px;height:7px;border-radius:50%}
+.chip-accent{background:var(--accent-dim);border-color:transparent;color:var(--accent)}
+.tag{display:inline-flex;font-size:11px;font-weight:500;border-radius:var(--r-full);padding:2px 9px;background:var(--bg-subtle);color:var(--text-2)}
+.delta{display:inline-flex;align-items:center;gap:3px;font-family:var(--f-mono);font-size:11px;font-weight:600;
+  border-radius:var(--r-full);padding:3px 8px}
+.delta.up{color:var(--success);background:color-mix(in srgb,var(--success) 12%,transparent)}
+.delta.flat{color:var(--text-3);background:var(--bg-subtle)}
+
+/* Segmented Control (Apple-like) */
+.segment{display:inline-flex;gap:2px;background:var(--bg-subtle);border:1px solid var(--border);
+  border-radius:var(--r-full);padding:3px;box-shadow:var(--edge)}
+.segment button{font-size:12px;font-weight:500;color:var(--text-2);border-radius:var(--r-full);padding:5px 12px;
+  transition:all var(--d-fast) var(--ease-out)}
+.segment button[aria-pressed="true"]{background:var(--card);color:var(--text-1);box-shadow:var(--shadow-card)}
+
+.progress{height:5px;background:var(--bg-subtle);border-radius:var(--r-full);overflow:hidden;box-shadow:var(--edge)}
+.progress>span{display:block;height:100%;border-radius:var(--r-full);
+  background:linear-gradient(90deg,var(--accent),var(--accent-bright));
+  transition:width var(--d-slow) var(--ease-spring)}
+.mono{font-family:var(--f-mono);font-feature-settings:"tnum"}
+
+/* ================================================================
+   DASHBOARD v2
+   ================================================================ */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-4);margin-top:var(--s-8)}
+.stat-card{display:flex;flex-direction:column;gap:var(--s-2)}
+.stat-label{font-size:12px;color:var(--text-2);display:flex;align-items:center;gap:var(--s-2)}
+/* SIGNATUR „Zahlen als Schmuck": Werte, die sich ändern, sind IMMER tabellarisch (mono).
+   Cabinet Grotesk garantiert kein tnum → Ziffern würden beim Zählen springen. Einheiten klein + ruhig. */
+.stat-value{font-family:var(--f-mono);font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1.05;font-feature-settings:"tnum"}
+.unit{font-family:var(--f-ui);font-size:15px;font-weight:500;color:var(--text-2);margin-left:3px;letter-spacing:0}
+.stat-foot{display:flex;align-items:center;gap:var(--s-2);font-size:11px;color:var(--text-3)}
+
+.dash-grid{display:grid;grid-template-columns:1fr 350px;gap:var(--s-4);margin-top:var(--s-4)}
+.dash-col{display:flex;flex-direction:column;gap:var(--s-4);min-width:0}
+
+/* OBT: Kontrast-Karte (hell: dunkle Karte / dunkel: Gold-Glas) */
+.obt{position:relative;overflow:hidden;border-radius:var(--r-xl);padding:var(--s-6);
+  background:var(--hero-bg);border:1px solid var(--hero-border);
+  color:var(--hero-text);box-shadow:var(--shadow-panel)}
+/* SIGNATUR „Der Goldene Faden": eine 2px-Naht markiert das Zentrum des Tages.
+   Sie erscheint NUR am One Big Thing — Knappheit ist ihre Bedeutung. */
+.obt::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,var(--accent-bright),var(--accent) 45%,transparent 92%) left top/2px 100% no-repeat,
+    radial-gradient(560px 220px at 88% -20%,var(--accent-glow),transparent 70%)}
+.obt::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.obt .eyebrow{color:var(--accent-bright)}
+.obt-title{font-family:var(--f-display);font-size:25px;font-weight:700;letter-spacing:-.02em;margin:var(--s-3) 0 var(--s-2)}
+.obt-meta{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-bottom:var(--s-5)}
+.obt .chip{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:var(--hero-text-2);box-shadow:none}
+.obt-actions{display:flex;gap:var(--s-3);position:relative}
+.obt .btn-secondary{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.14);color:var(--hero-text);box-shadow:none}
+.obt.done .obt-title{color:var(--hero-text-2);text-decoration:line-through}
+
+/* Momentum-Ring */
+.momentum{display:flex;align-items:center;gap:var(--s-6)}
+.momentum-ring{position:relative;width:118px;height:118px;flex:none}
+.momentum-ring::before{content:'';position:absolute;inset:-14px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent-glow),transparent 70%)}
+.momentum-ring svg{transform:rotate(-90deg)}
+.momentum-ring .track{stroke:var(--bg-subtle)}
+.momentum-ring .fill{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease-spring)}
+.momentum-num{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--f-mono);font-weight:600;font-size:27px;letter-spacing:-.03em;font-feature-settings:"tnum"}
+.momentum-num .unit{font-size:13px;margin-left:1px}
+.momentum-info{display:flex;flex-direction:column;gap:var(--s-2)}
+.momentum-level{font-family:var(--f-display);font-size:17px;font-weight:700;letter-spacing:-.01em}
+.momentum-next{font-size:12px;color:var(--text-3)}
+
+/* Task Rows */
+.task-list{display:flex;flex-direction:column}
+.task-row{display:flex;align-items:flex-start;gap:var(--s-3);padding:var(--s-3) var(--s-3);
+  border-radius:var(--r);cursor:pointer;transition:background-color var(--d-fast) var(--ease-out)}
+.task-row:hover{background:var(--bg-hover)}
+.task-row + .task-row{border-top:1px solid var(--border)}
+.task-check{width:20px;height:20px;flex:none;margin-top:1px;border-radius:50%;
+  border:1.5px solid var(--border-strong);display:grid;place-items:center;color:transparent;
+  transition:all 200ms var(--ease-springy)}
+.task-check:hover{border-color:var(--accent);transform:scale(1.08)}
+.task-row.done .task-check{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.task-body{min-width:0;flex:1}
+.task-title{font-size:14px;font-weight:500;letter-spacing:-.005em;transition:color var(--d-base) var(--ease-out)}
+.task-row.done .task-title{color:var(--text-3);text-decoration:line-through;text-decoration-color:var(--text-disabled)}
+.task-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-top:4px;font-size:11px;color:var(--text-3)}
+.task-meta .sep{opacity:.5}
+.prio{display:inline-flex;align-items:center;gap:4px;font-weight:500}
+.prio-high{color:var(--danger)} .prio-med{color:var(--warning)} .prio-low{color:var(--text-3)}
+.due{display:inline-flex;align-items:center;gap:4px}
+.due.today{color:var(--accent);font-weight:600}
+.obt-flag{display:inline-flex;align-items:center;gap:4px;color:var(--accent);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.task-row.completing{animation:taskDone 600ms var(--ease-spring)}
+@keyframes taskDone{0%{background:var(--accent-dim)}100%{background:transparent}}
+
+/* Habits */
+.habit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--s-4)}
+.habit-card{display:flex;flex-direction:column;gap:var(--s-4)}
+.habit-head{display:flex;align-items:flex-start;gap:var(--s-3)}
+.habit-icon{width:38px;height:38px;border-radius:var(--r);background:var(--bg-subtle);box-shadow:var(--edge);
+  display:grid;place-items:center;color:var(--text-2)}
+.habit-name{font-size:14px;font-weight:600;letter-spacing:-.005em}
+.habit-identity{font-size:12px;color:var(--text-3)}
+/* Streak-Badge: neutral als Default — Farbe ist Information, nicht Dekoration.
+   Orange NUR wenn der Streak heute in Gefahr ist (heute noch nicht erledigt). */
+.streak{margin-left:auto;display:flex;align-items:center;gap:4px;color:var(--text-2);
+  font-family:var(--f-mono);font-size:13px;font-weight:600;
+  background:var(--bg-subtle);border-radius:var(--r-full);padding:3px 9px;box-shadow:var(--edge);
+  transition:color var(--d-base) var(--ease-out),background-color var(--d-base) var(--ease-out)}
+.streak.risk{color:var(--warning);background:color-mix(in srgb,var(--warning) 11%,transparent)}
+.week-grid{display:flex;gap:6px}
+.week-cell{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px;color:var(--text-3);letter-spacing:.06em}
+/* Wochen-Historie: monochrom. Der einzige Farbpunkt pro Karte ist HEUTE.
+   So bleibt der Blick ruhig, auch wenn drei Karten nebeneinander stehen. */
+.week-dot{width:100%;aspect-ratio:1;max-width:30px;border-radius:9px;background:var(--bg-subtle);
+  border:1px solid var(--border);box-shadow:var(--edge);transition:all 200ms var(--ease-springy)}
+.week-dot.hit{background:var(--text-disabled);border-color:transparent}
+.week-dot.today{border-color:var(--accent);border-style:dashed;background:transparent}
+.week-dot.today.hit{background:var(--accent);border-style:solid;border-color:var(--accent);
+  box-shadow:0 2px 8px var(--accent-glow),var(--edge)}
+.habit-action{align-self:flex-start}
+.habit-card.celebrate .habit-icon{animation:pulse 600ms var(--ease-springy)}
+@keyframes pulse{0%{transform:scale(1)}40%{transform:scale(1.14)}100%{transform:scale(1)}}
+.heatmap{display:grid;grid-template-columns:repeat(18,1fr);gap:4px}
+.heatmap i{aspect-ratio:1;border-radius:4px;background:var(--bg-subtle)}
+.heatmap i.l1{background:color-mix(in srgb,var(--accent) 20%,var(--bg-subtle))}
+.heatmap i.l2{background:color-mix(in srgb,var(--accent) 45%,var(--bg-subtle))}
+.heatmap i.l3{background:color-mix(in srgb,var(--accent) 75%,var(--bg-subtle))}
+
+/* Goals / Rituale */
+.goal-row{display:flex;flex-direction:column;gap:var(--s-2);padding:var(--s-3) 0}
+.goal-row + .goal-row{border-top:1px solid var(--border)}
+.goal-top{display:flex;align-items:baseline;gap:var(--s-3)}
+.goal-name{font-size:13px;font-weight:500}
+.goal-pct{margin-left:auto;font-family:var(--f-mono);font-size:12px;color:var(--text-2)}
+.ritual-row{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) 0;font-size:13px}
+.ritual-state{width:9px;height:9px;border-radius:50%}
+.ritual-state.done{background:var(--success);box-shadow:0 0 0 3px color-mix(in srgb,var(--success) 15%,transparent)}
+.ritual-state.open{background:var(--text-disabled)}
+.ritual-time{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+
+/* ================================================================
+   FOKUS (Cinema)
+   ================================================================ */
+.focus-stage{min-height:calc(100dvh - var(--topbar-h) - 140px);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:var(--s-8);text-align:center;position:relative}
+.focus-stage::before{content:'';position:absolute;inset:-60px;pointer-events:none;
+  background:radial-gradient(720px 500px at 50% 36%,var(--accent-glow),transparent 70%);
+  animation:focusBreathe 7s ease-in-out infinite} /* kaum sichtbares Atmen — Ruhe, kein Effekt */
+@keyframes focusBreathe{0%,100%{opacity:.7}50%{opacity:1}}
+.focus-ring{position:relative;width:min(320px,72vw);aspect-ratio:1}
+.focus-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.focus-ring .track{stroke:var(--bg-subtle)}
+.focus-ring .fill{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.focus-time{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--f-mono);font-weight:600;font-size:clamp(40px,7vw,54px);letter-spacing:-.03em;font-feature-settings:"tnum"}
+.focus-task{font-size:15px;color:var(--text-2)}
+.focus-task strong{color:var(--text-1);font-weight:600}
+.focus-controls{display:flex;gap:var(--s-3);align-items:center}
+.app.cinema .sidebar{opacity:.05;pointer-events:none}
+.app.cinema .topbar{opacity:.25}
+
+/* ================================================================
+   MODAL: Glass-Sheet
+   ================================================================ */
+.modal-backdrop{position:fixed;inset:0;z-index:var(--z-modal);display:none;
+  background:color-mix(in srgb,var(--canvas) 45%,transparent);backdrop-filter:blur(14px) saturate(1.2)}
+.modal-backdrop.open{display:grid;place-items:center;animation:fadeIn var(--d-base) var(--ease-out)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{width:min(640px,calc(100vw - 32px));max-height:min(84dvh,760px);overflow-y:auto;
+  background:var(--panel-strong);backdrop-filter:blur(40px) saturate(1.6);
+  border:1px solid var(--panel-border);border-radius:var(--r-2xl);
+  box-shadow:var(--shadow-pop),var(--edge);padding:var(--s-8);
+  animation:modalIn var(--d-base) var(--ease-spring)}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-head{display:flex;align-items:flex-start;gap:var(--s-4);margin-bottom:var(--s-6)}
+.modal-title{font-family:var(--f-display);font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.modal-close{margin-left:auto}
+.prop-grid{display:grid;grid-template-columns:140px 1fr;row-gap:var(--s-3);column-gap:var(--s-4);align-items:center;margin-bottom:var(--s-6)}
+.prop-label{display:flex;align-items:center;gap:var(--s-2);font-size:12px;color:var(--text-3)}
+.prop-value{display:flex;flex-wrap:wrap;gap:var(--s-2);font-size:13px;align-items:center;min-height:26px}
+.desc-block{background:var(--bg-subtle);border-radius:var(--r);box-shadow:var(--edge);padding:var(--s-4);
+  font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:var(--s-6)}
+.subtask{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) 0;font-size:13px}
+.subtask + .subtask{border-top:1px solid var(--border)}
+.modal-foot{margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--border);
+  display:flex;align-items:center;font-size:11px;color:var(--text-3)}
+.modal-foot .btn{margin-left:auto}
+
+/* ================================================================
+   TOASTS
+   ================================================================ */
+.toast-root{position:fixed;top:calc(var(--s-5) + env(safe-area-inset-top,0px));right:var(--s-5);
+  z-index:var(--z-toast);display:flex;flex-direction:column;gap:var(--s-2);align-items:flex-end}
+.toast{display:flex;align-items:center;gap:var(--s-3);min-width:250px;
+  background:var(--panel-strong);backdrop-filter:blur(24px) saturate(1.4);
+  border:1px solid var(--panel-border);border-radius:var(--r-lg);
+  padding:var(--s-3) var(--s-4);box-shadow:var(--shadow-pop),var(--edge);font-size:13px;
+  animation:toastIn 300ms var(--ease-spring)}
+.toast.leaving{animation:toastOut 300ms var(--ease-out) forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-8px) scale(.97)}}
+.toast-xp{border-color:var(--accent-border)}
+.toast-xp .xp-num{font-family:var(--f-mono);font-weight:600;color:var(--accent);font-feature-settings:"tnum"}
+.toast-icon{color:var(--accent)}
+.toast-text{display:flex;flex-direction:column;line-height:1.35}
+.toast-text small{color:var(--text-3);font-size:11px}
+
+/* ================================================================
+   DESIGNSYSTEM-VIEW
+   ================================================================ */
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--s-4);margin-top:var(--s-6)}
+.swatch-row{display:flex;gap:var(--s-2);flex-wrap:wrap}
+.swatch{width:46px;height:46px;border-radius:var(--r);border:1px solid var(--border-strong);box-shadow:var(--edge)}
+.swatch-label{font-family:var(--f-mono);font-size:10px;color:var(--text-3);margin-top:4px;text-align:center}
+.type-row{display:flex;flex-direction:column;gap:var(--s-3)}
+.input-demo{width:100%;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--r);
+  box-shadow:var(--edge);padding:10px var(--s-4);font:inherit;font-size:13px;color:var(--text-1);
+  transition:border-color var(--d-fast) var(--ease-out),box-shadow var(--d-fast) var(--ease-out)}
+.input-demo::placeholder{color:var(--text-3)}
+.input-demo:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-glow),var(--edge)}
+.toggle-demo{width:44px;height:26px;border-radius:var(--r-full);background:var(--bg-pressed);position:relative;
+  transition:background-color var(--d-fast) var(--ease-out);box-shadow:var(--edge)}
+.toggle-demo::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform 200ms var(--ease-springy)}
+.toggle-demo[aria-checked="true"]{background:var(--accent)}
+.toggle-demo[aria-checked="true"]::after{transform:translateX(18px)}
+.empty-demo{display:flex;flex-direction:column;align-items:center;gap:var(--s-3);text-align:center;padding:var(--s-8) var(--s-4)}
+.empty-demo svg{color:var(--text-3)}
+.empty-title{font-family:var(--f-display);font-size:18px;font-weight:600}
+.empty-sub{font-size:13px;color:var(--text-2)}
+
+/* ================================================================
+   RESPONSIVE: Collapsed Rail → Floating Dock (Mobile)
+   ================================================================ */
+.tabbar{display:none}
+@media (max-width:1023px){
+  .sidebar{width:72px;padding:var(--s-4) var(--s-2)}
+  .sidebar .brand-name,.sidebar .nav-item span,.sidebar .nav-section,
+  .sidebar .badge-count,.sidebar .ws-meta,.sidebar .traffic{display:none}
+  .brand{justify-content:center;padding-bottom:var(--s-5)}
+  .nav-item{justify-content:center;padding:var(--s-3)}
+  .workspace-pill{justify-content:center;background:transparent;border:none;box-shadow:none}
+  .dash-grid{grid-template-columns:1fr}
+  .stat-row{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:767px){
+  .app{padding:var(--s-2);gap:0}
+  .sidebar{display:none}
+  .main{border-radius:var(--r-lg)}
+  .topbar{padding:0 var(--s-4)}
+  .search{display:none}
+  .sync-chip{display:none}
+  .page-inner{padding:var(--s-6) var(--s-4) calc(96px + env(safe-area-inset-bottom,0px))}
+  .page-h1{font-size:27px}
+  .obt-title{font-size:20px}
+  .stat-row{grid-template-columns:1fr 1fr;gap:var(--s-3)}
+  .stat-row .stat-card:first-child{grid-column:1/-1}
+  .stat-value{font-size:28px}
+  /* Floating Dock */
+  .tabbar{display:flex;position:fixed;left:50%;transform:translateX(-50%);
+    bottom:calc(var(--s-3) + env(safe-area-inset-bottom,0px));z-index:var(--z-sticky);
+    width:min(440px,calc(100vw - 24px));height:62px;padding:0 var(--s-2);
+    background:var(--panel-strong);backdrop-filter:blur(30px) saturate(1.6);
+    border:1px solid var(--panel-border);border-radius:var(--r-xl);
+    box-shadow:var(--shadow-pop),var(--edge)}
+  .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    font-size:10px;font-weight:500;color:var(--text-3);border-radius:var(--r);margin:var(--s-2) 2px;
+    transition:color var(--d-fast) var(--ease-out),background-color var(--d-fast) var(--ease-out)}
+  .tab-item[aria-current="page"]{color:var(--accent);background:var(--accent-dim)}
+  .modal{width:100vw;max-height:92dvh;border-radius:var(--r-2xl) var(--r-2xl) 0 0;align-self:end;padding:var(--s-6)}
+  .modal-backdrop.open{place-items:end center}
+  .prop-grid{grid-template-columns:118px 1fr}
+  .toast-root{left:var(--s-4);right:var(--s-4);align-items:stretch}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-peak" viewBox="0 0 24 24"><path d="M4 19 L10.5 7 L13.5 12.5 L16 8.5 L20 19 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="13.5" y="3.5" width="7" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="13.5" y="11.5" width="7" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3.5" y="15.5" width="7" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m8.5 12 2.5 2.5 5-5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2.5 20 5.5 17 8.5 M20 5.5 H7.5 A4 4 0 0 0 3.5 9.5 V11 M7 21.5 4 18.5 7 15.5 M4 18.5 H16.5 A4 4 0 0 0 20.5 14.5 V13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 10v3.5l2.5 1.5 M9.5 2.5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4.75" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-scope" viewBox="0 0 24 24"><path d="m4 13 9.5-7.5 3 4L7 17Z M14.5 6.5l2-1.5 3 4-2 1.5 M7 17l-2.5 4.5 M9.5 15.5 11 21.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4.5 19a2.5 2.5 0 0 1 2.5-2.5h12.5V3H7A2.5 2.5 0 0 0 4.5 5.5Z M4.5 19A2.5 2.5 0 0 0 7 21.5h12.5V16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><circle cx="7" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m20.5 20.5-4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 15 18 9 M10 20a2.2 2.2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2.5v2m0 15v2M4.8 4.8l1.4 1.4m11.6 11.6 1.4 1.4m0-14.4-1.4 1.4M6.2 17.8l-1.4 1.4M2.5 12h2m15 0h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4.5 M5 4.5C8 2.5 11 6.5 14 5c2-1 3.5-1.5 5-1v9c-1.5-.5-3 0-5 1-3 1.5-6-2.5-9-.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 2.8V6m8-3.2V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="m3 11.5 8.5 8.5a2 2 0 0 0 2.8 0l6.2-6.2a2 2 0 0 0 0-2.8L12 2.5H4.5a1.5 1.5 0 0 0-1.5 1.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2.5 4.5 13.5h6L11 21.5l8.5-11h-6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 21.5c4 0 6.5-2.6 6.5-6.2 0-3.4-2.3-5.5-4-8.3-.4 2-1.3 2.9-2.5 3.7C10.6 8 10.2 5 10.5 2.5 7 5 5.5 9 5.5 12.5c0 5 2.5 9 6.5 9Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7A2.5 2.5 0 0 1 6 4.5h3.5l2 2.5H18A2.5 2.5 0 0 1 20.5 9.5V17A2.5 2.5 0 0 1 18 19.5H6A2.5 2.5 0 0 1 3.5 17Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="3.6" height="14" rx="1.6" fill="currentColor"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+    <symbol id="i-rain" viewBox="0 0 24 24"><path d="M17.5 11.5a4.5 4.5 0 0 0-.4-9A6 6 0 0 0 5.7 5.6 4 4 0 0 0 6.5 13.5h11Z M8 16l-1 3m5-3-1 3m5-3-1 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l2.5-7 4 14 2.5-7H21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M12 9V3.5 M9.5 6 12 3.5 14.5 6 M5 18.5a7 7 0 0 1 14 0 M2.5 21.5h19 M3 14.5l1.8.8m16.2-.8-1.8.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3.5 17 5.5-5.5 3.5 3.5 7.5-7.5 M15 7.5h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+
+  <!-- ============ FLOATING SIDEBAR ============ -->
+  <aside class="sidebar" aria-label="Hauptnavigation">
+    <div class="traffic" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="brand">
+      <div class="brand-mark"><svg width="17" height="17"><use href="#i-peak"/></svg></div>
+      <span class="brand-name">APEX</span>
+    </div>
+    <button class="nav-item" data-nav="dashboard" aria-current="page"><svg width="17" height="17"><use href="#i-dash"/></svg><span>Dashboard</span></button>
+    <button class="nav-item" data-nav="tasks"><svg width="17" height="17"><use href="#i-check-sq"/></svg><span>Aufgaben</span><i class="badge-count">4</i></button>
+    <button class="nav-item" data-nav="habits"><svg width="17" height="17"><use href="#i-repeat"/></svg><span>Gewohnheiten</span></button>
+    <button class="nav-item" data-nav="focus"><svg width="17" height="17"><use href="#i-timer"/></svg><span>Fokus</span></button>
+    <div class="nav-section">Richtung</div>
+    <button class="nav-item" data-soon="Ziele"><svg width="17" height="17"><use href="#i-target"/></svg><span>Ziele</span></button>
+    <button class="nav-item" data-soon="Vision"><svg width="17" height="17"><use href="#i-scope"/></svg><span>Vision</span></button>
+    <div class="nav-section">Reflexion</div>
+    <button class="nav-item" data-soon="Journal"><svg width="17" height="17"><use href="#i-pen"/></svg><span>Journal</span></button>
+    <button class="nav-item" data-soon="Wissen"><svg width="17" height="17"><use href="#i-book"/></svg><span>Wissen</span></button>
+    <div class="nav-section">Referenz</div>
+    <button class="nav-item" data-nav="system"><svg width="17" height="17"><use href="#i-grid"/></svg><span>Designsystem</span></button>
+    <div class="sidebar-footer">
+      <button class="workspace-pill">
+        <span class="ws-avatar">PK</span>
+        <span class="ws-meta"><span class="ws-name">Petja — Solo</span><span class="ws-plan">Solo Pro</span></span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============ FLOATING CONTENT-PANEL ============ -->
+  <div class="main">
+    <header class="topbar">
+      <span class="topbar-title" id="topbarTitle">Dashboard</span>
+      <button class="search" aria-label="Suche öffnen">
+        <svg width="14" height="14"><use href="#i-search"/></svg>
+        Suchen oder Befehl…
+        <kbd>⌘K</kbd>
+      </button>
+      <button class="chip sync-chip" id="syncChip" title="Sync-Status (Demo: klicken)"><span class="sync-dot"></span>Synchron</button>
+      <div class="accent-dots" role="group" aria-label="Akzentfarbe">
+        <button class="accent-dot" style="background:#C9993A" data-accent-pick="gold" aria-pressed="true" aria-label="Gold"></button>
+        <button class="accent-dot" style="background:#8B9AAB" data-accent-pick="silver" aria-pressed="false" aria-label="Silber"></button>
+        <button class="accent-dot" style="background:#C4707A" data-accent-pick="rose" aria-pressed="false" aria-label="Rosé"></button>
+        <button class="accent-dot" style="background:#4A7FA5" data-accent-pick="sapphire" aria-pressed="false" aria-label="Saphir"></button>
+        <button class="accent-dot" style="background:#3A7D58" data-accent-pick="emerald" aria-pressed="false" aria-label="Smaragd"></button>
+      </div>
+      <button class="icon-btn" id="themeToggle" aria-label="Theme wechseln"><svg width="16" height="16"><use href="#i-moon"/></svg></button>
+      <button class="icon-btn" aria-label="Benachrichtigungen"><svg width="16" height="16"><use href="#i-bell"/></svg></button>
+      <div class="avatar" aria-hidden="true">PK</div>
+    </header>
+
+    <main class="page">
+      <div class="page-inner">
+
+        <!-- ======== DASHBOARD ======== -->
+        <section class="view active" id="view-dashboard">
+          <p class="eyebrow">Donnerstag, 11. Juni 2026</p>
+          <h1 class="page-h1">Guten Morgen, Petja.</h1>
+          <p class="page-sub">Stiller Tag. Ein Fokus — der Rest kann warten.</p>
+
+          <div class="stat-row">
+            <div class="card stat-card hoverable">
+              <span class="stat-label"><svg width="13" height="13"><use href="#i-trend"/></svg>Momentum</span>
+              <span class="stat-value" id="momentumNum">847</span>
+              <span class="stat-foot"><span class="delta up">+12 heute</span> Level 12 — Operator</span>
+            </div>
+            <div class="card stat-card hoverable">
+              <span class="stat-label"><svg width="13" height="13"><use href="#i-timer"/></svg>Fokus diese Woche</span>
+              <span class="stat-value">11,5<span class="unit">h</span></span>
+              <span class="stat-foot"><span class="delta up">+8 %</span> vs. letzte Woche</span>
+            </div>
+            <div class="card stat-card hoverable">
+              <span class="stat-label"><svg width="13" height="13"><use href="#i-flame"/></svg>Längster Streak</span>
+              <span class="stat-value">34<span class="unit">Tage</span></span>
+              <span class="stat-foot"><span class="delta flat">stabil</span> Lesen — täglich</span>
+            </div>
+          </div>
+
+          <div class="dash-grid">
+            <div class="dash-col">
+
+              <div class="obt" id="obtCard">
+                <span class="eyebrow">One Big Thing</span>
+                <h2 class="obt-title">PowerSync Sync-Rules deployen und adversarial testen</h2>
+                <div class="obt-meta">
+                  <span class="chip"><svg width="11" height="11"><use href="#i-folder"/></svg>Apex — Phase 09</span>
+                  <span class="chip"><span class="dot" style="background:var(--accent)"></span>Business</span>
+                  <span class="chip"><svg width="11" height="11"><use href="#i-clock"/></svg>90 min</span>
+                </div>
+                <div class="obt-actions">
+                  <button class="btn btn-primary" data-nav="focus"><svg width="15" height="15"><use href="#i-timer"/></svg>Fokus starten</button>
+                  <button class="btn btn-secondary" id="obtDone">Erledigt</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Heute <span class="hint">4 Aufgaben · 1 erledigt</span></h3>
+                <div class="task-list" id="taskListToday"></div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Gewohnheiten heute <span class="hint">2 von 3</span></h3>
+                <div class="habit-grid" id="habitGridDash"></div>
+              </div>
+            </div>
+
+            <div class="dash-col">
+              <div class="card hoverable">
+                <h3 class="section-h">Level-Fortschritt</h3>
+                <div class="momentum">
+                  <div class="momentum-ring">
+                    <svg width="118" height="118" viewBox="0 0 118 118">
+                      <circle class="track" cx="59" cy="59" r="52" fill="none" stroke-width="7"/>
+                      <circle class="fill" cx="59" cy="59" r="52" fill="none" stroke-width="7"
+                        stroke-dasharray="326.7" stroke-dashoffset="91.5"/>
+                    </svg>
+                    <span class="momentum-num">72<span class="unit">%</span></span>
+                  </div>
+                  <div class="momentum-info">
+                    <span class="momentum-level">Level 12 — Operator</span>
+                    <div class="progress" style="width:140px"><span style="width:72%"></span></div>
+                    <span class="momentum-next mono">2.840 / 3.200 XP bis Level 13</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Quartalsziele
+                  <span class="segment right" role="group" aria-label="Zeitraum">
+                    <button aria-pressed="false">Woche</button>
+                    <button aria-pressed="true">Quartal</button>
+                  </span>
+                </h3>
+                <div class="goal-row">
+                  <div class="goal-top"><span class="goal-name">Apex Alpha live + 30 Tage Dogfooding</span><span class="goal-pct">68 %</span></div>
+                  <div class="progress"><span style="width:68%"></span></div>
+                </div>
+                <div class="goal-row">
+                  <div class="goal-top"><span class="goal-name">Marathon-Trainingsvolumen aufbauen</span><span class="goal-pct">45 %</span></div>
+                  <div class="progress"><span style="width:45%"></span></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-h">Rituale</h3>
+                <div class="ritual-row"><span class="ritual-state done"></span> Morgenritual <span class="ritual-time">06:32</span></div>
+                <div class="ritual-row"><span class="ritual-state open"></span> Abendritual <span class="ritual-time">offen</span></div>
+              </div>
+
+              <div class="card hoverable">
+                <h3 class="section-h">Journal</h3>
+                <p style="font-size:13px;color:var(--text-2);margin-bottom:var(--s-4)">
+                  Der Abend gehört der Reflexion. Was war heute der beste Moment?
+                </p>
+                <button class="btn btn-secondary btn-sm"><svg width="13" height="13"><use href="#i-pen"/></svg>Eintrag beginnen</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======== AUFGABEN ======== -->
+        <section class="view" id="view-tasks">
+          <div style="display:flex;align-items:flex-end;gap:var(--s-4);flex-wrap:wrap">
+            <div>
+              <p class="eyebrow">Ausführung</p>
+              <h1 class="page-h1">Aufgaben</h1>
+            </div>
+            <button class="btn btn-primary" style="margin-left:auto"><svg width="15" height="15"><use href="#i-plus"/></svg>Neue Aufgabe</button>
+          </div>
+          <div style="display:flex;gap:var(--s-2);margin:var(--s-5) 0 var(--s-5);flex-wrap:wrap">
+            <button class="chip chip-accent">Heute · 4</button>
+            <button class="chip">Diese Woche · 12</button>
+            <button class="chip">Inbox · 3</button>
+            <button class="chip">Alle · 47</button>
+            <button class="chip"><svg width="11" height="11"><use href="#i-tag"/></svg>Tags</button>
+          </div>
+          <div class="card">
+            <h3 class="section-h">Heute</h3>
+            <div class="task-list" id="taskListFull"></div>
+          </div>
+          <div class="card" style="margin-top:var(--s-4)">
+            <h3 class="section-h">Morgen</h3>
+            <div class="task-list" id="taskListTomorrow"></div>
+          </div>
+          <p style="margin-top:var(--s-4);font-size:12px;color:var(--text-3)">
+            Eine Aufgabe anklicken öffnet das Detail mit allen Eigenschaften (Deadline, Bereich, Tags, Priorität, Energie, Schätzung …).
+          </p>
+        </section>
+
+        <!-- ======== GEWOHNHEITEN ======== -->
+        <section class="view" id="view-habits">
+          <p class="eyebrow">Identität</p>
+          <h1 class="page-h1">Gewohnheiten</h1>
+          <p class="page-sub">Du bist, was du wiederholst.</p>
+          <div class="habit-grid" style="margin-top:var(--s-8)" id="habitGridFull"></div>
+          <div class="card" style="margin-top:var(--s-4)">
+            <h3 class="section-h">Letzte 90 Tage <span class="hint">Lesen — 87 % Trefferquote</span></h3>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+        </section>
+
+        <!-- ======== FOKUS ======== -->
+        <section class="view" id="view-focus">
+          <div class="focus-stage">
+            <p class="eyebrow" style="letter-spacing:.14em">Deep-Work-Session</p>
+            <div class="focus-ring">
+              <svg viewBox="0 0 320 320">
+                <circle class="track" cx="160" cy="160" r="148" fill="none" stroke-width="5"/>
+                <circle class="fill" id="focusFill" cx="160" cy="160" r="148" fill="none" stroke-width="5"
+                  stroke-dasharray="929.9" stroke-dashoffset="232.5"/>
+              </svg>
+              <span class="focus-time" id="focusTime">37:30</span>
+            </div>
+            <p class="focus-task">Arbeitet an: <strong>PowerSync Sync-Rules deployen</strong></p>
+            <div class="focus-controls">
+              <button class="btn btn-secondary btn-lg" id="focusPause"><svg width="16" height="16"><use href="#i-pause"/></svg>Pause</button>
+              <button class="btn btn-ghost" id="focusEnd">Session beenden</button>
+              <span class="chip"><svg width="11" height="11"><use href="#i-rain"/></svg>Regen</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======== DESIGNSYSTEM ======== -->
+        <section class="view" id="view-system">
+          <p class="eyebrow">Referenz</p>
+          <h1 class="page-h1">Designsystem v2</h1>
+          <p class="page-sub">„Floating Glass" — schwebende Panels, große Radien, Frosted-Blur. Theme und Akzent oben rechts.</p>
+
+          <div class="spec-grid">
+            <div class="card">
+              <h3 class="section-h">Flächen-Ebenen</h3>
+              <div class="swatch-row">
+                <div><div class="swatch" style="background:var(--canvas)"></div><div class="swatch-label">canvas</div></div>
+                <div><div class="swatch" style="background:var(--panel);backdrop-filter:blur(20px)"></div><div class="swatch-label">panel</div></div>
+                <div><div class="swatch" style="background:var(--card)"></div><div class="swatch-label">card</div></div>
+                <div><div class="swatch" style="background:var(--bg-subtle)"></div><div class="swatch-label">subtle</div></div>
+                <div><div class="swatch" style="background:var(--bg-hover)"></div><div class="swatch-label">hover</div></div>
+              </div>
+              <h3 class="section-h" style="margin-top:var(--s-6)">Status + Akzent</h3>
+              <div class="swatch-row">
+                <div><div class="swatch" style="background:var(--success)"></div><div class="swatch-label">success</div></div>
+                <div><div class="swatch" style="background:var(--warning)"></div><div class="swatch-label">warning</div></div>
+                <div><div class="swatch" style="background:var(--danger)"></div><div class="swatch-label">danger</div></div>
+                <div><div class="swatch" style="background:var(--info)"></div><div class="swatch-label">info</div></div>
+                <div><div class="swatch" style="background:linear-gradient(145deg,var(--accent-bright),var(--accent))"></div><div class="swatch-label">accent</div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="section-h">Typografie</h3>
+              <div class="type-row">
+                <span style="font-family:var(--f-display);font-size:34px;font-weight:700;letter-spacing:-.025em">Seitentitel 34</span>
+                <span style="font-family:var(--f-display);font-size:24px;font-weight:600;letter-spacing:-.01em">Abschnitt 24</span>
+                <span style="font-size:15px">Fließtext 15 — Apex liest sich ruhig und präzise.</span>
+                <span style="font-size:13px;color:var(--text-2)">UI-Label 13 — sekundär</span>
+                <span class="eyebrow">Eyebrow 10 — Großbuchstaben</span>
+                <span class="mono" style="font-size:15px">1.234 / 88:12 — JetBrains Mono (tnum)</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="section-h">Buttons (Pill)</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--s-3);align-items:center">
+                <button class="btn btn-primary">Primär</button>
+                <button class="btn btn-secondary">Sekundär</button>
+                <button class="btn btn-ghost">Ghost</button>
+                <button class="btn btn-danger-ghost">Löschen</button>
+              </div>
+              <h3 class="section-h" style="margin-top:var(--s-6)">Segmented + Eingaben</h3>
+              <div style="display:flex;flex-direction:column;gap:var(--s-3)">
+                <span class="segment" role="group"><button aria-pressed="true">Heute</button><button aria-pressed="false">Woche</button><button aria-pressed="false">Quartal</button></span>
+                <input class="input-demo" placeholder="Aufgabe benennen…">
+                <div style="display:flex;align-items:center;gap:var(--s-3)">
+                  <button class="toggle-demo" role="switch" aria-checked="true" onclick="this.setAttribute('aria-checked',this.getAttribute('aria-checked')==='true'?'false':'true')"></button>
+                  <span style="font-size:13px">Haptisches Feedback</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="section-h">Chips · Tags · Delta</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--s-2);align-items:center">
+                <span class="chip chip-accent">Aktiv</span>
+                <span class="chip"><span class="dot" style="background:var(--accent)"></span>Business</span>
+                <span class="chip"><span class="dot" style="background:var(--info)"></span>Gesundheit</span>
+                <span class="delta up">+12 %</span>
+                <span class="delta flat">±0</span>
+                <span class="tag">deep-work</span>
+                <span class="tag">infrastruktur</span>
+              </div>
+              <h3 class="section-h" style="margin-top:var(--s-6)">Empty State</h3>
+              <div class="empty-demo">
+                <svg width="40" height="40"><use href="#i-sunrise"/></svg>
+                <span class="empty-title">Der Kopf ist frei.</span>
+                <span class="empty-sub">Nichts in der Inbox. Zurück zum Wesentlichen.</span>
+                <button class="btn btn-secondary btn-sm">Zum One Big Thing</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ FLOATING DOCK (Mobile) ============ -->
+  <nav class="tabbar" aria-label="Tab-Navigation">
+    <button class="tab-item" data-nav="dashboard" aria-current="page"><svg width="20" height="20"><use href="#i-dash"/></svg>Heute</button>
+    <button class="tab-item" data-nav="tasks"><svg width="20" height="20"><use href="#i-check-sq"/></svg>Aufgaben</button>
+    <button class="tab-item" data-nav="habits"><svg width="20" height="20"><use href="#i-repeat"/></svg>Habits</button>
+    <button class="tab-item" data-nav="focus"><svg width="20" height="20"><use href="#i-timer"/></svg>Fokus</button>
+    <button class="tab-item" data-nav="system"><svg width="20" height="20"><use href="#i-grid"/></svg>System</button>
+  </nav>
+</div>
+
+<!-- ============ TASK-DETAIL (Glass-Sheet) ============ -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <div>
+        <span class="obt-flag"><svg width="11" height="11"><use href="#i-dot"/></svg>One Big Thing</span>
+        <h2 class="modal-title" id="modalTitle">PowerSync Sync-Rules deployen und adversarial testen</h2>
+      </div>
+      <button class="icon-btn modal-close" id="modalClose" aria-label="Schließen"><svg width="15" height="15"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="prop-grid">
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-dot"/></svg>Status</span>
+      <span class="prop-value"><span class="chip" style="background:color-mix(in srgb,var(--info) 12%,transparent);border-color:transparent;color:var(--info)">In Arbeit</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-flag"/></svg>Priorität</span>
+      <span class="prop-value"><span class="prio prio-high"><svg width="12" height="12"><use href="#i-flag"/></svg>Hoch</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-grid"/></svg>Bereich</span>
+      <span class="prop-value"><span class="chip"><span class="dot" style="background:var(--accent)"></span>Business</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-folder"/></svg>Projekt</span>
+      <span class="prop-value">Apex — Phase 09</span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-cal"/></svg>Deadline</span>
+      <span class="prop-value"><span class="due today"><svg width="12" height="12"><use href="#i-cal"/></svg>Heute, 11. Juni</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-zap"/></svg>Energie</span>
+      <span class="prop-value">Hoch — Deep Work</span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-clock"/></svg>Schätzung</span>
+      <span class="prop-value mono">90 min</span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-tag"/></svg>Tags</span>
+      <span class="prop-value"><span class="tag">deep-work</span><span class="tag">infrastruktur</span><span class="tag">sicherheit</span></span>
+      <span class="prop-label"><svg width="13" height="13"><use href="#i-repeat"/></svg>Wiederholung</span>
+      <span class="prop-value" style="color:var(--text-3)">Keine</span>
+    </div>
+    <div class="desc-block">
+      Sync-Rules aus <span class="mono" style="font-size:12px">data-model.md</span> in der PowerSync-Konsole deployen.
+      Danach die fünf Adversarial-Tests aus Phase 09 EXPANDED ausführen — Bucket-Isolation ist nicht verhandelbar.
+    </div>
+    <h3 class="section-h" style="font-size:14px">Teilaufgaben <span class="hint">1 / 3</span></h3>
+    <div class="subtask"><span class="task-check" style="background:var(--accent);border-color:var(--accent);color:var(--text-inverse)"><svg width="11" height="11"><use href="#i-check"/></svg></span><s style="color:var(--text-3)">Sync-Rules YAML validieren</s></div>
+    <div class="subtask"><span class="task-check"></span>Deploy auf Dev-Instanz</div>
+    <div class="subtask"><span class="task-check"></span>Adversarial-Tests 1–5 dokumentieren</div>
+    <div class="modal-foot">
+      Erstellt gestern · Geändert vor 2 Std
+      <button class="btn btn-primary btn-sm" id="modalComplete">Erledigt</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-root" id="toastRoot" aria-live="polite"></div>
+
+<script>
+/* ================================================================
+   APEX PREVIEW v2 — Interaktion (Demo-Logik, kein Framework)
+   ================================================================ */
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+
+/* ---------- Demo-Daten ---------- */
+const TASKS=[
+ {id:1,title:'PowerSync Sync-Rules deployen und adversarial testen',obt:true,prio:'high',area:['Business','var(--accent)'],tags:['deep-work','infrastruktur'],due:'Heute',today:true,est:'90 min'},
+ {id:2,title:'AVV mit Supabase und PowerSync abschließen',prio:'high',area:['Business','var(--accent)'],tags:['dsgvo'],due:'Heute',today:true,est:'20 min'},
+ {id:3,title:'Intervall-Lauf 6 × 800 m',prio:'med',area:['Gesundheit','var(--info)'],tags:['marathon'],due:'Heute',today:true,est:'50 min'},
+ {id:4,title:'Wochenrechnung an Klient K. senden',prio:'low',area:['Finanzen','var(--success)'],tags:['admin'],due:'Heute',today:true,est:'10 min',done:true},
+];
+const TASKS_TOMORROW=[
+ {id:5,title:'Phase 10 — App-Shell-Spec lesen und Fragen notieren',prio:'med',area:['Business','var(--accent)'],tags:['planung'],due:'Morgen',est:'30 min'},
+ {id:6,title:'Mama anrufen',prio:'med',area:['Beziehungen','#C4707A'],tags:[],due:'Morgen',est:'15 min'},
+];
+const HABITS=[
+ {id:1,name:'Lesen — 20 Seiten',identity:'Ich bin jemand, der jeden Tag lernt.',icon:'i-book',streak:34,week:[1,1,1,0,1,1,'today']},
+ {id:2,name:'Laufen',identity:'Ich bin jemand, der seinen Körper trainiert.',icon:'i-activity',streak:12,week:[1,0,1,1,0,1,'today']},
+ {id:3,name:'Morgenritual vor 7 Uhr',identity:'Ich gehöre mir, bevor der Tag mir gehört.',icon:'i-sunrise',streak:21,week:[1,1,1,1,1,1,'today-hit']},
+];
+
+/* ---------- Task-Rows ---------- */
+const PRIO_LABEL={high:['prio-high','Hoch'],med:['prio-med','Mittel'],low:['prio-low','Niedrig']};
+function taskRow(t){
+  const row=document.createElement('div');
+  row.className='task-row'+(t.done?' done':'');
+  row.setAttribute('role','button');row.tabIndex=0;
+  const [pc,pl]=PRIO_LABEL[t.prio];
+  row.innerHTML=`
+    <span class="task-check" aria-label="Aufgabe abschließen">${t.done?'<svg width="11" height="11"><use href="#i-check"/></svg>':''}</span>
+    <span class="task-body">
+      <span class="task-title">${t.title}</span>
+      <span class="task-meta">
+        ${t.obt?'<span class="obt-flag"><svg width="10" height="10"><use href="#i-dot"/></svg>OBT</span><span class="sep">·</span>':''}
+        <span class="prio ${pc}"><svg width="11" height="11"><use href="#i-flag"/></svg>${pl}</span>
+        <span class="sep">·</span>
+        <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:99px;background:${t.area[1]};display:inline-block"></span>${t.area[0]}</span>
+        ${t.tags.map(x=>`<span class="tag">${x}</span>`).join('')}
+        <span class="sep">·</span>
+        <span class="due ${t.today?'today':''}"><svg width="11" height="11"><use href="#i-cal"/></svg>${t.due}</span>
+        <span class="sep">·</span><span class="mono">${t.est}</span>
+      </span>
+    </span>`;
+  row.querySelector('.task-check').addEventListener('click',e=>{e.stopPropagation();completeTask(row,t);});
+  row.addEventListener('click',()=>openModal());
+  row.addEventListener('keydown',e=>{if(e.key==='Enter')openModal();});
+  return row;
+}
+function renderTasks(){
+  const mount=(el,list)=>{el.innerHTML='';list.forEach(t=>el.appendChild(taskRow(t)));};
+  mount($('#taskListToday'),TASKS.filter(t=>!t.done).slice(0,3).concat(TASKS.filter(t=>t.done)));
+  mount($('#taskListFull'),TASKS);
+  mount($('#taskListTomorrow'),TASKS_TOMORROW);
+}
+function completeTask(row,t){
+  if(row.classList.contains('done'))return;
+  row.classList.add('done','completing');
+  row.querySelector('.task-check').innerHTML='<svg width="11" height="11"><use href="#i-check"/></svg>';
+  toastXP(t.obt?50:25,t.title);
+  bumpMomentum(t.obt?12:5);
+}
+
+/* ---------- Habits ---------- */
+const DAYS=['M','D','M','D','F','S','S'];
+function habitCard(h,compact=false){
+  const el=document.createElement('div');
+  el.className='card habit-card';
+  const dots=h.week.map((w,i)=>{
+    const today=(w==='today'||w==='today-hit');
+    const hit=(w===1||w==='today-hit');
+    return `<span class="week-cell">${compact?'':DAYS[i]}<span class="week-dot ${hit?'hit':''} ${today?'today':''}"></span></span>`;
+  }).join('');
+  const doneToday=h.week[6]==='today-hit';
+  el.innerHTML=`
+    <div class="habit-head">
+      <span class="habit-icon"><svg width="17" height="17"><use href="#${h.icon}"/></svg></span>
+      <span>
+        <div class="habit-name">${h.name}</div>
+        <div class="habit-identity">${h.identity}</div>
+      </span>
+      <span class="streak${h.week[6]==='today'?' risk':''}" title="${h.week[6]==='today'?'Streak in Gefahr — heute noch offen':'Aktueller Streak'}"><svg width="13" height="13"><use href="#i-flame"/></svg><span class="streak-n">${h.streak}</span></span>
+    </div>
+    <div class="week-grid">${dots}</div>
+    <button class="btn ${doneToday?'btn-ghost':'btn-secondary'} btn-sm habit-action">${doneToday?'Heute erledigt':'Abschließen'}</button>`;
+  const btn=el.querySelector('.habit-action');
+  btn.addEventListener('click',()=>{
+    if(btn.textContent==='Heute erledigt')return;
+    const lastDot=el.querySelectorAll('.week-dot')[6];
+    lastDot.classList.add('hit');
+    el.querySelector('.streak').classList.remove('risk');
+    const n=el.querySelector('.streak-n');n.textContent=+n.textContent+1;
+    btn.textContent='Heute erledigt';btn.classList.replace('btn-secondary','btn-ghost');
+    el.classList.add('celebrate');setTimeout(()=>el.classList.remove('celebrate'),700);
+    toastXP(15,h.name,'Du bist jemand, der dranbleibt.');
+  });
+  return el;
+}
+function renderHabits(){
+  const dash=$('#habitGridDash'),full=$('#habitGridFull');
+  dash.innerHTML='';full.innerHTML='';
+  HABITS.slice(0,2).forEach(h=>dash.appendChild(habitCard(structuredClone(h),true)));
+  HABITS.forEach(h=>full.appendChild(habitCard(structuredClone(h))));
+}
+(function heatmap(){
+  const hm=$('#heatmap');let seed=42;
+  const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
+  for(let i=0;i<90;i++){
+    const v=rnd();const cell=document.createElement('i');
+    if(v>.78)cell.className='l3';else if(v>.5)cell.className='l2';else if(v>.25)cell.className='l1';
+    hm.appendChild(cell);
+  }
+})();
+
+/* ---------- Momentum ---------- */
+let momentum=847;
+function bumpMomentum(d){
+  momentum+=d;const el=$('#momentumNum');
+  el.style.transition='transform 200ms var(--ease-springy)';el.style.transform='scale(1.06)';
+  setTimeout(()=>{el.textContent=momentum;el.style.transform='scale(1)';},120);
+}
+
+/* ---------- Toasts ---------- */
+function toastXP(xp,title,sub){
+  const root=$('#toastRoot');
+  const t=document.createElement('div');t.className='toast toast-xp';
+  t.innerHTML=`<span class="toast-icon"><svg width="16" height="16"><use href="#i-zap"/></svg></span>
+    <span class="toast-text"><span><span class="xp-num">+0 XP</span></span><small>${sub??title}</small></span>`;
+  root.appendChild(t);
+  const numEl=t.querySelector('.xp-num');const t0=performance.now();
+  const tick=now=>{const p=Math.min((now-t0)/500,1);
+    numEl.textContent='+'+Math.round(xp*(p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2))+' XP';
+    if(p<1)requestAnimationFrame(tick);};
+  requestAnimationFrame(tick);
+  setTimeout(()=>{t.classList.add('leaving');setTimeout(()=>t.remove(),320);},2600);
+  while(root.children.length>5)root.firstChild.remove();
+}
+function toastInfo(msg,sub='Im Prototyp angedeutet, nicht ausgebaut.'){
+  const root=$('#toastRoot');const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<span class="toast-icon" style="color:var(--info)"><svg width="16" height="16"><use href="#i-dot"/></svg></span>
+    <span class="toast-text"><span>${msg}</span><small>${sub}</small></span>`;
+  root.appendChild(t);setTimeout(()=>{t.classList.add('leaving');setTimeout(()=>t.remove(),320)},2400);
+}
+/* Sync-Status (Demo: Offline-First sichtbar machen) */
+const syncChip=$('#syncChip');let isOnline=true;
+syncChip.addEventListener('click',()=>{
+  isOnline=!isOnline;
+  syncChip.classList.toggle('offline',!isOnline);
+  syncChip.lastChild.textContent=isOnline?'Synchron':'Offline';
+  toastInfo(isOnline?'Wieder online.':'Offline.',
+    isOnline?'Lokale Änderungen wurden synchronisiert.':'Apex funktioniert weiter — alles wird lokal gespeichert.');
+});
+
+/* ---------- Navigation ---------- */
+const TITLES={dashboard:'Dashboard',tasks:'Aufgaben',habits:'Gewohnheiten',focus:'Fokus',system:'Designsystem'};
+function go(view){
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+view));
+  $$('.nav-item,.tab-item').forEach(b=>b.removeAttribute('aria-current'));
+  $$(`.nav-item[data-nav="${view}"],.tab-item[data-nav="${view}"]`).forEach(b=>b.se
