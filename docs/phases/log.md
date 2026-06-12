@@ -302,3 +302,23 @@
   - Sandbox-OOM bei pnpm install (Hintergrund) und Metro-Export → Foreground + NODE_OPTIONS=--max-old-space-size=1200 löst es
   - eslint-config-expo ist im SDK-56-Template NICHT enthalten → manuell als devDep + flat config
 - **Verifiziert:** turbo typecheck 2/2 ✓ · turbo lint 2/2 ✓ · format:check ✓ · next build ✓ · expo export web ✓ · Lefthook-Negativtest (Type-Error-Commit abgelehnt) ✓
+
+## Phase 02 — Design Tokens & Theme System (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** `@apex/design-tokens` (tokens v4.1, themes light/dark, 5 Akzente + Custom-Builder, Tailwind-Preset auf CSS-Var-Basis, css-variables für Web, themeVars für NativeWind, 50 Kontrast-Tests grün) · Marketing: next-themes (data-theme) + Accent-Pre-Paint + injizierte Vars + `/dev/tokens` · Product: NativeWind 4.2.5 + Tailwind 3.4, ThemeProvider (vars(), MMKV-v4-Adapter mit Expo-Go-Fallback), `/dev/tokens`, Startscreen auf Klassen umgestellt
+- **Abweichungen von der Spec:**
+  - Spec-Routen `app/_test/...` sind in Next UND Expo Router unsichtbar (Underscore = privat) → `/dev/tokens`
+  - Farbwerte: v4.1 „Floating Glass" statt der im Spec-Text genannten v3-Werte (#080706/#F5F3EE)
+  - NativeWind 4.2.x (stable line) statt 4.1; MMKV ist v4 (Nitro): `createMMKV` statt `new MMKV`
+  - `experiments.reactCompiler` deaktiviert (Kompatibilität mit nativewind/babel ungeprüft — Re-Evaluation Phase 30)
+- **Token-Härtung durch Tests (Design-Entscheidungen!):**
+  - `buildAccent` garantiert AA: onAccent muss auf base UND bright ≥4.5 — Saphir #4A7FA5→#4C83AA, Smaragd #3A7D58→#408C64 minimal aufgehellt; alle 5 Akzente einheitlich dunkler Button-Text
+  - Neue `statusFg`-Tokens je Theme (Status-TEXT auf 12%-Tint war in beiden Themes AA-verletzend)
+  - `accentTextFor(theme, accent)`: Akzent-als-Text je Theme nachgeführt (Chip-Fall), als Compound-CSS-Blöcke generiert
+- **Issues & Learnings:**
+  - pnpm-Strictness: `react-native-css-interop` (NativeWind-Runtime) muss direkte Dependency der App sein, sonst Metro-Resolve-Fehler
+  - `nativewind-env.d.ts` (Types-Referenz) nötig für className-Props + CSS-Import
+  - Next 16 Lint verbietet setState-im-Effect → Hydration-Gate via `useSyncExternalStore` (useHydrated())
+  - Sandbox: Hintergrundprozesse überleben Call-Ende nicht zuverlässig; Expo-Export braucht hier `METRO_MAX_WORKERS=1` + `--no-minify` (Verifikations-Build; Prod-Minify macht Vercel/EAS)
+- **Verifiziert:** typecheck 3/3 ✓ · lint 2/2 ✓ · 50/50 Kontrast-Tests ✓ · next build ✓ · expo export ✓ (inkl. /dev/tokens) · format ✓

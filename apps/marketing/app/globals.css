@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Theme-/Akzent-Variablen werden aus @apex/design-tokens injiziert (layout.tsx). */
+body {
+  background-color: var(--canvas);
+  color: var(--fg-1);
+}

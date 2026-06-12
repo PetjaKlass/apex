@@ -12,10 +12,13 @@
     "expo-splash-screen": "~56.0.10",
     "expo-status-bar": "~56.0.4",
     "expo-system-ui": "~56.0.5",
+    "nativewind": "^4.2.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.85.3",
+    "react-native-css-interop": "^0.2.5",
     "react-native-gesture-handler": "~2.31.1",
+    "react-native-mmkv": "^4.3.1",
     "react-native-reanimated": "4.3.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "4.25.2",
@@ -23,9 +26,11 @@
     "react-native-worklets": "0.8.3"
   },
   "devDependencies": {
+    "@apex/design-tokens": "workspace:*",
     "@types/react": "~19.2.2",
     "eslint": "^9.39.4",
     "eslint-config-expo": "^56.0.4",
+    "tailwindcss": "^3.4.19",
     "typescript": "~6.0.3"
   },
   "scripts": {
