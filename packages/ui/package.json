@@ -9,6 +9,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@apex/design-tokens": "workspace:*",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.0.0"
   },
@@ -17,16 +18,18 @@
     "lucide-react-native": "*",
     "nativewind": "*",
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "expo-linear-gradient": "*"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "expo-haptics": "*",
+    "lucide-react-native": "*",
+    "nativewind": "^4.2.5",
     "react": "19.2.3",
     "react-native": "0.85.3",
-    "nativewind": "^4.2.5",
-    "lucide-react-native": "*",
-    "expo-haptics": "*",
     "typescript": "~6.0.3",
-    "vitest": "^3.0.0"
+    "vitest": "^3.0.0",
+    "expo-linear-gradient": "~56.0.4"
   }
 }

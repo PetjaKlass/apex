@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { cn } from '../cn';
 import { tapLight } from '../haptics';
+import { useUiColors } from '../theme';
 
 export type IconComponent = React.ComponentType<{ size?: number; color?: string }>;
 
@@ -62,6 +63,7 @@ export function Button({
   accessibilityLabel,
   spinnerColor,
 }: ButtonProps) {
+  const c = useUiColors();
   const v = VARIANT[variant];
   const s = SIZE[size];
   const isBlocked = disabled || loading;
@@ -126,7 +128,10 @@ export function Button({
       )}
     >
       {showSpinner ? (
-        <ActivityIndicator size="small" color={spinnerColor} />
+        <ActivityIndicator
+          size="small"
+          color={spinnerColor ?? (variant === 'primary' ? c.accentOn : c.fg2)}
+        />
       ) : (
         Icon &&
         iconSide === 'left' && (

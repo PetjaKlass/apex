@@ -7,6 +7,7 @@ import { useId, useState } from 'react';
 import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 import { Eye, EyeOff, Search, X } from 'lucide-react-native';
 import { cn } from '../cn';
+import { useUiColors } from '../theme';
 
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'search';
 export type InputSize = 'sm' | 'md' | 'lg';
@@ -63,6 +64,7 @@ export function Input({
   returnKeyType,
   onSubmitEditing,
 }: InputProps) {
+  const c = useUiColors();
   const s = SIZE[size];
   const id = useId();
   const describedBy = `${id}-desc`;
@@ -96,7 +98,7 @@ export function Input({
           disabled && 'opacity-40'
         )}
       >
-        {type === 'search' && <Search size={s.icon} color="#8A8782" />}
+        {type === 'search' && <Search size={s.icon} color={c.fg3} />}
         <TextInput
           id={Platform.OS === 'web' ? id : undefined}
           className={cn(
@@ -105,7 +107,7 @@ export function Input({
             Platform.OS === 'web' && 'web:outline-none'
           )}
           placeholder={placeholder}
-          placeholderTextColor="#8A8782"
+          placeholderTextColor={c.fg3}
           value={value}
           onChangeText={onChangeText}
           editable={!disabled && !readonly}
@@ -133,11 +135,7 @@ export function Input({
             onPress={() => setSecure((v) => !v)}
             hitSlop={8}
           >
-            {secure ? (
-              <Eye size={s.icon} color="#8A8782" />
-            ) : (
-              <EyeOff size={s.icon} color="#8A8782" />
-            )}
+            {secure ? <Eye size={s.icon} color={c.fg3} /> : <EyeOff size={s.icon} color={c.fg3} />}
           </Pressable>
         )}
         {showClear && (
@@ -147,7 +145,7 @@ export function Input({
             onPress={() => onChangeText('')}
             hitSlop={8}
           >
-            <X size={s.icon} color="#8A8782" />
+            <X size={s.icon} color={c.fg3} />
           </Pressable>
         )}
       </View>

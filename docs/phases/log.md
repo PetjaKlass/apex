@@ -347,3 +347,12 @@
   - Komponententests (RN-Rendering) auf Testing-Infra-Phase verschoben; cn-Merge-Test als Platzhalter
 - **Deps:** react-native-svg@15.15.4 (SDK-56-Bundled-Version, expo install crashte im Sandbox-TTY → Version aus bundledNativeModules.json gezogen), lucide-react-native, clsx, tailwind-merge
 - **Verifiziert:** typecheck 5/5 ✓ · lint ✓ · ui-Test ✓ · expo export mit /dev/components ✓ („Fokus starten"/„Umlaut-Test" im Static-HTML)
+
+## Phase 05 — Foundation Components 2: Form Controls (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** UiColors-Theme-Bridge in @apex/ui (behebt die Phase-04-Hardcodes: placeholderTextColor, Icon-Farben, Spinner jetzt token-gespeist; App verdrahtet sie in _layout via buildUiColors(theme, accent)) · Checkbox (r6 eckig, Indeterminate accent-dim + Strich, Zeile = Tap-Target) · Toggle (44×26, Knob-Animation springy 200ms via RN-Animated, optimistisch MIT Revert bei Promise-Reject, loading-Spinner im Knob) · RadioGroup (Punkt 8px, Pfeiltasten-Navigation Web, allowDeselect, Fehlerzeile) · Textarea (Auto-Resize via onContentSizeChange beidseitig, maxHeight, Zeichenzähler ab 90 % danger) · Select (Trigger im Input-Look + Chevron-Rotation; Web: Dropdown auf Pop-Ebene mit ↑↓/Enter/Esc/Home/End + Hover-Sync, Gruppen mit Uppercase-Labels; Native: Minimal-Bottom-Sheet via RN-Modal — Vollausbau folgt mit modal.md Phase 06) · Avatar (Initialen-Pflicht, self = Accent-Gradient via expo-linear-gradient, deterministische 8er-Pastell-Palette mit Dark-Mix über composite(), Status-Punkt mit Canvas-Ring, AvatarGroup max 4 + „+N") · Badge-Familie (Chip default/accent + Bedeutungs-Dots, Tag mit onRemove, Delta up/down/flat mono, Count 9+ / unseen-dot)
+- **Demo:** /dev/components um drei Karten erweitert (Form-Controls inkl. Indeterminate-Parent + absichtlich fehlschlagendem Async-Toggle, Textarea+Select mit Pflicht-Fehler, Avatar+Badges) — Static-Export-Beweis im HTML
+- **Lektion (in CLAUDE.md verankert):** Prettier-Umformatierung ließ einen JSX-Patch STILL fehlschlagen (Marker mehrzeilig geworden; Folge: Import/State da, JSX fehlte, 24 Unused-Warnings + unveränderte Export-Größe als Symptome). Neue Regel: vor jedem Patch Datei lesen + assert auf Marker.
+- **Deps:** expo-linear-gradient@~56.0.4 (bundled-Version), @apex/design-tokens als ui-Dependency (Bridge-Defaults)
+- **Verifiziert:** typecheck 5/5 ✓ · lint 0 Warnings ✓ · ui-Test ✓ · expo export /dev/components 54KB mit allen neuen Sektionen ✓

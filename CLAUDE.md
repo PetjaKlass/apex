@@ -60,3 +60,10 @@ Phase 19, vor Payments) · AUDIT-REPORT (bekannte Korrekturen 2026-06-10).
 `X:\Claude\apex` ist Petjas LOKALER GIT-CLONE. NIEMALS per rsync/Spiegel überschreiben —
 Austausch läuft ausschließlich über GitHub (Claude pusht, Petja pullt). Claudes Arbeitskopie
 lebt in der Session-Sandbox und wird je Session frisch von origin geclont.
+
+## Patch-Regel (Lektion aus Phase 03+05)
+
+Prettier (inkl. Tailwind-Klassen-Sortierung) formatiert Dateien um. Deshalb: NIEMALS gegen
+erinnerte/auswendige Strings patchen. Vor jedem Patch die Datei LESEN; Marker per assert prüfen
+(Python `assert marker in s`), sonst schlägt der Patch still fehl. Nach `pnpm format` gilt
+jeder gemerkte Dateiinhalt als ungültig.
