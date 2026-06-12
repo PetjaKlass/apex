@@ -334,3 +334,16 @@
   - Intl setzt U+202F vor €-Symbol — Tests normalisieren Whitespace (Formatter war korrekt)
   - Product nutzt bewusst NICHT next-intl: Mini-Übersetzer (~60 Zeilen) reicht laut Spec; volle ICU nur im Marketing
 - **Verifiziert:** typecheck 5/5 ✓ · lint ✓ · i18n-Tests 8/8 ✓ · next build (/en+/de+dev-Seiten) ✓ · expo export (/dev/i18n) ✓
+
+## Phase 04 — Foundation Components 1: Button, Input, Card (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** `@apex/ui` (cn-Util mit tailwind-merge, Haptik-Adapter) · Button per Muster-Spec (5 Varianten × 3 Größen, iconOnly, Loading mit 200ms-Delay/300ms-Min-Hold/Breiten-Freeze, Haptik Light primary/secondary, AA-Focus-Ring Web) · Input per Spec (5 Typen × 3 Größen, sichtbares Label, hint/error mit aria-describedby/role=alert, Passwort-Auge, Such-X, instant Focus-States, KEINE Transitions auf dem Feld) · Card per Spec (default/hoverable/subtle, header+hint+footer-Slots, Divider-Regel, Lift NUR mit onPress, Pressable+Haptik) · Demo `/dev/components` mit allen States inkl. Theme-Toggle-Karte
+- **Spec-Konflikte gelöst:** Phasen-Datei (v3-Ära) nannte „7 Button-/8 Card-Varianten" + Storybook + cva — maßgeblich sind die v4.1-Komponenten-Specs (5/3 Varianten); Storybook bleibt gestrichen (Demo-Screen ist die Abnahmefläche, components/README korrigiert: /dev/components statt __components); cva nicht nötig (Record-Maps + cn reichen, eine Dependency weniger)
+- **Bewusste Abweichungen (Folge-Arbeit Phase 05):**
+  - Spinner = ActivityIndicator statt rotierendem Loader2 (kein Reanimated-Loop nötig); Farbe via optionalem spinnerColor-Prop — Token-Anbindung kommt mit Theme-Hook-Injection in @apex/ui
+  - Icon-/Placeholder-Grau in Input punktuell hart (#8A8782): RN-Props (placeholderTextColor, lucide color) können keine CSS-Vars — Fix: Theme-Context in @apex/ui (geplant Phase 05, dann Hex-Grep-Gate scharf)
+  - Marketing-Demoseite entfällt: @apex/ui ist RN/NativeWind (Product); Marketing behält eigene Primitives (architecture.md)
+  - Komponententests (RN-Rendering) auf Testing-Infra-Phase verschoben; cn-Merge-Test als Platzhalter
+- **Deps:** react-native-svg@15.15.4 (SDK-56-Bundled-Version, expo install crashte im Sandbox-TTY → Version aus bundledNativeModules.json gezogen), lucide-react-native, clsx, tailwind-merge
+- **Verifiziert:** typecheck 5/5 ✓ · lint ✓ · ui-Test ✓ · expo export mit /dev/components ✓ („Fokus starten"/„Umlaut-Test" im Static-HTML)

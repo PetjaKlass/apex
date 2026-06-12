@@ -41,7 +41,7 @@
 
 ### Tokens & Themes
 - Farben/Radien/Schatten NUR über Tokens aus `packages/design-tokens` (Namen wie in `design-system.md` §2–3). Kein Hex im Komponenten-Code.
-- Jede Komponente wird in **2 Themes × 5 Akzenten** getestet (Storybook-Ersatz: Demo-Screen `/__components` im Dev-Build, da Storybook gestrichen — siehe phases/log.md Phase 04).
+- Jede Komponente wird in **2 Themes × 5 Akzenten** getestet (Storybook-Ersatz: Demo-Screen `/dev/components` im Dev-Build, da Storybook gestrichen — siehe phases/log.md Phase 04).
 - Karten/Container: **opak**. Glas (`panel`/`panelStrong` + blur) ist exklusiv für: Sidebar, Content-Hülle, Dock, Modal/Sheet, Toast, Command Palette. Blur-Budget: max. 3 gleichzeitig.
 - Borders: Dark-Mode-Werkzeug. Light = borderless + Schatten (`--shadow-card`) + Lichtkante (`--edge`).
 

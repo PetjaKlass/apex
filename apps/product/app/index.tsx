@@ -19,6 +19,9 @@ export default function HomeScreen() {
         <Link href="/dev/i18n" className="text-accent-text mt-2 text-sm">
           Dev: i18n →
         </Link>
+        <Link href="/dev/components" className="text-accent-text mt-2 text-sm">
+          Dev: Components →
+        </Link>
       </View>
     </SafeAreaView>
   );
