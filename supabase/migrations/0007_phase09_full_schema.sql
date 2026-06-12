@@ -1,0 +1,21 @@
+-- ============================================================================
+-- Phase 09 (Teil A) — angewendet als 9 Live-Migrationen auf dem Dev-Projekt
+-- (uzbzrcwexifduawmzrfn, Frankfurt), Versionen 20260612141710..20260612142009:
+--   areas_visions · goals_projects · tasks_habits · execution_reflection ·
+--   knowledge_wellbeing_finance_calendar · gamification_notifications_misc ·
+--   denormalization_triggers · rls_all_tables · indexes_and_powersync_role
+--
+-- REPRODUZIERBARKEIT (Prod-Setup Phase 13): Schema aus Dev exportieren —
+--   supabase db dump --db-url <DEV-URL> --schema public,app -f schema.sql
+-- bzw. supabase migration fetch (Migrationshistorie liegt serverseitig in
+-- supabase_migrations.schema_migrations inkl. aller Statements).
+-- Inhaltliche Quelle der Wahrheit: docs/data-model.md (v. 2026-06-10ff).
+--
+-- Highlights:
+--  • ~30 Tabellen inkl. tasks.tags[], finance.visibility, xp_state OHNE workspace_id
+--  • updated_at + Trigger auf allen mutierbaren Tabellen (Last-Write-Wins-Vorbereitung)
+--  • Denorm-Trigger füllen workspace_id (7 Kindtabellen) + visibility (Transaktionen)
+--  • RLS: workspace-shared via app.user_workspaces() · user-privat strikt ·
+--    private Finanzkonten für Duo-Partner unsichtbar
+--  • powersync_role (NOLOGIN bis Passwort gesetzt — siehe NEEDS B1) + publication
+-- ============================================================================

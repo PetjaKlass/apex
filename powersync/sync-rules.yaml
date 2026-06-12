@@ -1,0 +1,57 @@
+# PowerSync Sync Rules (Legacy-Format) — deploybar sobald Instanz existiert (NEEDS B1).
+# Bei Wahl von SYNC STREAMS beim Setup: diese Datei dient als 1:1-Vorlage der Buckets.
+# Quelle: docs/data-model.md §PowerSync (denormalisierte workspace_id, KEINE Subqueries/JOINs).
+bucket_definitions:
+  workspace_shared:
+    parameters: |
+      SELECT workspace_id FROM workspace_members WHERE user_id = request.user_id()
+    data:
+      - SELECT id, name, type, owner_id, plan, trial_ends_at, created_at, updated_at FROM workspaces WHERE id = bucket.workspace_id
+      - SELECT * FROM workspace_members WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM areas WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM visions WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM vision_values WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM annual_letters WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM goals WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM key_results WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM projects WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM project_kanban_columns WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM tasks WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM task_assignees WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM habits WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM habit_logs WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM inbox_items WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM knowledge_entries WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM knowledge_tags WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM calendar_events WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM financial_accounts WHERE workspace_id = bucket.workspace_id AND visibility = 'shared'
+      - SELECT * FROM financial_transactions WHERE workspace_id = bucket.workspace_id AND visibility = 'shared'
+      - SELECT * FROM activity_log WHERE workspace_id = bucket.workspace_id
+      - SELECT * FROM attachments WHERE workspace_id = bucket.workspace_id
+
+  user_private:
+    parameters: |
+      SELECT request.user_id() AS user_id
+    data:
+      - SELECT * FROM profiles WHERE id = bucket.user_id
+      - SELECT * FROM journal_entries WHERE user_id = bucket.user_id
+      - SELECT * FROM morning_rituals WHERE user_id = bucket.user_id
+      - SELECT * FROM evening_rituals WHERE user_id = bucket.user_id
+      - SELECT * FROM ceo_reviews WHERE user_id = bucket.user_id
+      - SELECT * FROM energy_logs WHERE user_id = bucket.user_id
+      - SELECT * FROM sleep_logs WHERE user_id = bucket.user_id
+      - SELECT * FROM emotion_logs WHERE user_id = bucket.user_id
+      - SELECT * FROM focus_sessions WHERE user_id = bucket.user_id
+      - SELECT * FROM xp_events WHERE user_id = bucket.user_id
+      - SELECT * FROM xp_state WHERE user_id = bucket.user_id
+      - SELECT * FROM badges WHERE user_id = bucket.user_id
+      - SELECT * FROM notifications WHERE user_id = bucket.user_id
+      - SELECT * FROM notification_preferences WHERE user_id = bucket.user_id
+      - SELECT * FROM calendar_integrations WHERE user_id = bucket.user_id
+
+  # User-private Finanzen (eigene private Konten/Transaktionen)
+  user_private_finance:
+    parameters: |
+      SELECT request.user_id() AS user_id
+    data:
+      - SELECT * FROM financial_accounts WHERE owner_id = bucket.user_id AND visibility = 'private'
