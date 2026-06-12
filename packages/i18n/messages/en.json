@@ -47,5 +47,116 @@
     "sampleNumber": "Number",
     "sampleCurrency": "Currency",
     "switchLocale": "Sprache: Deutsch"
+  },
+  "marketing": {
+    "nav": {
+      "pricing": "Pricing",
+      "signIn": "Sign in",
+      "getStarted": "Get started"
+    },
+    "hero": {
+      "eyebrow": "For solo founders and duos",
+      "title": "Run your life like a founder runs a company.",
+      "subtitle": "One calm place that connects today's effort to the life you said you would build — vision, goals, deep work, reflection.",
+      "ctaPrimary": "Start free",
+      "ctaSecondary": "See pricing",
+      "status": "In development — Alpha"
+    },
+    "features": {
+      "obt": {
+        "title": "One Big Thing",
+        "body": "One task is the center of your day. Everything else can wait."
+      },
+      "identity": {
+        "title": "Identity-based habits",
+        "body": "Not streak theatre. You are what you repeat — Apex keeps the proof."
+      },
+      "focus": {
+        "title": "Cinema-mode deep work",
+        "body": "The room goes quiet, the ring counts down, momentum compounds."
+      },
+      "offline": {
+        "title": "Offline-first & private",
+        "body": "Works without a connection. EU-hosted. Your data is yours."
+      }
+    },
+    "pricing": {
+      "title": "Honest pricing. No tricks.",
+      "subtitle": "Free is a real start, not a trap. Annual saves about 30 percent.",
+      "perMonth": "/month",
+      "perYear": "/year",
+      "orAnnual": "or {price} annually",
+      "free": {
+        "name": "Free",
+        "price": "€0",
+        "tagline": "Try the system",
+        "features": [
+          "1 personal workspace",
+          "3 goals, 5 habits, 1 vision",
+          "Tasks, focus, journal",
+          "No AI coach"
+        ]
+      },
+      "solo": {
+        "name": "Solo Pro",
+        "price": "€12",
+        "annual": "€99",
+        "tagline": "The full system",
+        "features": [
+          "Everything unlimited",
+          "AI coach included (200/mo)",
+          "All exports",
+          "Desktop app (soon)"
+        ]
+      },
+      "duo": {
+        "name": "Duo Pro",
+        "price": "€29",
+        "annual": "€249",
+        "tagline": "Two people, one direction",
+        "features": [
+          "Everything in Solo Pro",
+          "Shared duo workspace",
+          "Shared vision, goals, tasks",
+          "Journal stays private"
+        ]
+      },
+      "cta": "Choose {plan}",
+      "popular": "Most popular",
+      "note": "Prices incl. VAT where applicable. Cancel anytime."
+    },
+    "auth": {
+      "signInTitle": "Welcome back.",
+      "signUpTitle": "Build the life you said you would.",
+      "resetTitle": "Reset password",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign in",
+      "signUp": "Create account",
+      "reset": "Send reset link",
+      "noAccount": "No account yet?",
+      "hasAccount": "Already have an account?",
+      "forgot": "Forgot password?",
+      "comingSoon": "Authentication goes live in Phase 08 — this page is the prepared shell.",
+      "legalHint": "By continuing you accept our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+    },
+    "legal": {
+      "imprint": "Imprint",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "draft": "DRAFT — placeholder. Lawyer-reviewed version required before public launch (see ADR 0010).",
+      "imprintBody": "Information according to § 5 TMG. Operator: [FULL NAME], [STREET], [ZIP CITY], Germany. Contact: [EMAIL]. VAT ID: [PENDING].",
+      "privacyBody": "This privacy policy will be generated with e-recht24 and reviewed by a lawyer before launch. Data residency: EU (Frankfurt). No ads, no tracking without consent.",
+      "termsBody": "Terms of service will be drafted from a B2C SaaS template and reviewed by a lawyer before launch."
+    },
+    "notFound": {
+      "title": "Nothing here.",
+      "body": "The page does not exist — back to what matters.",
+      "cta": "Go home"
+    },
+    "footer": {
+      "tagline": "The Life Operating System.",
+      "language": "Language"
+    }
   }
 }

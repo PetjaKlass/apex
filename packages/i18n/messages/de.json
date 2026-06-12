@@ -47,5 +47,116 @@
     "sampleNumber": "Zahl",
     "sampleCurrency": "Währung",
     "switchLocale": "Language: English"
+  },
+  "marketing": {
+    "nav": {
+      "pricing": "Preise",
+      "signIn": "Anmelden",
+      "getStarted": "Loslegen"
+    },
+    "hero": {
+      "eyebrow": "Für Solo-Founder und Duos",
+      "title": "Führe dein Leben wie ein Founder sein Unternehmen.",
+      "subtitle": "Ein ruhiger Ort, der die Arbeit von heute mit dem Leben verbindet, das du dir vorgenommen hast — Vision, Ziele, Deep Work, Reflexion.",
+      "ctaPrimary": "Kostenlos starten",
+      "ctaSecondary": "Preise ansehen",
+      "status": "In Entwicklung — Alpha"
+    },
+    "features": {
+      "obt": {
+        "title": "One Big Thing",
+        "body": "Eine Aufgabe ist das Zentrum deines Tages. Alles andere kann warten."
+      },
+      "identity": {
+        "title": "Identitätsbasierte Gewohnheiten",
+        "body": "Kein Streak-Theater. Du bist, was du wiederholst — Apex führt den Beweis."
+      },
+      "focus": {
+        "title": "Deep Work im Cinema-Modus",
+        "body": "Der Raum wird still, der Ring zählt runter, Momentum verzinst sich."
+      },
+      "offline": {
+        "title": "Offline-first & privat",
+        "body": "Funktioniert ohne Verbindung. EU-gehostet. Deine Daten gehören dir."
+      }
+    },
+    "pricing": {
+      "title": "Ehrliche Preise. Keine Tricks.",
+      "subtitle": "Free ist ein echter Start, keine Falle. Jährlich sparst du rund 30 Prozent.",
+      "perMonth": "/Monat",
+      "perYear": "/Jahr",
+      "orAnnual": "oder {price} jährlich",
+      "free": {
+        "name": "Free",
+        "price": "0 €",
+        "tagline": "Das System testen",
+        "features": [
+          "1 persönlicher Workspace",
+          "3 Ziele, 5 Gewohnheiten, 1 Vision",
+          "Aufgaben, Fokus, Journal",
+          "Kein AI-Coach"
+        ]
+      },
+      "solo": {
+        "name": "Solo Pro",
+        "price": "12 €",
+        "annual": "99 €",
+        "tagline": "Das volle System",
+        "features": [
+          "Alles unbegrenzt",
+          "AI-Coach inklusive (200/Monat)",
+          "Alle Exporte",
+          "Desktop-App (bald)"
+        ]
+      },
+      "duo": {
+        "name": "Duo Pro",
+        "price": "29 €",
+        "annual": "249 €",
+        "tagline": "Zwei Menschen, eine Richtung",
+        "features": [
+          "Alles aus Solo Pro",
+          "Gemeinsamer Duo-Workspace",
+          "Geteilte Vision, Ziele, Aufgaben",
+          "Journal bleibt privat"
+        ]
+      },
+      "cta": "{plan} wählen",
+      "popular": "Beliebteste Wahl",
+      "note": "Preise inkl. USt., sofern anwendbar. Jederzeit kündbar."
+    },
+    "auth": {
+      "signInTitle": "Willkommen zurück.",
+      "signUpTitle": "Bau das Leben, das du dir vorgenommen hast.",
+      "resetTitle": "Passwort zurücksetzen",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "signIn": "Anmelden",
+      "signUp": "Konto erstellen",
+      "reset": "Reset-Link senden",
+      "noAccount": "Noch kein Konto?",
+      "hasAccount": "Schon ein Konto?",
+      "forgot": "Passwort vergessen?",
+      "comingSoon": "Die Anmeldung geht in Phase 08 live — diese Seite ist die vorbereitete Hülle.",
+      "legalHint": "Mit dem Fortfahren akzeptierst du unsere <terms>AGB</terms> und <privacy>Datenschutzerklärung</privacy>."
+    },
+    "legal": {
+      "imprint": "Impressum",
+      "privacy": "Datenschutzerklärung",
+      "terms": "AGB",
+      "draft": "ENTWURF — Platzhalter. Vor dem öffentlichen Launch ist die anwaltlich geprüfte Fassung Pflicht (siehe ADR 0010).",
+      "imprintBody": "Angaben gemäß § 5 TMG. Betreiber: [VOLLSTÄNDIGER NAME], [STRASSE], [PLZ ORT], Deutschland. Kontakt: [E-MAIL]. USt-IdNr.: [AUSSTEHEND].",
+      "privacyBody": "Diese Datenschutzerklärung wird vor dem Launch mit e-recht24 erstellt und anwaltlich geprüft. Datenstandort: EU (Frankfurt). Keine Werbung, kein Tracking ohne Einwilligung.",
+      "termsBody": "Die AGB werden vor dem Launch aus einer B2C-SaaS-Vorlage erstellt und anwaltlich geprüft."
+    },
+    "notFound": {
+      "title": "Hier ist nichts.",
+      "body": "Die Seite existiert nicht — zurück zum Wesentlichen.",
+      "cta": "Zur Startseite"
+    },
+    "footer": {
+      "tagline": "Das Life Operating System.",
+      "language": "Sprache"
+    }
   }
 }
