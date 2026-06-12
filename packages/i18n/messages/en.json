@@ -1,0 +1,51 @@
+{
+  "common": {
+    "appName": "Apex",
+    "tagline": "Life Operating System for Solo Founders and Duos",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "done": "Done.",
+    "back": "Back",
+    "continue": "Continue",
+    "loading": "Loading…"
+  },
+  "greeting": {
+    "morning": "Good morning, {name}.",
+    "afternoon": "Good afternoon, {name}.",
+    "evening": "Good evening, {name}."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tasks": "Tasks",
+    "habits": "Habits",
+    "focus": "Focus",
+    "goals": "Goals",
+    "vision": "Vision",
+    "journal": "Journal",
+    "knowledge": "Knowledge",
+    "settings": "Settings"
+  },
+  "tasks": {
+    "count": "{count, plural, =0 {No tasks} one {# task} other {# tasks}}",
+    "today": "Today",
+    "newTask": "New task",
+    "obt": "One Big Thing"
+  },
+  "status": {
+    "offline": "Offline. Apex still works.",
+    "online": "Back online.",
+    "synced": "Synced",
+    "error": "Couldn't save. Check your connection and try again."
+  },
+  "dev": {
+    "i18nTitle": "Dev — i18n",
+    "sampleDate": "Date",
+    "sampleNumber": "Number",
+    "sampleCurrency": "Currency",
+    "switchLocale": "Sprache: Deutsch"
+  }
+}

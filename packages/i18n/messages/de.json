@@ -1,0 +1,51 @@
+{
+  "common": {
+    "appName": "Apex",
+    "tagline": "Das Life Operating System für Solo-Founder und Duos",
+    "save": "Speichern",
+    "saving": "Speichert…",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "done": "Erledigt.",
+    "back": "Zurück",
+    "continue": "Weiter",
+    "loading": "Lädt…"
+  },
+  "greeting": {
+    "morning": "Guten Morgen, {name}.",
+    "afternoon": "Guten Tag, {name}.",
+    "evening": "Guten Abend, {name}."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tasks": "Aufgaben",
+    "habits": "Gewohnheiten",
+    "focus": "Fokus",
+    "goals": "Ziele",
+    "vision": "Vision",
+    "journal": "Journal",
+    "knowledge": "Wissen",
+    "settings": "Einstellungen"
+  },
+  "tasks": {
+    "count": "{count, plural, =0 {Keine Aufgaben} one {# Aufgabe} other {# Aufgaben}}",
+    "today": "Heute",
+    "newTask": "Neue Aufgabe",
+    "obt": "One Big Thing"
+  },
+  "status": {
+    "offline": "Offline. Apex funktioniert weiter.",
+    "online": "Wieder online.",
+    "synced": "Synchron",
+    "error": "Konnte nicht speichern. Prüfe deine Verbindung."
+  },
+  "dev": {
+    "i18nTitle": "Dev — i18n",
+    "sampleDate": "Datum",
+    "sampleNumber": "Zahl",
+    "sampleCurrency": "Währung",
+    "switchLocale": "Language: English"
+  }
+}

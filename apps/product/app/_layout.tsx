@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { LocaleProvider } from '@/lib/i18n';
 import { ThemeProvider, useTheme } from '@/lib/theme';
 import '../global.css';
 
@@ -16,7 +17,9 @@ function AppStack() {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <AppStack />
+      <LocaleProvider>
+        <AppStack />
+      </LocaleProvider>
     </ThemeProvider>
   );
 }

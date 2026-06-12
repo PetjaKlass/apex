@@ -1,8 +1,10 @@
 import { Text, View } from 'react-native';
 import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useT } from '@/lib/i18n';
 
 export default function HomeScreen() {
+  const t = useT();
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1 items-center justify-center">

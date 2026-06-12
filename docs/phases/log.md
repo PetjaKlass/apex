@@ -322,3 +322,15 @@
   - Next 16 Lint verbietet setState-im-Effect → Hydration-Gate via `useSyncExternalStore` (useHydrated())
   - Sandbox: Hintergrundprozesse überleben Call-Ende nicht zuverlässig; Expo-Export braucht hier `METRO_MAX_WORKERS=1` + `--no-minify` (Verifikations-Build; Prod-Minify macht Vercel/EAS)
 - **Verifiziert:** typecheck 3/3 ✓ · lint 2/2 ✓ · 50/50 Kontrast-Tests ✓ · next build ✓ · expo export ✓ (inkl. /dev/tokens) · format ✓
+
+## Phase 03 — i18n (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** `@apex/i18n` (EN/DE-Bundles mit Struktur-Gleichheits-Test, Intl-Format-Helper, Mini-ICU-Übersetzer mit Plural+Interpolation, 8 Tests) · Marketing: next-intl 4 mit `[locale]`-Routing (/en, /de prerendered), Accept-Language-Redirect + Cookie, hreflang-Alternates, `/dev/i18n` · Product: LocaleProvider (Gerätesprache als Default via expo-localization, Persistenz über settingsStorage), `useT()`, `/dev/i18n`, Startscreen übersetzt
+- **Abweichungen/Findings:**
+  - `_test`-Routen aus Spec wieder durch `/dev/*` ersetzt (Underscore = privat in beiden Routern)
+  - Next 16: `middleware.ts` ist deprecated → `proxy.ts` (next-intl createMiddleware funktioniert dort unverändert)
+  - Root-Layout entfernt — `app/[locale]/layout.tsx` ist jetzt Root (offizielles next-intl-Pattern)
+  - Intl setzt U+202F vor €-Symbol — Tests normalisieren Whitespace (Formatter war korrekt)
+  - Product nutzt bewusst NICHT next-intl: Mini-Übersetzer (~60 Zeilen) reicht laut Spec; volle ICU nur im Marketing
+- **Verifiziert:** typecheck 5/5 ✓ · lint ✓ · i18n-Tests 8/8 ✓ · next build (/en+/de+dev-Seiten) ✓ · expo export (/dev/i18n) ✓
