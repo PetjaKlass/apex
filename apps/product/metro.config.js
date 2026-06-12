@@ -3,6 +3,9 @@ const { withNativeWind } = require('nativewind/metro');
 
 const config = getDefaultConfig(__dirname);
 
+// @powersync/web: wa-sqlite liefert WASM — als Asset auflösen (Expo-Web)
+config.resolver.assetExts.push('wasm');
+
 // RAM-arme Umgebungen (CI/Sandbox): Worker-Zahl drosselbar, z.B. METRO_MAX_WORKERS=1
 if (process.env.METRO_MAX_WORKERS) {
   config.maxWorkers = parseInt(process.env.METRO_MAX_WORKERS, 10);

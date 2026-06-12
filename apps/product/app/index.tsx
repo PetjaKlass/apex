@@ -35,6 +35,9 @@ export default function HomeScreen() {
           <Link href="/dev/components" className="text-accent-text text-sm">
             Dev: Components →
           </Link>
+          <Link href="/dev/db" className="text-accent-text text-sm">
+            DB →
+          </Link>
           <Link href="/dev/tokens" className="text-accent-text text-sm">
             Tokens →
           </Link>

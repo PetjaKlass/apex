@@ -393,3 +393,16 @@
 - **Bewusst verschoben auf Teil B/09b:** SDK-Installation (@powersync/react-native+op-sqlite, Web: @powersync/web), AppSchema, Connector-Aktivierung, Offline-E2E, Types-Regen für neue Tabellen (1 MCP-Call), Backups-Konfiguration (Dashboard)
 - **Repro-Strategie Prod:** Migrationshistorie liegt serverseitig (supabase_migrations.schema_migrations, 15 Einträge) → Phase 13 nutzt supabase db dump/migration fetch statt handgepflegter Spiegel (0007_phase09_full_schema.sql dokumentiert das)
 - **Verifiziert:** Alle 9 Migrationen success · Adversarial-Suite ✓ · typecheck 6/6 ✓ · lint ✓
+
+## Phase 09b — PowerSync lokal: SQLite-Replik ohne aktiven Sync (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Kontext-Entscheidung (Petja):** Supabase Free bietet KEINE direkte IPv4-Verbindung für Logical Replication → PowerSync-Cloud-Anbindung deferred bis Pre-Launch (dann Pro $25 + IPv4 $4). Bis dahin Offline-First rein lokal; Connector liegt fertig bereit.
+- **Geliefert:** SDK-Stack installiert (@powersync/react-native 1.35, @powersync/op-sqlite + op-sqlite 16 nativ, @powersync/web 1.38 + wa-sqlite Web, @powersync/common 1.54 als gemeinsame Typbasis) · AppSchema (7 Kern-Tabellen: tasks/areas/goals/projects/habits/habit_logs/journal_entries — Erweiterung je Feature-Phase; jsonb/bool/datum-Konventionen dokumentiert) · DB-Singleton USER-SCOPED (apex-<userid>-Datei: Logout schließt, fremde Daten teilen nie eine Replik) · Platform-Split db.native/db.web + TS-Shim · VOLLSTÄNDIGER SupabaseConnector (fetchCredentials via Session-JWT, uploadData PUT/PATCH/DELETE → Supabase REST) hinter SYNC_CONFIGURED-Flag: später NUR EXPO_PUBLIC_POWERSYNC_URL setzen · DbProvider session-gekoppelt mit sauberem Fehlerpfad (Expo Go ohne op-sqlite → Hinweis statt Crash) · /dev/db: Offline-E2E (Insert per expo-crypto-UUID, watch()-Live-Query, Count, Persistenz-Hinweis Reload)
+- **Gelöste Fallen:**
+  1) SSG-Crash „__fbBatchedBridgeConfig is not set": Expo-Static-Rendering (Node) evaluierte via Import-Kette @powersync/react-native die Native-Bridge → Fix: Typen/Enums aus @powersync/common + Plattform-Treiber als LAZY dynamic imports (SSG lädt null PowerSync-Code)
+  2) @powersync/common ist bei pnpm nicht hoisted → explizite Dependency
+  3) Web ohne Worker/Multi-Tab (useWebWorker:false) — Metro-Web ohne Worker-Bundling, 1-Tab-Dogfooding reicht; wasm als Metro-Asset registriert
+- **Ab jetzt nativ:** op-sqlite = Dev-Build Pflicht (Expo Go zeigt auf /dev/db den erklärenden Fehlertext; Web unverändert voll funktionsfähig)
+- **Laufzeit-E2E (Browser/IndexedDB-Persistenz, Flugmodus-Test):** auf Petjas lokalem Web-Run — Sandbox hat keinen Browser; Codepfad via Export+SSG verifiziert
+- **Verifiziert:** typecheck 6/6 ✓ · lint ✓ · expo export inkl. /dev/db (23KB) ✓
