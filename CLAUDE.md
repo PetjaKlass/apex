@@ -54,3 +54,9 @@ product-vision (Positionierung, kanonische Preise €12/€99 · €29/€249) �
 Kosten, DSGVO-Tabelle) · data-model (Schema + RLS in Schema `app`, PowerSync-Sync-Rules OHNE
 Subqueries/JOINs bzw. Sync Streams) · phases/README (Stages & Gates — Dogfooding-Gate nach
 Phase 19, vor Payments) · AUDIT-REPORT (bekannte Korrekturen 2026-06-10).
+
+## Lokale Arbeitskopie (seit Phase 02)
+
+`X:\Claude\apex` ist Petjas LOKALER GIT-CLONE. NIEMALS per rsync/Spiegel überschreiben —
+Austausch läuft ausschließlich über GitHub (Claude pusht, Petja pullt). Claudes Arbeitskopie
+lebt in der Session-Sandbox und wird je Session frisch von origin geclont.

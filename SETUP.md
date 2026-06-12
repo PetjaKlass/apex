@@ -2,13 +2,18 @@
 
 ## Windows (Petjas Rechner)
 
-1. **Node.js 22 LTS**: https://nodejs.org → LTS installieren → `node -v`
-2. **pnpm** via Corepack: `corepack enable` (Terminal als Admin) → `pnpm -v` (≥9)
+1. **Node.js 22 LTS**: `winget install OpenJS.NodeJS.LTS` (oder nodejs.org) → **PowerShell danach NEU öffnen** → `node -v`
+2. **pnpm** via Corepack: PowerShell **als Administrator** → `corepack enable` → neues Fenster → `pnpm -v` (≥9)
+   - Falls `corepack` unbekannt: `npm install -g pnpm`
+   - Falls PowerShell Scripts blockt (`running scripts is disabled`): `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` (≥9)
 3. **Git**: https://git-scm.com → `git config --global user.name "Petja Klass"`,
    `git config --global user.email "peter.klass1990@gmail.com"`
-4. **Repo clonen** (NICHT in OneDrive!): z.B. `C:\Dev>` `git clone https://github.com/PetjaKlass/apex.git`
-5. `cd apex && pnpm install && pnpm dev`
-   - Marketing: http://localhost:3000 · Product: Expo-Devtools, `w` für Web
+4. **Lokaler Clone:** `X:\Claude\apex` ist der lokale Arbeits-Clone (nicht in OneDrive).
+   Workflow: Claude pusht auf GitHub → du holst Änderungen mit `git pull`.
+5. `cd X:\Claude\apex; pnpm install; pnpm dev`
+   - Marketing: http://localhost:3000 (Token-Test: /dev/tokens)
+   - Product: Expo-Devtools → Taste `w` für Web (Token-Test: /dev/tokens)
+   - Einzeln: `pnpm -F @apex/marketing dev` bzw. `pnpm -F @apex/product dev`
 
 ## Mobile (ab Phase 21)
 
