@@ -265,5 +265,21 @@
     "completeTitle": "Der Rahmen steht.",
     "completeBody": "Vision, Ziel, Gewohnheit, der heutige Fokus — alles an seinem Platz. Jetzt bleibt nur noch die tägliche Frage.",
     "completeCta": "Apex betreten"
+  },
+  "dashboard": {
+    "obtEmptyTitle": "Was ist heute das Eine?",
+    "obtPick": "Wähle dein One Big Thing",
+    "todayTasks": "Heute",
+    "todayHabits": "Gewohnheiten heute",
+    "journalPrompt": "Was ist heute passiert, das zählte?",
+    "journalCta": "Journal öffnen",
+    "momentum": "Momentum",
+    "emptyTasks": "Posteingang leer. Und jetzt?",
+    "emptyHabits": "Bau das erste Ritual.",
+    "quickAdd": "Aufgabe schnell hinzufügen…",
+    "cmdHint": "Suchen oder hinzufügen — ⌘K",
+    "addTask": "Aufgabe: {q}",
+    "tasksLeft": "{count, plural, =0 {alles erledigt} one {# offen} other {# offen}}",
+    "habitsProgress": "{done} von {total}"
   }
 }

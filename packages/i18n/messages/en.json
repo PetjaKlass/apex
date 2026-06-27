@@ -265,5 +265,21 @@
     "completeTitle": "The frame is set.",
     "completeBody": "Vision, goal, habit, today's focus — all in place. Now the only question left is the daily one.",
     "completeCta": "Enter Apex"
+  },
+  "dashboard": {
+    "obtEmptyTitle": "What is the one thing today?",
+    "obtPick": "Choose your One Big Thing",
+    "todayTasks": "Today",
+    "todayHabits": "Habits today",
+    "journalPrompt": "What happened today that mattered?",
+    "journalCta": "Open journal",
+    "momentum": "Momentum",
+    "emptyTasks": "Inbox zero. Now what?",
+    "emptyHabits": "Build the first ritual.",
+    "quickAdd": "Quick add task…",
+    "cmdHint": "Search or add — ⌘K",
+    "addTask": "Add task: {q}",
+    "tasksLeft": "{count, plural, =0 {all clear} one {# left} other {# left}}",
+    "habitsProgress": "{done} of {total}"
   }
 }
