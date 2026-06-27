@@ -190,5 +190,80 @@
     "menu": "Menu",
     "soon": "Coming in Phase {n}",
     "placeholder": "This is where {feature} will live."
+  },
+  "onboarding": {
+    "welcomeEyebrow": "Welcome",
+    "welcomeTitle": "You did not come here to manage tasks.",
+    "welcomeBody": "Apex connects what you do today to the person you are becoming. Five minutes now sets the frame. You can skip anything — and add it later.",
+    "welcomeCta": "Begin",
+    "consent": "I accept the {terms} and {privacy}.",
+    "skip": "Skip for now",
+    "identityEyebrow": "Identity",
+    "identityTitle": "Who are you becoming?",
+    "identitySubtitle": "This shapes how Apex speaks to you. One choice — change it anytime.",
+    "identityOptions": {
+      "founder": {
+        "label": "The Solo Founder",
+        "desc": "Building a company alone, betting on yourself."
+      },
+      "operator": {
+        "label": "The Operator",
+        "desc": "Output-driven, allergic to busywork."
+      },
+      "creator": {
+        "label": "The Creator",
+        "desc": "Shipping work into the world, on your terms."
+      },
+      "athlete": {
+        "label": "The Self-Athlete",
+        "desc": "Training body and mind like a craft."
+      },
+      "builder": {
+        "label": "The Quiet Builder",
+        "desc": "Compounding in silence, results speak."
+      }
+    },
+    "identityCustom": "…or in your own words",
+    "workspaceEyebrow": "Workspace",
+    "workspaceTitle": "Name your space.",
+    "workspaceSubtitle": "And pick the colour you want to live in.",
+    "workspaceName": "Workspace name",
+    "workspaceTypeSolo": "Solo — just me",
+    "workspaceTypeDuo": "Duo — me and a partner",
+    "workspaceAccent": "Accent",
+    "visionEyebrow": "Vision",
+    "visionTitle": "Where is this all going?",
+    "visionSubtitle": "Not a goal. The horizon goals point at. Skip if it's not ready.",
+    "visionTitleField": "Vision in one line",
+    "visionTitlePh": "e.g. A calm, profitable company I'm proud of",
+    "visionStatement": "Future-self statement (optional)",
+    "visionStatementPh": "In three years, I am someone who…",
+    "visionHorizon": "Horizon",
+    "goalEyebrow": "Goal",
+    "goalTitle": "What is the first move?",
+    "goalSubtitle": "One 90-day goal that bends the vision closer.",
+    "goalTitleField": "Goal this quarter",
+    "goalTitlePh": "e.g. Ship Apex Alpha and use it daily",
+    "goalKr": "How will you measure it? (optional)",
+    "goalKrPh": "e.g. 30 consecutive days of use",
+    "habitEyebrow": "Habit",
+    "habitTitle": "Who do you become daily?",
+    "habitSubtitle": "A habit is identity in motion. Start with one.",
+    "habitTitleField": "Habit",
+    "habitTitlePh": "e.g. Read 20 pages",
+    "habitIdentity": "Identity statement",
+    "habitIdentityPh": "I am someone who learns every day",
+    "habitFrequency": "Frequency",
+    "freqDaily": "Every day",
+    "freqXWeek": "A few times a week",
+    "freqWeekly": "Once a week",
+    "obtEyebrow": "One Big Thing",
+    "obtTitle": "What is the one thing today?",
+    "obtSubtitle": "Not your list. The single thing that matters most today.",
+    "obtField": "Today's One Big Thing",
+    "obtPh": "e.g. Finish the onboarding flow",
+    "completeTitle": "The frame is set.",
+    "completeBody": "Vision, goal, habit, today's focus — all in place. Now the only question left is the daily one.",
+    "completeCta": "Enter Apex"
   }
 }

@@ -12,13 +12,15 @@ import { Topbar } from '@/components/shell/Topbar';
 
 /** Authentifizierte Shell. ≥1024 Desktop-Sidebar · 768-1023 Icon-Rail · <768 Drawer. */
 export default function AppLayout() {
-  const { session, loading } = useAuth();
+  const { session, profile, loading } = useAuth();
   const pathname = usePathname();
   const { width } = useWindowDimensions();
   const t = useT();
   const [drawer, setDrawer] = useState(false);
 
   if (!loading && !session) return <Redirect href="/sign-in" />;
+  if (!loading && session && profile && !profile.onboarded_at)
+    return <Redirect href="/onboarding/welcome" />;
 
   const isDesktop = width >= 1024;
   const isTablet = width >= 768 && width < 1024;

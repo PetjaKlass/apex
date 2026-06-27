@@ -190,5 +190,80 @@
     "menu": "Menü",
     "soon": "Kommt in Phase {n}",
     "placeholder": "Hier entsteht {feature}."
+  },
+  "onboarding": {
+    "welcomeEyebrow": "Willkommen",
+    "welcomeTitle": "Du bist nicht hier, um Aufgaben zu verwalten.",
+    "welcomeBody": "Apex verbindet, was du heute tust, mit dem Menschen, der du wirst. Fünf Minuten jetzt setzen den Rahmen. Du kannst alles überspringen — und später ergänzen.",
+    "welcomeCta": "Beginnen",
+    "consent": "Ich akzeptiere die {terms} und {privacy}.",
+    "skip": "Vorerst überspringen",
+    "identityEyebrow": "Identität",
+    "identityTitle": "Wer wirst du gerade?",
+    "identitySubtitle": "Das prägt, wie Apex mit dir spricht. Eine Wahl — jederzeit änderbar.",
+    "identityOptions": {
+      "founder": {
+        "label": "Der Solo-Founder",
+        "desc": "Baut allein ein Unternehmen, setzt auf sich selbst."
+      },
+      "operator": {
+        "label": "Der Operator",
+        "desc": "Ergebnisgetrieben, allergisch gegen Beschäftigungstherapie."
+      },
+      "creator": {
+        "label": "Der Creator",
+        "desc": "Bringt Arbeit in die Welt, zu eigenen Bedingungen."
+      },
+      "athlete": {
+        "label": "Der Selbst-Athlet",
+        "desc": "Trainiert Körper und Geist wie ein Handwerk."
+      },
+      "builder": {
+        "label": "Der stille Macher",
+        "desc": "Verzinst sich in der Stille, Ergebnisse sprechen."
+      }
+    },
+    "identityCustom": "…oder in deinen eigenen Worten",
+    "workspaceEyebrow": "Workspace",
+    "workspaceTitle": "Benenne deinen Raum.",
+    "workspaceSubtitle": "Und wähle die Farbe, in der du leben willst.",
+    "workspaceName": "Workspace-Name",
+    "workspaceTypeSolo": "Solo — nur ich",
+    "workspaceTypeDuo": "Duo — ich und ein Partner",
+    "workspaceAccent": "Akzent",
+    "visionEyebrow": "Vision",
+    "visionTitle": "Wohin führt das alles?",
+    "visionSubtitle": "Kein Ziel. Der Horizont, auf den Ziele zeigen. Überspringe, wenn es noch nicht bereit ist.",
+    "visionTitleField": "Vision in einer Zeile",
+    "visionTitlePh": "z. B. Ein ruhiges, profitables Unternehmen, auf das ich stolz bin",
+    "visionStatement": "Zukunfts-Ich-Satz (optional)",
+    "visionStatementPh": "In drei Jahren bin ich jemand, der…",
+    "visionHorizon": "Horizont",
+    "goalEyebrow": "Ziel",
+    "goalTitle": "Was ist der erste Zug?",
+    "goalSubtitle": "Ein 90-Tage-Ziel, das die Vision näher rückt.",
+    "goalTitleField": "Ziel dieses Quartal",
+    "goalTitlePh": "z. B. Apex-Alpha ausliefern und täglich nutzen",
+    "goalKr": "Woran misst du es? (optional)",
+    "goalKrPh": "z. B. 30 Tage am Stück genutzt",
+    "habitEyebrow": "Gewohnheit",
+    "habitTitle": "Wer wirst du täglich?",
+    "habitSubtitle": "Eine Gewohnheit ist Identität in Bewegung. Beginne mit einer.",
+    "habitTitleField": "Gewohnheit",
+    "habitTitlePh": "z. B. 20 Seiten lesen",
+    "habitIdentity": "Identitätssatz",
+    "habitIdentityPh": "Ich bin jemand, der jeden Tag lernt",
+    "habitFrequency": "Häufigkeit",
+    "freqDaily": "Jeden Tag",
+    "freqXWeek": "Ein paar Mal pro Woche",
+    "freqWeekly": "Einmal pro Woche",
+    "obtEyebrow": "One Big Thing",
+    "obtTitle": "Was ist heute das Eine?",
+    "obtSubtitle": "Nicht deine Liste. Das eine, das heute am meisten zählt.",
+    "obtField": "Das One Big Thing für heute",
+    "obtPh": "z. B. Den Onboarding-Flow fertigstellen",
+    "completeTitle": "Der Rahmen steht.",
+    "completeBody": "Vision, Ziel, Gewohnheit, der heutige Fokus — alles an seinem Platz. Jetzt bleibt nur noch die tägliche Frage.",
+    "completeCta": "Apex betreten"
   }
 }

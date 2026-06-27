@@ -418,3 +418,13 @@
   4) useTheme().colors ist das volle ThemeColors (status.danger, accent.base) — NICHT die flache UiColors-Bridge
 - **Bewusst offen (Folge-Phasen):** Notification-Panel-Inhalt (Stage 2) · Workspace-Erstellung (Onboarding Phase 11) · Command-Palette (Phase 12) · Lateral-Slide-Page-Transitions: Expo-Router-Default genutzt (Custom-Choreo bei Bedarf später) · echte Touch-/Screenreader-Abnahme auf Petjas Geräten
 - **Verifiziert:** typecheck 6/6 ✓ · lint clean ✓ · expo export: alle 8 Routen + dev statisch ✓
+
+## Phase 11 — Onboarding Flow (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** Zustand-Store (mmkv-persistiert, übersteht Reload mitten im Flow) · onboarding/-Layout als Full-Screen-Takeover außerhalb der (app)-Shell mit Gate (onboarded_at gesetzt → Dashboard) · 8 Schritte: welcome (identitäts-erste Copy + DSGVO-Opt-in Pflicht), identity (5 spezifische Rollen statt generisch + Custom-Feld), workspace (Name/Solo-Duo/Live-Akzentwahl), vision (Titel/Zukunfts-Ich/Horizont, skippbar), goal (+1 Key Result, skippbar), habit (Identitätssatz + Frequenz, skippbar), obt (heutiges One Big Thing) → submit, complete (Faden-Celebration, Store-Reset) · StepShell (Progress n/6, Zurück, Weiter/Überspringen, Goldener Faden) · IdentityCard · submit.ts schreibt Vision/Goal/KR/Habit/OBT + onboarded_at DIREKT nach Supabase (Sync deferred) und AKTUALISIERT den vorhandenen „Personal"-Workspace statt neuen anzulegen · Gate auch in (app)-Layout: nicht onboardet → /onboarding/welcome
+- **Spec-Korrektur:** Migration 0014_onboarding_complete ENTFÄLLT — `profiles.onboarded_at` existiert seit Phase 08 (im Log vermerkt)
+- **Typsicherheit:** submit.ts generisch (SupabaseClient-Cast), da @apex/types noch Phase-08-Stand — voller Typen-Regen kommt mit Sync-Aktivierung
+- **DB-E2E (verifiziert):** submit-Pfad als eingeloggter User per SQL durchgespielt → Vision/Ziel/KR/Habit/OBT angelegt, onboarded_at=true, alles RLS-konform
+- **Zwischenfall (wichtige Lektion, in CLAUDE.md):** Dev-Projekt war pausiert (Free-Tier INACTIVE). `restore_project` reaktiviert async — währenddessen meldeten Queries kurz „leeres Schema"/Timeout (sah aus wie Totalverlust). Nach Hochlauf: alle 40 Tabellen/15 Migrationen/2 User intakt, NULL Datenverlust. Regel: Free-Tier mit simpler Query wecken, ACTIVE_HEALTHY abwarten; doppelte Migrations-Historie bereinigt.
+- **Verifiziert:** typecheck 6/6 ✓ · lint clean ✓ · expo export alle onboarding-Routen ✓ · DB-E2E ✓

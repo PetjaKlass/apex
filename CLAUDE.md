@@ -67,3 +67,13 @@ Prettier (inkl. Tailwind-Klassen-Sortierung) formatiert Dateien um. Deshalb: NIE
 erinnerte/auswendige Strings patchen. Vor jedem Patch die Datei LESEN; Marker per assert prüfen
 (Python `assert marker in s`), sonst schlägt der Patch still fehl. Nach `pnpm format` gilt
 jeder gemerkte Dateiinhalt als ungültig.
+
+## Supabase Free-Tier (Lektion 2026-06-12)
+
+Das Dev-Projekt pausiert nach ~1 Woche Inaktivität (Status INACTIVE). Reaktivierung:
+
+- **NICHT** `restore_project` aus Reflex aufrufen — direkt eine SQL-Query absetzen weckt es;
+  während des Aufwach-Fensters (~1–2 min) liefern Queries kurzzeitig „leeres Schema" /
+  Connection-Timeout. Das ist KEIN Datenverlust — abwarten bis get_project = ACTIVE_HEALTHY,
+  dann erneut. Migrationen/Daten bleiben erhalten.
+- Vor Phase 13: Pro-Plan beseitigt das Pausieren (und ermöglicht PowerSync-IPv4).
