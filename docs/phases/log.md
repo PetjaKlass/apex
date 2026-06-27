@@ -406,3 +406,15 @@
 - **Ab jetzt nativ:** op-sqlite = Dev-Build Pflicht (Expo Go zeigt auf /dev/db den erklärenden Fehlertext; Web unverändert voll funktionsfähig)
 - **Laufzeit-E2E (Browser/IndexedDB-Persistenz, Flugmodus-Test):** auf Petjas lokalem Web-Run — Sandbox hat keinen Browser; Codepfad via Export+SSG verifiziert
 - **Verifiziert:** typecheck 6/6 ✓ · lint ✓ · expo export inkl. /dev/db (23KB) ✓
+
+## Phase 10 — App Shell & Navigation (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** WorkspaceProvider (Workspaces via Supabase/RLS, aktive Auswahl mmkv-persistiert) · (app)-Route-Gruppe als authentifizierte Shell mit 3-Breakpoint-Layout (≥1024 Desktop-Sidebar 248px · 768–1023 Icon-Rail 72px · <768 schwebender Drawer) · Sidebar als Glas-Panel (NAV-Sektionen Richtung/Reflexion/System, Goldener Faden im Brand, aktiver Eintrag = opake Karte + Akzent-Icon S2) · Topbar (Titel aus aktiver Route, Notification-Bell mit unseen-dot-Count, Menu-Button <1024) · WorkspaceSwitcher (Sheet, mehrere Workspaces) · ProfileMenu (Sheet: Theme-Toggle + Logout) · MobileDrawer (Slide+Fade, ESC, Backdrop) · 8 Platzhalterseiten (einheitliche Placeholder-Komponente mit Phasen-Badge + aktivem Workspace) · +not-found · Root-index leitet je Session zu /dashboard bzw. /sign-in · Dev-Screens nach (app)/dev verschoben (in der Shell erreichbar)
+- **Lektionen (React-Compiler-Lint, neu/streng in RN 0.85):**
+  1) `useRef(new Animated.Value(open?…))` = „Cannot access refs during render" → Lazy-Init via `useState(() => new Animated.Value(...))`
+  2) `setState` synchron im Effekt verboten → Mount-Lifecycle des Drawers über abgeleitetes `closing`-Flag + `wasOpen`-ref statt setMounted-im-Effekt
+  3) Heredoc-Falle: `phase={N}` wurde durch Shell-Expansion zu `phase=N` (kein JSX) → sed-Fix; künftig JSX-Props nicht aus Bash-Variablen in Heredocs
+  4) useTheme().colors ist das volle ThemeColors (status.danger, accent.base) — NICHT die flache UiColors-Bridge
+- **Bewusst offen (Folge-Phasen):** Notification-Panel-Inhalt (Stage 2) · Workspace-Erstellung (Onboarding Phase 11) · Command-Palette (Phase 12) · Lateral-Slide-Page-Transitions: Expo-Router-Default genutzt (Custom-Choreo bei Bedarf später) · echte Touch-/Screenreader-Abnahme auf Petjas Geräten
+- **Verifiziert:** typecheck 6/6 ✓ · lint clean ✓ · expo export: alle 8 Routen + dev statisch ✓

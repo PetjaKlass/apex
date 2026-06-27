@@ -27,7 +27,12 @@
     "vision": "Vision",
     "journal": "Journal",
     "knowledge": "Knowledge",
-    "settings": "Settings"
+    "settings": "Settings",
+    "sections": {
+      "direction": "Direction",
+      "reflection": "Reflection",
+      "system": "System"
+    }
   },
   "tasks": {
     "count": "{count, plural, =0 {No tasks} one {# task} other {# tasks}}",
@@ -178,5 +183,12 @@
     "welcomeBack": "Welcome back.",
     "confirmationSent": "Check your inbox — confirm your email to continue.",
     "resetSent": "If the address exists, a reset link is on its way."
+  },
+  "shell": {
+    "workspace": "Workspace",
+    "notifications": "Notifications",
+    "menu": "Menu",
+    "soon": "Coming in Phase {n}",
+    "placeholder": "This is where {feature} will live."
   }
 }
