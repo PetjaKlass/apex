@@ -428,3 +428,10 @@
 - **DB-E2E (verifiziert):** submit-Pfad als eingeloggter User per SQL durchgespielt → Vision/Ziel/KR/Habit/OBT angelegt, onboarded_at=true, alles RLS-konform
 - **Zwischenfall (wichtige Lektion, in CLAUDE.md):** Dev-Projekt war pausiert (Free-Tier INACTIVE). `restore_project` reaktiviert async — währenddessen meldeten Queries kurz „leeres Schema"/Timeout (sah aus wie Totalverlust). Nach Hochlauf: alle 40 Tabellen/15 Migrationen/2 User intakt, NULL Datenverlust. Regel: Free-Tier mit simpler Query wecken, ACTIVE_HEALTHY abwarten; doppelte Migrations-Historie bereinigt.
 - **Verifiziert:** typecheck 6/6 ✓ · lint clean ✓ · expo export alle onboarding-Routen ✓ · DB-E2E ✓
+
+## Phase 12 — Dashboard (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-12 (1 Session)
+- **Geliefert:** useDashboard (Supabase direkt, RLS+Workspace) · MomentumOrb per Spec (SVG-Ring 12-Uhr, AnimatedCircle, Count-up 500ms mono+tnum, Glow, Level+XP; calcMomentum-Platzhalter bis Phase 17) · OBTHero per Spec mit S1-Goldenem-Faden (Kontrast-Karte hell/dunkel, Zustände today/done/empty) · Greeting (zeit-/locale-aware) · Today-Tasks/Habits-Widgets (TaskRow/HabitCard-Platzhalter, Live-Toggle) · JournalPromptWidget · CommandPalette (⌘/Ctrl+K, echtes Input+Enter) · Empty States · responsiv 1-/2-Spalten · LIVE-Interaktion: OBT/Task abhaken (+XP), Habit loggen (+15), Quick-Add
+- **Sandbox-Grenze:** Dev-Server bootet (Metro :8081), aber Sandbox-localhost ist für Petja nicht erreichbar → Verifikation via Export (/dashboard 24KB); echtes localhost auf Petjas Rechner (pnpm dev)
+- **Verifiziert:** typecheck 6/6 ✓ · lint clean ✓ · expo export /dashboard ✓ · Dev-Boot ✓
