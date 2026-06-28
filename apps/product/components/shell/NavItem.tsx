@@ -21,7 +21,7 @@ export function NavItem({
   const { colors } = useTheme();
   const Icon = entry.icon;
   return (
-    <Link href={entry.href} asChild onPress={onPress}>
+    <Link href={entry.href as never} asChild onPress={onPress}>
       <Pressable
         accessibilityRole="link"
         accessibilityState={{ selected: active }}

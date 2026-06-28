@@ -5,6 +5,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { cssVariablesAll } from '@apex/design-tokens';
 import { locales } from '@apex/i18n';
 import { Providers } from '@/components/theme';
+import { Analytics } from '@/components/analytics';
 import { routing } from '@/i18n/routing';
 import '../globals.css';
 
@@ -34,6 +35,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} data-accent="gold" suppressHydrationWarning>
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ECEAE6" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <style id="apex-tokens" dangerouslySetInnerHTML={{ __html: cssVariablesAll }} />
         <script dangerouslySetInnerHTML={{ __html: accentScript }} />
       </head>
@@ -41,6 +45,7 @@ export default async function LocaleLayout({
         <Providers>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

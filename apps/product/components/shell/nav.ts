@@ -12,7 +12,7 @@ import {
 
 export type NavEntry = {
   key: string;
-  href: `/${string}`;
+  href: string;
   icon: typeof LayoutDashboard;
   section?: string;
 };

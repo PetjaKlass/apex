@@ -1,4 +1,4 @@
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Checkbox } from '@apex/ui';
@@ -28,11 +28,6 @@ export default function Welcome() {
             checked={consent}
             onToggle={(v) => set('consent', v)}
           />
-          <Text className="text-2xs text-fg-3 -mt-1 ml-8">
-            <Link href="/(legal)/terms" className="underline">
-              {t('common.continue')}
-            </Link>
-          </Text>
         </View>
 
         <View className="mt-8">
