@@ -101,11 +101,9 @@ export function Input({
         {type === 'search' && <Search size={s.icon} color={c.fg3} />}
         <TextInput
           id={Platform.OS === 'web' ? id : undefined}
-          className={cn(
-            'text-fg-1 flex-1 py-0',
-            s.text,
-            Platform.OS === 'web' && 'web:outline-none'
-          )}
+          className={cn('text-fg-1 flex-1 py-0', s.text)}
+          // Web: UA-Fokus-Rechteck entfernen — Fokus wird über Akzent-Rand + Glow gezeigt
+          style={Platform.OS === 'web' ? ({ outlineStyle: 'none' } as object) : undefined}
           placeholder={placeholder}
           placeholderTextColor={c.fg3}
           value={value}

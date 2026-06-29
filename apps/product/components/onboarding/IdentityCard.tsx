@@ -20,14 +20,19 @@ export function IdentityCard({
       accessibilityLabel={`${label}. ${description}`}
       onPress={onPress}
       className={cn(
-        'bg-card shadow-card-edge rounded-lg border p-4',
-        selected ? 'border-accent-border' : 'border-border'
+        'rounded-lg border p-4',
+        'web:transition-transform web:duration-fast web:hover:-translate-y-0.5 web:cursor-pointer',
+        selected
+          ? 'bg-accent-dim border-accent-border shadow-card-edge'
+          : 'bg-card border-border shadow-card-edge web:hover:border-border-strong'
       )}
     >
       <Text className={cn('text-sm font-semibold', selected ? 'text-accent-text' : 'text-fg-1')}>
         {label}
       </Text>
-      <Text className="text-fg-3 mt-1 text-xs">{description}</Text>
+      <Text className={cn('mt-1 text-xs', selected ? 'text-accent-text opacity-80' : 'text-fg-3')}>
+        {description}
+      </Text>
     </Pressable>
   );
 }

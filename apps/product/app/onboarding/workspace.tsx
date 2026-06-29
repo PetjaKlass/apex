@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { cn, Input, RadioGroup } from '@apex/ui';
+import { cn, Input, Segmented } from '@apex/ui';
 import { accentNames } from '@apex/design-tokens';
 import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/theme';
@@ -37,9 +37,8 @@ export default function Workspace() {
           onChangeText={(v) => set('workspaceName', v)}
           placeholder="Personal"
         />
-        <RadioGroup
-          legend={t('onboarding.workspaceEyebrow')}
-          legendHidden
+        <Segmented
+          legend={t('onboarding.workspaceTypeLegend')}
           value={workspaceType}
           onChange={(v) => set('workspaceType', v as 'solo' | 'duo')}
           options={[
@@ -61,6 +60,7 @@ export default function Workspace() {
                 onPress={() => setAccent(a)}
                 className={cn(
                   'h-9 w-9 items-center justify-center rounded-full',
+                  'web:transition-transform web:duration-fast web:hover:scale-110 web:cursor-pointer',
                   accent === a && 'border-fg-1 border-2'
                 )}
               >

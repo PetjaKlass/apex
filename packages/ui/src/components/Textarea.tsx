@@ -64,7 +64,11 @@ export function Textarea({
           disabled && 'opacity-40',
           Platform.OS === 'web' && 'web:outline-none web:resize-none'
         )}
-        style={{ height: Math.min(Math.max(height, s.minH), maxHeight) }}
+        style={[
+          { height: Math.min(Math.max(height, s.minH), maxHeight) },
+          // Web: UA-Fokus-Rechteck entfernen (Fokus = Akzent-Rand + Glow)
+          Platform.OS === 'web' ? ({ outlineStyle: 'none' } as object) : null,
+        ]}
         onContentSizeChange={(e) => setHeight(e.nativeEvent.contentSize.height + 24)}
         placeholder={placeholder}
         placeholderTextColor={c.fg3}

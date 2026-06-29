@@ -5,6 +5,7 @@ import { DbProvider } from '@/lib/powersync/DbProvider';
 import { LocaleProvider } from '@/lib/i18n';
 import { SkeletonProvider, ToastProvider, UiColorsProvider, buildUiColors } from '@apex/ui';
 import { ThemeProvider, useTheme } from '@/lib/theme';
+import { WorkspaceProvider } from '@/lib/workspace';
 import '../global.css';
 
 function AppStack() {
@@ -28,7 +29,9 @@ export default function RootLayout() {
       <LocaleProvider>
         <AuthProvider>
           <DbProvider>
-            <AppStack />
+            <WorkspaceProvider>
+              <AppStack />
+            </WorkspaceProvider>
           </DbProvider>
         </AuthProvider>
       </LocaleProvider>

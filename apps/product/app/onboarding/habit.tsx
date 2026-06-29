@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { View } from 'react-native';
-import { Input, RadioGroup } from '@apex/ui';
+import { Input, Segmented } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { StepShell } from '@/components/onboarding/StepShell';
 import { useOnboarding, type FrequencyType } from '@/lib/onboarding/store';
@@ -32,7 +32,7 @@ export default function Habit() {
           onChangeText={(v) => set('habitIdentity', v)}
           placeholder={t('onboarding.habitIdentityPh')}
         />
-        <RadioGroup
+        <Segmented
           legend={t('onboarding.habitFrequency')}
           value={habitFrequency}
           onChange={(v) => set('habitFrequency', v as FrequencyType)}
