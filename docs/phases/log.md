@@ -473,3 +473,14 @@
 - **Dev-Nit gefixt:** db.tsx (Debug-Screen) erste Zeile ohne Top-Border via Index-Guard statt totem `first:`.
 - **Ehrliche Grenze:** Ein frischer vollständiger statischer Web-Export (SSG) lief in dieser Sandbox nicht durch (Speicherlimit in der HTML-Render-Phase, Hintergrundprozess recycelt). Der Metro-Bundle selbst kompilierte; `pnpm dev` (Petjas Testweg) macht KEIN SSG → unberührt. Visueller Final-Check bleibt Petjas Re-Test.
 - **Verifiziert:** typecheck 6/6 ✓ · lint 0/0 ✓ · Tests 53/53 ✓ (inkl. neuem Guard) · Footguns app-weit 0 ✓ · Subagent-Review (1 Blocker→gefixt, Rest clean).
+
+## Onboarding-Redesign + P0-Crash (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-29, nach Petjas Re-Test am ZBook (localhost:8081) mit Screenshots.** Onboarding wirkte „unfertig", weit unter Dashboard-Niveau; konkrete Mängel + ein harter Crash.
+- **P0-Crash behoben:** `useWorkspace muss innerhalb von <WorkspaceProvider>` nach dem Habit-Schritt (obt.tsx). Ursache: WorkspaceProvider hing nur in `(app)/_layout` — Onboarding läuft als Takeover AUSSERHALB dieser Gruppe. Fix: Provider ins Root-Layout hochgezogen (AuthProvider → DbProvider → WorkspaceProvider → AppStack), aus (app)-Layout entfernt → onboarding + app teilen ihn. obt.tsx löst jetzt auf.
+- **Input-Fokusbox:** sichtbares schwarzes UA-Fokus-Rechteck in Eingabefeldern. `web:outline-none` (NativeWind) griff nicht → stattdessen `style={{ outlineStyle:'none' }}` auf TextInput/Textarea; Fokus zeigt sich über Akzent-Rand + Glow (wie Prototyp `.input:focus`).
+- **Floating-Glass-Niveau:** StepShell/welcome/complete legen den Inhalt jetzt in eine zentrierte Glas-Karte (bg-card, border-hairline, shadow-panel-edge, rounded-2xl) statt nackt auf den Canvas — wie die Dashboard-Panels. Vertikal zentriert, scrollt nur bei echter Überlänge (zuvor Dauer-Scrollbar).
+- **Kreis-Radios → Segmented:** neue `<Segmented>` (Prototyp `.segment`: subtiler Track, aktiv = weiße Karten-Pille + Schatten) für Solo/Duo, Häufigkeit, Horizont. Identitäts-Auswahl bleibt Karten, jetzt mit Hover-Lift + klarerem Selected-State.
+- **Weitere:** Akzentpunkte mit Hover-Scale; Vision-Textarea gezähmt (maxHeight 132 — Web-Auto-Grow blähte sie auf ~halbe Seite); `{terms}/{privacy}`-Platzhalter → lesbarer Consent-Text; kürzere Segmented-Labels (de+en); identity-Karten kompakter (gap-2.5).
+- **Offen/ehrlich:** Copy ist strukturell verbessert (Labels, Platzhalter-Bug), aber eine vollständige „Texter-Politur" ist ein eigener, iterativer Track — braucht Petjas Stimme/Ton. Visuelle Endabnahme bleibt Petjas Re-Test (Sandbox kann nicht rendern; statischer Export OOM't weiterhin).
+- **Verifiziert:** typecheck 6/6 ✓ · lint ✓ · i18n 8/8 + design-tokens 53/53 ✓ · unabhängiges Subagent-Review (0 Blocker, 2 Nits → beide gefixt) ✓ · Commits 19bba10 (+ a22b7ac) gepusht + gespiegelt.
