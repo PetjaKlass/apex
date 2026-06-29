@@ -513,3 +513,11 @@
 - **Daten-Lage:** petja.klass@gmail.com hat 2 Aufgaben/2 Gewohnheiten/2 OBT → zeigt echte Inhalte. RLS sorgt dafür, dass jeder nur seine eigenen sieht.
 - **Bewusst Stufe-3:** Quartalsziele/Rituale/Fokus-Stunden-Widget brauchen eigene Tabellen/Logik → folgen mit den Feature-Views.
 - **Verifiziert:** typecheck ✓ · `next build` grün (EXIT=0). Start: `pnpm -F @apex/web dev` → localhost:3001.
+
+## Web-App Stufe 3 — Registrierung + Onboarding (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-29.** SignIn um Registrierung erweitert (Modus-Toggle An-/Abmelden; signUp; „Postfach prüfen" bei aktiver E-Mail-Bestätigung). AppGate gated jetzt zusätzlich auf `profiles.onboarded_at`: Session ohne Onboarding → Onboarding-Flow, sonst Dashboard.
+- **Onboarding (Web):** voller Split-Screen-Flow (welcome→identity→workspace→vision→goal→habit→obt→complete) in der Prototyp-Sprache (neues CSS: .ob-*, dunkles Marken-Panel links, Eingaben rechts, Fortschritt, Akzent-Live-Wahl, Segmented, Rollen-Karten mit Hover). submitOnboarding aus product portiert (generischer Supabase-Cast für visions/goals/key_results/habits/tasks; setzt onboarded_at).
+- **Verifiziert:** typecheck ✓ · `next build` grün (EXIT=0).
+- **Test:** Login mit petja.klass@gmail.com (onboarded_at=null) → landet jetzt im Onboarding; nach Abschluss → Dashboard. Oder „Registrieren" für einen frischen Account.
+- **Bewusst Stufe-4/5:** Dashboard-Interaktionen (abhaken/loggen → DB), Widgets Quartalsziele/Rituale, dann Deploy.
