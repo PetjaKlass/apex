@@ -2,7 +2,7 @@ import { randomUUID } from 'expo-crypto';
 import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Card, Chip, Input } from '@apex/ui';
+import { Button, Card, Chip, Input, cn } from '@apex/ui';
 import { useAuth } from '@/lib/auth';
 import { useDb } from '@/lib/powersync/DbProvider';
 import { SYNC_CONFIGURED } from '@/lib/powersync';
@@ -100,10 +100,13 @@ export default function DbTestScreen() {
           {rows.length === 0 ? (
             <Text className="text-fg-3 text-sm">Noch keine Einträge.</Text>
           ) : (
-            rows.map((r) => (
+            rows.map((r, i) => (
               <View
                 key={r.id}
-                className="border-border flex-row items-baseline gap-2 border-t py-2"
+                className={cn(
+                  'border-border flex-row items-baseline gap-2 py-2',
+                  i > 0 && 'border-t'
+                )}
               >
                 <Text className="text-fg-1 flex-1 text-sm" numberOfLines={1}>
                   {r.title}

@@ -20,6 +20,7 @@ export function themeVars(theme: Theme, accent: Accent): Record<string, string> 
     '--pressed': t.pressed,
     '--border': t.border,
     '--border-strong': t.borderStrong,
+    '--card-border': t.cardBorder,
     '--fg-1': t.fg1,
     '--fg-2': t.fg2,
     '--fg-3': t.fg3,

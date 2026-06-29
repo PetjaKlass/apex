@@ -44,7 +44,7 @@ nie über `dark:`. Reihen-Trenner über explizite Props (`first`), nie `first:`.
 **Schriften** müssen aktiv geladen werden (Web/PWA via `app/+html.tsx`: Fontshare Cabinet Grotesk +
 Google Inter/JetBrains Mono); sonst System-Fallback und alles wirkt generisch. Native-Bundling (expo-font) erst Stage 2.
 **Verifikations-Regel:** „Build grün + Text-im-HTML" beweist NICHT das visuelle Rendering. Für UI-Treue:
-gegen die NativeWind-Capability-Liste prüfen, Schrift-Ladung bestätigen, Tokens gegen den Prototyp diffen.
+gegen die NativeWind-Capability-Liste prüfen, Schrift-Ladung bestätigen, Tokens gegen den Prototyp diffen. Token-Vars IMMER end-to-end prüfen: ein `var(--x)` im Preset, das kein Generator (css-variables.ts/web + native-vars.ts) emittiert, fällt still auf `currentColor` zurück (schwarzer Rand!). `preset-vars.test.ts` bewacht das.
 
 ## Arbeitsweise
 
