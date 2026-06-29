@@ -484,3 +484,16 @@
 - **Weitere:** Akzentpunkte mit Hover-Scale; Vision-Textarea gezähmt (maxHeight 132 — Web-Auto-Grow blähte sie auf ~halbe Seite); `{terms}/{privacy}`-Platzhalter → lesbarer Consent-Text; kürzere Segmented-Labels (de+en); identity-Karten kompakter (gap-2.5).
 - **Offen/ehrlich:** Copy ist strukturell verbessert (Labels, Platzhalter-Bug), aber eine vollständige „Texter-Politur" ist ein eigener, iterativer Track — braucht Petjas Stimme/Ton. Visuelle Endabnahme bleibt Petjas Re-Test (Sandbox kann nicht rendern; statischer Export OOM't weiterhin).
 - **Verifiziert:** typecheck 6/6 ✓ · lint ✓ · i18n 8/8 + design-tokens 53/53 ✓ · unabhängiges Subagent-Review (0 Blocker, 2 Nits → beide gefixt) ✓ · Commits 19bba10 (+ a22b7ac) gepusht + gespiegelt.
+
+## Runtime-Bugs + Layout/Animation aus Petjas dev-Log (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-29, nach Re-Test mit echtem `expo start --web` + Konsolen-Log.** Mehrere echte Bugs sichtbar geworden, die ohne laufende App verborgen blieben:
+- **Spacing-Loch (Ursache „Text klebt am Rand"):** `tokens.spacing` sprang von 12→16, **kein 14/7/9/11**. NativeWind verwirft unbekannte Utilities still ⇒ `p-14` am Split-Panel = 0 Padding. Fix: 7/9/11/14 (Tailwind-Standard) ergänzt; Panel zusätzlich auf großzügiges Inline-Padding (72/64).
+- **`[apex-db] Invalid base URL`-Flut (Mit-Ursache der Navigations-Langsamkeit):** PowerSync-Web scheitert am wa-sqlite-Locator; DbProvider re-rann zudem bei jeder session-Referenz. Lokale Replik wird jetzt NUR geöffnet, wenn `SYNC_CONFIGURED` (Sync ist deferred → App liest ohnehin direkt aus Supabase; einziger useDb-Konsument ist /dev/db). Dep auf stabile `user.id`. Fehler-Flut weg.
+- **MomentumOrb-Render-Error (Dashboard):** `useNativeDriver:true` auf `strokeDashoffset` (Native-Driver kann nur transform/opacity; react-native-svg-web lehnt Animated.Value ab) → roter Fehler. Ring + Count-up jetzt per requestAnimationFrame (plain Circle, numerischer Offset) — cross-platform, kein Animated/useNativeDriver.
+- **useNativeDriver-Warnung:** MobileDrawer auf `Platform.OS !== 'web'` umgestellt.
+- **i18n require-cycle** (index→translate→index): Locale-Definitionen in `locale.ts` extrahiert, index re-exportiert nur. Zyklus weg.
+- **Segmented-Animation:** aktives Feld GLEITET jetzt zur Auswahl (Animated translateX, springy easing) statt hartem Umschalten — das vom Nutzer gewünschte „Regler bewegt sich"-Gefühl, cross-platform (GSAP wäre Web-DOM-only, nicht mobil).
+- **Layout:** Wortmarke größer (text-lg, eigene Farbe je Panel hell/dunkel), Identitäts-Karten gap-2.5→gap-4.
+- **Ehrlich offen:** „halbe Ewigkeit" beim Navigieren ist überwiegend Metro-Dev-Lazy-Bundling (jede Route wird beim ersten Besuch gebündelt — im Log als „Web Bundled …ms" sichtbar); Production-Build (expo export/Deploy) ist vorgebündelt → schnell. Volle Dashboard-Treue zum Prototyp + breitere Motion-Politur = nächster Schritt.
+- **Verifiziert:** typecheck 6/6 ✓ · lint ✓ · design-tokens 53/53 ✓ · i18n 8/8 ✓.

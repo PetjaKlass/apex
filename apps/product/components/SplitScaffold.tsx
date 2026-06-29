@@ -1,6 +1,6 @@
 import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, GoldThread } from '@apex/ui';
+import { Button, cn, GoldThread } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/theme';
 
@@ -31,10 +31,17 @@ export function SplitScaffold({
   const wide = width >= 1024;
   const pct = progress ? Math.round((progress.index / progress.total) * 100) : 0;
 
-  const Brand = (
-    <View className="flex-row items-center gap-2.5">
-      <GoldThread height={20} />
-      <Text className="font-display text-hero-text text-sm font-bold tracking-widest">APEX</Text>
+  const brand = (onDark: boolean) => (
+    <View className="flex-row items-center gap-3">
+      <GoldThread height={26} />
+      <Text
+        className={cn(
+          'font-display text-lg font-bold tracking-[0.2em]',
+          onDark ? 'text-hero-text' : 'text-fg-1'
+        )}
+      >
+        APEX
+      </Text>
     </View>
   );
 
@@ -44,15 +51,20 @@ export function SplitScaffold({
       <View className="bg-canvas flex-1 flex-row">
         {/* Linkes Marken-/Frage-Panel (dunkel) */}
         <View
-          className="relative justify-between overflow-hidden p-14"
-          style={{ flex: 4, backgroundColor: isDark ? '#121214' : '#16150F' }}
+          className="relative justify-between overflow-hidden"
+          style={{
+            flex: 4,
+            backgroundColor: isDark ? '#121214' : '#16150F',
+            paddingHorizontal: 72,
+            paddingVertical: 64,
+          }}
         >
           <View
             className="bg-accent-glow absolute -right-16 -top-16 h-72 w-72 rounded-full"
             style={{ opacity: 0.5 }}
             aria-hidden
           />
-          {Brand}
+          {brand(true)}
           <View className="max-w-lg">
             {eyebrow && (
               <Text className="text-2xs text-accent-bright font-semibold uppercase tracking-widest">
@@ -121,7 +133,7 @@ export function SplitScaffold({
         showsVerticalScrollIndicator={false}
       >
         <View className="mb-6 flex-row items-center justify-between">
-          {Brand}
+          {brand(false)}
           {progress && (
             <Text className="text-fg-3 font-mono text-xs">
               {progress.index}/{progress.total}

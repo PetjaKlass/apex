@@ -4,7 +4,7 @@
  * einfache Plurale {count, plural, =0 {…} one {…} other {…}} mit #-Ersetzung.
  * Mehr ICU (select, Verschachtelung) ist Out-of-Scope (Phase-03-Spec).
  */
-import { messages, type Locale, type Messages } from './index';
+import { messages, type Locale, type Messages } from './locale';
 
 type Values = Record<string, string | number>;
 

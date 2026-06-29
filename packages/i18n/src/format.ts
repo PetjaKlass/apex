@@ -1,5 +1,5 @@
 /** Intl-Helper — Locale-bewusste Formate (design-system §19: deutsche Formate sind Pflicht). */
-import type { Locale } from './index';
+import type { Locale } from './locale';
 
 const BCP47: Record<Locale, string> = { en: 'en-US', de: 'de-DE' };
 

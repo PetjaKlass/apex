@@ -28,13 +28,13 @@ export function MobileDrawer({
         toValue: open ? 0 : -300,
         duration: open ? 300 : 200,
         easing: Easing.bezier(0.16, 1, 0.3, 1),
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS !== 'web',
       }),
       Animated.timing(fade, {
         toValue: open ? 1 : 0,
         duration: 250,
         easing: Easing.out(Easing.quad),
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS !== 'web',
       }),
     ]).start(({ finished }) => {
       if (finished && !open) setClosing(false);

@@ -1,11 +1,11 @@
-/** MomentumOrb (docs/.../momentum-orb.md). SVG-Ring 12-Uhr + Count-up (S3: mono+tnum). */
-import { useEffect, useState } from 'react';
-import { Animated, Easing, Pressable, Text, View } from 'react-native';
+/** MomentumOrb (docs/.../momentum-orb.md). SVG-Ring 12-Uhr + Count-up (S3: mono+tnum).
+ *  Ring + Zahl werden per requestAnimationFrame animiert — kein Animated/useNativeDriver
+ *  (react-native-svg-web akzeptiert keine Animated.Value auf strokeDashoffset). */
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { useTheme } from '@/lib/theme';
 import type { MomentumResult } from '@/lib/momentum/calculator';
-
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export function MomentumOrb({
   data,
@@ -21,29 +21,29 @@ export function MomentumOrb({
   const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
 
-  const [offset] = useState(() => new Animated.Value(circ));
   const [shown, setShown] = useState(0);
+  const [pctShown, setPctShown] = useState(0);
+  const fromRef = useRef({ n: 0, p: 0 });
 
   useEffect(() => {
-    Animated.timing(offset, {
-      toValue: circ * (1 - data.pct),
-      duration: 1000,
-      easing: Easing.bezier(0.16, 1, 0.3, 1),
-      useNativeDriver: true,
-    }).start();
-    // Count-up auf den absoluten Momentum-Wert (500ms, ease-out)
-    const from = shown;
-    const to = data.momentum;
+    const from = fromRef.current;
+    const toN = data.momentum;
+    const toP = data.pct;
     const t0 = Date.now();
+    const dur = 900;
     let raf: number;
     const tick = () => {
-      const p = Math.min((Date.now() - t0) / 500, 1);
-      setShown(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 2))));
-      if (p < 1) raf = requestAnimationFrame(tick);
+      const t = Math.min((Date.now() - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const n = Math.round(from.n + (toN - from.n) * e);
+      const p = from.p + (toP - from.p) * e;
+      setShown(n);
+      setPctShown(p);
+      fromRef.current = { n, p };
+      if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.momentum, data.pct]);
 
   const ring = (
@@ -67,7 +67,7 @@ export function MomentumOrb({
           strokeWidth={stroke}
           fill="none"
         />
-        <AnimatedCircle
+        <Circle
           cx={size / 2}
           cy={size / 2}
           r={r}
@@ -75,7 +75,7 @@ export function MomentumOrb({
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={circ}
-          strokeDashoffset={offset}
+          strokeDashoffset={circ * (1 - pctShown)}
           fill="none"
         />
       </Svg>

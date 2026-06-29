@@ -24,7 +24,7 @@ export default function Identity() {
       onContinue={() => router.push('/onboarding/workspace')}
       onSkip={() => router.push('/onboarding/workspace')}
     >
-      <View className="gap-2.5">
+      <View className="gap-4">
         {KEYS.map((k) => (
           <IdentityCard
             key={k}
