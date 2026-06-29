@@ -1,4 +1,5 @@
 import { ScrollView, Text, View } from 'react-native';
+import { GoldThread } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { useWorkspace } from '@/lib/workspace';
 
@@ -8,7 +9,7 @@ export function Placeholder({ featureKey, phase }: { featureKey: string; phase: 
   const { active } = useWorkspace();
   return (
     <ScrollView contentContainerClassName="flex-1 items-center justify-center gap-3 p-6">
-      <View className="from-accent-bright via-accent h-10 w-0.5 rounded-full bg-gradient-to-b to-transparent opacity-40" />
+      <GoldThread height={40} dimmed />
       <Text className="font-display text-fg-1 text-2xl font-bold tracking-tight">
         {t(`nav.${featureKey}`)}
       </Text>

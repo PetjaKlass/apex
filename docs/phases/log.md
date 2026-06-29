@@ -444,3 +444,22 @@
 - **Sandbox-Grenze (ehrlich):** Echter Live-Deploy nicht autonom abschließbar (Dashboard-Root-Dir + Domain + Redirect-URLs). Maximale Readiness hergestellt; Builds beider Apps lokal grün (next build ✓, expo export ✓ inkl. PWA-Assets im dist).
 - **Verifiziert:** typecheck 6/6 ✓ · lint ✓ · marketing prod build ✓ (Manifest/Icons im Build) · expo export mit manifest.json/service-worker.js/icons/ + SW-Registrierung im HTML ✓
 - **Tag:** v0.1.0-alpha (Ende Stage-1-Code; Live-Gang + Dogfooding folgen über C-Deploy)
+
+## Design-Fix — App ↔ Prototyp-Abgleich (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **Started/Completed:** 2026-06-29 (1 Session). Auslöser: Petja testete die App und meldete „Design matched nicht mit dem Besprochenen, Onboarding hat viele Anzeigefehler" (Referenz: design/design-preview-v2.html).
+- **Wurzelursache (verifiziert, nicht vermutet):** NativeWind v4 wendet Utilities zur LAUFZEIT per JS an (kein Klassen-CSS) und lässt mehrere CSS-Muster STILL fallen:
+  1. `bg-gradient-*` (CSS-Verläufe) → No-Op ⇒ der „Goldene Faden" (Signatur S1) war auf JEDER Fläche unsichtbar (7 Dateien + OBTHero).
+  2. `dark:` folgt dem System-colorScheme, NICHT dem In-App-Theme ⇒ Karten-Hairline im Dark-Theme falsch.
+  3. `first:`/`last:`/`divide-` nicht unterstützt ⇒ Trenner-Logik wirkungslos.
+  - ZUSÄTZLICH und am sichtbarsten: **Keine Schriften geladen.** `font-display` (Cabinet Grotesk), `font-ui` (Inter), `font-mono` (JetBrains Mono) fielen alle auf System-Schrift zurück → die gesamte Typografie wirkte generisch statt wie der Prototyp.
+- **Behoben:**
+  - `<GoldThread>` (packages/ui) auf Basis von **expo-linear-gradient** — rendert echten Verlauf auf Web (NativeLinearGradient.web.js → `linear-gradient(...)`) und nativ. Ersetzt alle 8 unsichtbaren Gradient-Views (welcome, complete, +not-found, Placeholder, Sidebar, StepShell, OBTHero[fill], dashboard).
+  - **Theme-Token `cardBorder`** (Light: transparent · Dark: rgba(255,255,255,.075)) + `--card-border`-Var + Klasse `border-hairline` ⇒ ersetzt alle `dark:border` (Card, Tooltip, HabitCard …). Kodiert die Regel „Light randlos, Dark Hairline" als Theme-Wert statt via `dark:`.
+  - `first:` entfernt: TaskRow bekommt `first`-Prop, Dashboard/Select/db.tsx explizit.
+  - **Schriften via +html.tsx geladen** (exakt wie Prototyp): Fontshare Cabinet Grotesk 400/500/700/800 + Google Inter 400–700 / JetBrains Mono 400–600, inkl. preconnect. Gilt für Web UND installierte PWA (beide Web-Renderer) — also für Petjas gesamtes aktuelles Test-/Dogfooding-Szenario.
+  - **No-Flash-Skript** in +html.tsx: setzt Canvas-Farbe (Light #ECEAE6 / Dark #08080A) vor Hydration → kein weißes Aufblitzen (v. a. Dark-Mode).
+- **Token-Treue geprüft:** themes.ts deckt sich 1:1 mit Prototyp-`:root` (canvas #ECEAE6, card #FFFFFF, subtle #F2F0EB, fg1 #1B1A17, alle Akzente). Fundament war korrekt; sichtbar wurde es erst mit Schrift + Faden.
+- **METHODEN-LEKTION (in CLAUDE.md):** „Build grün + Text-im-HTML" verifiziert NICHT das visuelle Rendering, weil NativeWind zur Laufzeit stylt und CSS-only-Muster still verschluckt. Für UI-Treue gilt: gegen NativeWind-Capability-Liste prüfen (keine gradients/`dark:`/`first:`/radial-bg), Schrift-Ladung verifizieren, Tokens gegen den Prototyp diffen — nicht nur Bundle-Text grepen.
+- **Bewusst zurückgestellt (Folge-Tasks):** (a) Ambient-Canvas-Glow (radiale Akzent-Blobs des Prototyps) — erfordert transparente Screen-Canvases + root-Background, invasiv für laufende App; radiale Verläufe sind in RN nicht cross-platform. (b) Native Font-Bundling (expo-font + .ttf) für echte iOS/Android-Builds — erst Stage 2 (Phase 21) nötig, da aktuell alles über Web/PWA läuft.
+- **Verifiziert:** typecheck 6/6 ✓ · lint clean (0/0) ✓ · design-tokens 50/50 ✓ · expo-linear-gradient installiert+symlinkt, Web-Build emittiert `linear-gradient(...)` ✓ · alle NativeWind-Fallen (bg-gradient/dark/first/divide) aus product+@apex/ui entfernt ✓

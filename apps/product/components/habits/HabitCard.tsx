@@ -16,7 +16,7 @@ export function HabitCard({
 }) {
   const { colors } = useTheme();
   return (
-    <View className="bg-card shadow-card-edge dark:border-border rounded-lg p-4 dark:border">
+    <View className="bg-card border-hairline shadow-card-edge rounded-lg border p-4">
       <View className="flex-row items-start gap-3">
         <View className="bg-subtle shadow-edge h-9 w-9 items-center justify-center rounded-[14px]">
           <Flame size={16} color={colors.fg2} />

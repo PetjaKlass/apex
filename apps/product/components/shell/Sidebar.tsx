@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { GoldThread } from '@apex/ui';
 import { Text, View } from 'react-native';
 import { useT } from '@/lib/i18n';
 import { NAV } from './nav';
@@ -22,7 +23,7 @@ export function Sidebar({
       style={collapsed ? { width: 72 } : undefined}
     >
       <View className="mb-5 flex-row items-center gap-3 px-3 pt-2">
-        <View className="from-accent-bright via-accent h-7 w-0.5 rounded-full bg-gradient-to-b to-transparent" />
+        <GoldThread height={28} />
         {!collapsed && (
           <Text className="font-display text-fg-1 text-base font-bold tracking-tight">APEX</Text>
         )}

@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Checkbox } from '@apex/ui';
+import { Button, Checkbox, GoldThread } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { useOnboarding } from '@/lib/onboarding/store';
 
@@ -13,7 +13,7 @@ export default function Welcome() {
   return (
     <SafeAreaView className="bg-canvas flex-1">
       <View className="mx-auto w-full max-w-md flex-1 justify-center px-6">
-        <View className="from-accent-bright via-accent mb-8 h-12 w-0.5 rounded-full bg-gradient-to-b to-transparent" />
+        <GoldThread height={48} style={{ marginBottom: 32 }} />
         <Text className="text-2xs text-accent-text font-semibold uppercase tracking-widest">
           {t('onboarding.welcomeEyebrow')}
         </Text>

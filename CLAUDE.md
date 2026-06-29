@@ -34,6 +34,18 @@ S2 ein Goldpunkt pro Karte (Historie monochrom), S3 Live-Zahlen immer mono+tnum.
 Blur nur Panel-Ebene (max. 3); Borders nur Dark; Buttons sind Pills; Motion nur transform/opacity;
 prefers-reduced-motion respektieren. Referenz-Prototyp: `docs/design/design-preview-v2.html`.
 
+## NativeWind-Fallen & UI-Verifikation (Lektion 2026-06-29)
+
+NativeWind v4 stylt zur **Laufzeit per JS**, nicht über Klassen-CSS, und verschluckt mehrere Muster STILL:
+`bg-gradient-*` (CSS-Verläufe), `dark:` (folgt System, nicht In-App-Theme), `first:`/`last:`/`divide-`,
+radiale Hintergründe. ⇒ Goldener Faden NIE mit `bg-gradient` bauen, sondern mit **`<GoldThread>`**
+(expo-linear-gradient). Theme-abhängige Borders über das Token **`cardBorder` / Klasse `border-hairline`**,
+nie über `dark:`. Reihen-Trenner über explizite Props (`first`), nie `first:`.
+**Schriften** müssen aktiv geladen werden (Web/PWA via `app/+html.tsx`: Fontshare Cabinet Grotesk +
+Google Inter/JetBrains Mono); sonst System-Fallback und alles wirkt generisch. Native-Bundling (expo-font) erst Stage 2.
+**Verifikations-Regel:** „Build grün + Text-im-HTML" beweist NICHT das visuelle Rendering. Für UI-Treue:
+gegen die NativeWind-Capability-Liste prüfen, Schrift-Ladung bestätigen, Tokens gegen den Prototyp diffen.
+
 ## Arbeitsweise
 
 1. Phase-Datei lesen → Scope strikt einhalten (Out-of-Scope = nicht anfassen, erst fragen).

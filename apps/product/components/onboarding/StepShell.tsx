@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, ProgressBar } from '@apex/ui';
+import { Button, GoldThread, ProgressBar } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { STEPS, type Step } from '@/lib/onboarding/store';
 
@@ -54,7 +54,7 @@ export function StepShell({
         </View>
 
         <ScrollView className="mt-10 flex-1" keyboardShouldPersistTaps="handled">
-          <View className="from-accent-bright via-accent mb-8 h-10 w-0.5 rounded-full bg-gradient-to-b to-transparent opacity-40" />
+          <GoldThread height={40} dimmed style={{ marginBottom: 32 }} />
           {eyebrow && (
             <Text className="text-2xs text-accent-text font-semibold uppercase tracking-widest">
               {eyebrow}

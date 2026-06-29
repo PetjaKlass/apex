@@ -42,3 +42,4 @@ export {
   type ProgressRingProps,
 } from './components/Progress';
 export { Skeleton, SkeletonProvider } from './components/Skeleton';
+export { GoldThread } from './components/GoldThread';

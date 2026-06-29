@@ -11,11 +11,19 @@ const PRIO: Record<string, string> = {
   low: 'text-fg-3',
 };
 
-export function TaskRow({ task, onToggle }: { task: Task; onToggle?: (id: string) => void }) {
+export function TaskRow({
+  task,
+  onToggle,
+  first,
+}: {
+  task: Task;
+  onToggle?: (id: string) => void;
+  first?: boolean;
+}) {
   const { colors } = useTheme();
   const done = task.status === 'done';
   return (
-    <View className="border-border flex-row items-start gap-3 border-t py-3 first:border-t-0">
+    <View className={cn('flex-row items-start gap-3 py-3', !first && 'border-border border-t')}>
       <Pressable
         accessibilityRole="checkbox"
         accessibilityState={{ checked: done }}

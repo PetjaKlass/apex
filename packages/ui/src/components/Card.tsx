@@ -41,8 +41,8 @@ export function Card({
   const surface = cn(
     'rounded-lg p-4 sm:p-6',
     variant === 'subtle'
-      ? 'bg-subtle shadow-edge dark:border dark:border-border'
-      : 'bg-card shadow-card-edge dark:border dark:border-border',
+      ? 'bg-subtle border border-hairline shadow-edge'
+      : 'bg-card border border-hairline shadow-card-edge',
     // hoverable: einziger erlaubter Lift — nur Web, nur mit onPress (Agent-Regel aus card.md)
     interactive &&
       'web:transition-transform web:duration-fast web:hover:-translate-y-0.5 web:hover:shadow-panel-edge web:cursor-pointer active:bg-pressed',

@@ -37,7 +37,7 @@ export function Tooltip({ label, children }: TooltipProps) {
           {...({ role: 'tooltip' } as object)}
           className={cn(
             'web:absolute web:bottom-full web:left-1/2 web:z-tooltip web:-translate-x-1/2 mb-2',
-            'bg-card shadow-card-edge dark:border-border max-w-[240px] rounded-sm px-3 py-1.5 dark:border'
+            'bg-card border-hairline shadow-card-edge max-w-[240px] rounded-sm border px-3 py-1.5'
           )}
         >
           <Text className="text-fg-1 text-xs" numberOfLines={3}>

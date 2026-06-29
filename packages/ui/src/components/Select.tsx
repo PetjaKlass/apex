@@ -126,7 +126,7 @@ export function Select({
         renderItem={({ item, index }) => {
           if (item.kind === 'group') {
             return (
-              <View className="border-border border-t px-3 pb-1 pt-2 first:border-t-0">
+              <View className={cn('px-3 pb-1 pt-2', index > 0 && 'border-border border-t')}>
                 <Text className="text-2xs text-fg-3 font-semibold uppercase tracking-widest">
                   {item.label}
                 </Text>

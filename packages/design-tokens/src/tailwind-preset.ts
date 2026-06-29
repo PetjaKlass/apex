@@ -49,6 +49,7 @@ export const apexPreset = {
       hover: 'var(--hover)',
       pressed: 'var(--pressed)',
       border: { DEFAULT: 'var(--border)', strong: 'var(--border-strong)' },
+      hairline: 'var(--card-border)',
       fg: {
         1: 'var(--fg-1)',
         2: 'var(--fg-2)',

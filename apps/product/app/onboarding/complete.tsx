@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from '@apex/ui';
+import { Button, GoldThread } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { useOnboarding } from '@/lib/onboarding/store';
 
@@ -17,7 +17,7 @@ export default function Complete() {
   return (
     <SafeAreaView className="bg-canvas flex-1">
       <View className="mx-auto w-full max-w-md flex-1 items-center justify-center px-6 text-center">
-        <View className="from-accent-bright via-accent mb-8 h-14 w-0.5 rounded-full bg-gradient-to-b to-transparent" />
+        <GoldThread height={56} style={{ marginBottom: 32 }} />
         <Text className="font-display text-fg-1 text-3xl font-bold tracking-tight">
           {t('onboarding.completeTitle')}
         </Text>

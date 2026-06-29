@@ -20,6 +20,7 @@ export type ThemeColors = {
   pressed: string;
   border: string;
   borderStrong: string;
+  cardBorder: string; // Karten-Kante: Light transparent, Dark Hairline (löst dark:-Problem)
   fg1: string;
   fg2: string;
   fg3: string;
@@ -54,6 +55,7 @@ export const themes: Record<'light' | 'dark', ThemeColors> = {
     pressed: 'rgba(20, 18, 12, 0.08)',
     border: 'rgba(20, 18, 12, 0.07)',
     borderStrong: 'rgba(20, 18, 12, 0.13)',
+    cardBorder: 'transparent',
     fg1: '#1B1A17',
     fg2: 'rgba(27, 26, 23, 0.64)',
     fg3: 'rgba(27, 26, 23, 0.44)',
@@ -97,6 +99,7 @@ export const themes: Record<'light' | 'dark', ThemeColors> = {
     pressed: 'rgba(255, 255, 255, 0.11)',
     border: 'rgba(255, 255, 255, 0.075)',
     borderStrong: 'rgba(255, 255, 255, 0.14)',
+    cardBorder: 'rgba(255, 255, 255, 0.075)',
     fg1: 'rgba(248, 247, 244, 0.93)',
     fg2: 'rgba(248, 247, 244, 0.62)',
     fg3: 'rgba(248, 247, 244, 0.38)',

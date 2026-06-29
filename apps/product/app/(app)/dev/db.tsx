@@ -103,7 +103,7 @@ export default function DbTestScreen() {
             rows.map((r) => (
               <View
                 key={r.id}
-                className="border-border flex-row items-baseline gap-2 border-t py-2 first:border-t-0"
+                className="border-border flex-row items-baseline gap-2 border-t py-2"
               >
                 <Text className="text-fg-1 flex-1 text-sm" numberOfLines={1}>
                   {r.title}

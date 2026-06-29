@@ -125,10 +125,11 @@ export default function Dashboard() {
         {data.tasks.length === 0 ? (
           <Text className="text-fg-3 py-4 text-sm">{t('dashboard.emptyTasks')}</Text>
         ) : (
-          data.tasks.map((task) => (
+          data.tasks.map((task, i) => (
             <TaskRow
               key={task.id}
               task={task}
+              first={i === 0}
               onToggle={(id) => void toggleTask(id, task.status !== 'done')}
             />
           ))

@@ -1,6 +1,6 @@
 /** OBTHero (docs/.../obt-hero.md) — trägt Signatur S1 (Goldener Faden). 4 Varianten. */
 import { Text, View } from 'react-native';
-import { Button, Chip } from '@apex/ui';
+import { Button, Chip, GoldThread } from '@apex/ui';
 import { Clock, Folder, Timer } from 'lucide-react-native';
 import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/theme';
@@ -32,10 +32,7 @@ export function OBTHero({
       }}
     >
       {/* S1: Goldener Faden, linke Innenkante — gedimmt im Empty-Zustand */}
-      <View
-        className="from-accent-bright via-accent absolute bottom-0 left-0 top-0 w-0.5 rounded-full bg-gradient-to-b to-transparent"
-        style={{ opacity: phase === 'empty' ? 0.4 : 1 }}
-      />
+      <GoldThread fill dimmed={phase === 'empty'} />
       <View
         className="absolute right-0 top-0 h-40 w-72"
         style={{ backgroundColor: colors.accent.glow, opacity: 0.5 }}
