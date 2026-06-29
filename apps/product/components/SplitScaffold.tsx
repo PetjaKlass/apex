@@ -5,11 +5,11 @@ import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/theme';
 
 /**
- * Award-Tier-Onboarding-Hülle: Split-Screen auf Desktop (Marke + Frage im dunklen
+ * Award-Tier-Split-Hülle (Onboarding + Auth): Split-Screen auf Desktop (Marke + Frage im dunklen
  * Panel links, Eingaben rechts, volle Bildbreite), Einspaltig auf Mobil.
  * Vereinheitlicht ALLE Onboarding-Screens (welcome … complete) → ein konsistentes Bild.
  */
-export function OnboardingScaffold({
+export function SplitScaffold({
   eyebrow,
   title,
   subtitle,

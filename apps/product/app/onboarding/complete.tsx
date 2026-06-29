@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Button } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { useOnboarding } from '@/lib/onboarding/store';
-import { OnboardingScaffold } from '@/components/onboarding/OnboardingScaffold';
+import { SplitScaffold } from '@/components/SplitScaffold';
 
 export default function Complete() {
   const t = useT();
@@ -14,7 +14,7 @@ export default function Complete() {
   useEffect(() => reset, [reset]);
 
   return (
-    <OnboardingScaffold
+    <SplitScaffold
       eyebrow={t('onboarding.completeEyebrow')}
       title={t('onboarding.completeTitle')}
       subtitle={t('onboarding.completeBody')}
@@ -22,6 +22,6 @@ export default function Complete() {
       <Button variant="primary" size="lg" onPress={() => router.replace('/dashboard')}>
         {t('onboarding.completeCta')}
       </Button>
-    </OnboardingScaffold>
+    </SplitScaffold>
   );
 }

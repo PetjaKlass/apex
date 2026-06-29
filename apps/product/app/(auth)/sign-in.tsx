@@ -1,10 +1,10 @@
 import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Card, Input, useToast } from '@apex/ui';
+import { Text, View } from 'react-native';
+import { Button, Input, useToast } from '@apex/ui';
 import { useAuth } from '@/lib/auth';
 import { useT } from '@/lib/i18n';
+import { SplitScaffold } from '@/components/SplitScaffold';
 
 export default function SignInScreen() {
   const { signIn } = useAuth();
@@ -29,42 +29,40 @@ export default function SignInScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1">
-      <View className="flex-1 justify-center p-6">
-        <View className="bg-accent mb-6 h-12 w-0.5 self-center rounded-full" />
-        <Card header={t('auth.signInTitle')}>
-          <View className="gap-4">
-            <Input
-              type="email"
-              label={t('auth.email')}
-              value={email}
-              onChangeText={setEmail}
-              autoComplete="email"
-            />
-            <Input
-              type="password"
-              label={t('auth.password')}
-              value={password}
-              onChangeText={setPassword}
-              autoComplete="current-password"
-              error={error}
-              onSubmitEditing={() => void submit()}
-              returnKeyType="go"
-            />
-            <Button variant="primary" loading={busy} onPress={() => void submit()}>
-              {t('auth.signIn')}
-            </Button>
-            <View className="flex-row justify-between">
-              <Link href="/reset-password" className="text-fg-3 text-xs">
-                {t('auth.forgot')}
-              </Link>
-              <Link href="/sign-up" className="text-accent-text text-xs">
-                {t('auth.signUp')}
-              </Link>
-            </View>
-          </View>
-        </Card>
+    <SplitScaffold title={t('auth.brandTitle')} subtitle={t('auth.brandPitch')}>
+      <Text className="font-display text-fg-1 mb-7 text-2xl font-bold tracking-tight">
+        {t('auth.signInTitle')}
+      </Text>
+      <View className="gap-4">
+        <Input
+          type="email"
+          label={t('auth.email')}
+          value={email}
+          onChangeText={setEmail}
+          autoComplete="email"
+        />
+        <Input
+          type="password"
+          label={t('auth.password')}
+          value={password}
+          onChangeText={setPassword}
+          autoComplete="current-password"
+          error={error}
+          onSubmitEditing={() => void submit()}
+          returnKeyType="go"
+        />
+        <Button variant="primary" size="lg" loading={busy} onPress={() => void submit()}>
+          {t('auth.signIn')}
+        </Button>
+        <View className="mt-1 flex-row justify-between">
+          <Link href="/reset-password" className="text-fg-3 text-xs">
+            {t('auth.forgot')}
+          </Link>
+          <Link href="/sign-up" className="text-accent-text text-xs font-semibold">
+            {t('auth.signUp')}
+          </Link>
+        </View>
       </View>
-    </SafeAreaView>
+    </SplitScaffold>
   );
 }

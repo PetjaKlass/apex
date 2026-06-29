@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import { Button } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { STEPS, type Step } from '@/lib/onboarding/store';
-import { OnboardingScaffold } from './OnboardingScaffold';
+import { SplitScaffold } from '../SplitScaffold';
 
-/** Schritt-Hülle: delegiert das Split-Layout an OnboardingScaffold, rendert Footer-Aktionen. */
+/** Schritt-Hülle: delegiert das Split-Layout an SplitScaffold, rendert Footer-Aktionen. */
 export function StepShell({
   step,
   eyebrow,
@@ -34,7 +34,7 @@ export function StepShell({
   const idx = STEPS.indexOf(step);
 
   return (
-    <OnboardingScaffold
+    <SplitScaffold
       eyebrow={eyebrow}
       title={title}
       subtitle={subtitle}
@@ -58,6 +58,6 @@ export function StepShell({
           </Button>
         )}
       </View>
-    </OnboardingScaffold>
+    </SplitScaffold>
   );
 }

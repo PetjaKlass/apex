@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button, Checkbox } from '@apex/ui';
 import { useT } from '@/lib/i18n';
 import { useOnboarding } from '@/lib/onboarding/store';
-import { OnboardingScaffold } from '@/components/onboarding/OnboardingScaffold';
+import { SplitScaffold } from '@/components/SplitScaffold';
 
 export default function Welcome() {
   const t = useT();
@@ -11,7 +11,7 @@ export default function Welcome() {
   const { consent, set } = useOnboarding();
 
   return (
-    <OnboardingScaffold
+    <SplitScaffold
       eyebrow={t('onboarding.welcomeEyebrow')}
       title={t('onboarding.welcomeTitle')}
       subtitle={t('onboarding.welcomeBody')}
@@ -31,6 +31,6 @@ export default function Welcome() {
           {t('onboarding.welcomeCta')}
         </Button>
       </View>
-    </OnboardingScaffold>
+    </SplitScaffold>
   );
 }

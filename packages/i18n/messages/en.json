@@ -182,7 +182,9 @@
     "hasAccount": "Already have an account? Sign in",
     "welcomeBack": "Welcome back.",
     "confirmationSent": "Check your inbox — confirm your email to continue.",
-    "resetSent": "If the address exists, a reset link is on its way."
+    "resetSent": "If the address exists, a reset link is on its way.",
+    "brandTitle": "Your day, on purpose.",
+    "brandPitch": "Apex connects what you do today with the person you're becoming."
   },
   "shell": {
     "workspace": "Workspace",

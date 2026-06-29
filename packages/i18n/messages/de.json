@@ -182,7 +182,9 @@
     "hasAccount": "Schon ein Konto? Anmelden",
     "welcomeBack": "Willkommen zurück.",
     "confirmationSent": "Prüfe dein Postfach — bestätige deine E-Mail, um fortzufahren.",
-    "resetSent": "Falls die Adresse existiert, ist ein Reset-Link unterwegs."
+    "resetSent": "Falls die Adresse existiert, ist ein Reset-Link unterwegs.",
+    "brandTitle": "Dein Tag, mit Absicht.",
+    "brandPitch": "Apex verbindet, was du heute tust, mit dem Menschen, der du wirst."
   },
   "shell": {
     "workspace": "Workspace",
