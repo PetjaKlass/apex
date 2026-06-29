@@ -43,4 +43,4 @@ export {
 } from './components/Progress';
 export { Skeleton, SkeletonProvider } from './components/Skeleton';
 export { GoldThread } from './components/GoldThread';
-export { Segmented, type SegmentedOption } from './components/Segmented';
+export { Segmented, type SegmentedOption, type SegmentedProps } from './components/Segmented';

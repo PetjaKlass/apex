@@ -62,7 +62,7 @@ export function Textarea({
           hasError ? 'border-danger' : focused ? 'border-accent' : 'border-border',
           focused && !hasError && 'web:shadow-[0_0_0_4px_var(--accent-glow)]',
           disabled && 'opacity-40',
-          Platform.OS === 'web' && 'web:outline-none web:resize-none'
+          Platform.OS === 'web' && 'web:resize-none'
         )}
         style={[
           { height: Math.min(Math.max(height, s.minH), maxHeight) },
