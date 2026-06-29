@@ -15,7 +15,13 @@ const NAV = [
   { key: 'system', icon: 'i-grid', label: 'Designsystem' },
 ] as const;
 
-export function Sidebar({ active = 'dashboard' }: { active?: string }) {
+export function Sidebar({
+  active = 'dashboard',
+  onSignOut,
+}: {
+  active?: string;
+  onSignOut?: () => void;
+}) {
   return (
     <aside className="sidebar" aria-label="Hauptnavigation">
       <div className="traffic" aria-hidden="true">
@@ -47,7 +53,7 @@ export function Sidebar({ active = 'dashboard' }: { active?: string }) {
         )
       )}
       <div className="sidebar-footer">
-        <button className="workspace-pill">
+        <button className="workspace-pill" onClick={onSignOut} title="Abmelden">
           <span className="ws-avatar">PK</span>
           <span className="ws-meta">
             <span className="ws-name">Petja — Solo</span>

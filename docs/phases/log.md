@@ -505,3 +505,11 @@
 - **Verifiziert:** `next build` grün (EXIT=0, statisch prerendered); gerendertes HTML enthält „Guten Morgen, Petja", OBT, Stat-Cards, Momentum-Ring, Sidebar, Fonts, Sprite; CSS (ECEAE6/Cabinet Grotesk) gebündelt. typecheck ✓.
 - **Start:** `pnpm -F @apex/web dev` → http://localhost:3001
 - **Nächste Stufen:** (2) Supabase-Login-Gate + echte Daten ins Dashboard, (3) restliche Views (Aufgaben/Gewohnheiten/Fokus) + Interaktionen (Task abhaken, Habit loggen), (4) Onboarding, (5) Deploy.
+
+## Web-App Stufe 2 — Login + echte Daten (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-29.** AppGate (Supabase-Session via getSession + onAuthStateChange) → SignIn (in Prototyp-Sprache) oder AppShell. Abmelden über die Workspace-Pille.
+- **Live-Daten:** useDashboard aus product portiert (framework-agnostische Supabase-Queries, RLS + Workspace-Filter). DashboardLive löst den ersten Workspace des Users auf, Dashboard rendert OBT, heutige Aufgaben, Gewohnheiten (mit Heute-geloggt-Status) und das Momentum/Level aus echten Daten (calcMomentum). Empty-States wo nichts da ist.
+- **Daten-Lage:** petja.klass@gmail.com hat 2 Aufgaben/2 Gewohnheiten/2 OBT → zeigt echte Inhalte. RLS sorgt dafür, dass jeder nur seine eigenen sieht.
+- **Bewusst Stufe-3:** Quartalsziele/Rituale/Fokus-Stunden-Widget brauchen eigene Tabellen/Logik → folgen mit den Feature-Views.
+- **Verifiziert:** typecheck ✓ · `next build` grün (EXIT=0). Start: `pnpm -F @apex/web dev` → localhost:3001.
