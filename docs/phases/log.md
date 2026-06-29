@@ -497,3 +497,11 @@
 - **Layout:** Wortmarke größer (text-lg, eigene Farbe je Panel hell/dunkel), Identitäts-Karten gap-2.5→gap-4.
 - **Ehrlich offen:** „halbe Ewigkeit" beim Navigieren ist überwiegend Metro-Dev-Lazy-Bundling (jede Route wird beim ersten Besuch gebündelt — im Log als „Web Bundled …ms" sichtbar); Production-Build (expo export/Deploy) ist vorgebündelt → schnell. Volle Dashboard-Treue zum Prototyp + breitere Motion-Politur = nächster Schritt.
 - **Verifiziert:** typecheck 6/6 ✓ · lint ✓ · design-tokens 53/53 ✓ · i18n 8/8 ✓.
+
+## Web-App aus Prototyp (Next.js) — Stufe 1 (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-29.** Strategiewechsel mit Petja: Web-Version wird NICHT mehr in React Native nachgebildet, sondern direkt aus `design/design-preview-v2.html` als echte Web-App gebaut (Next.js 16, gleiche Technik wie Marketing). Grund: RN→Web ist verlustbehaftet + ich kann das RN-Rendering hier nicht sehen; der Prototyp ist bereits perfektes HTML/CSS. RN-App bleibt für spätere Mobile-App geparkt.
+- **Stufe 1 geliefert:** `apps/web` gescaffoldet. Prototyp-CSS **verbatim** (511 Zeilen → app/globals.css), Icon-Sprite **verbatim** (30 Symbole → public/sprite.svg), Shell (Sidebar/Topbar) + Dashboard 1:1 nach React portiert (class→className etc.). Theme-/Akzent-Umschaltung funktioniert (data-Attribute). Fonts via Layout (Fontshare/Google).
+- **Verifiziert:** `next build` grün (EXIT=0, statisch prerendered); gerendertes HTML enthält „Guten Morgen, Petja", OBT, Stat-Cards, Momentum-Ring, Sidebar, Fonts, Sprite; CSS (ECEAE6/Cabinet Grotesk) gebündelt. typecheck ✓.
+- **Start:** `pnpm -F @apex/web dev` → http://localhost:3001
+- **Nächste Stufen:** (2) Supabase-Login-Gate + echte Daten ins Dashboard, (3) restliche Views (Aufgaben/Gewohnheiten/Fokus) + Interaktionen (Task abhaken, Habit loggen), (4) Onboarding, (5) Deploy.
