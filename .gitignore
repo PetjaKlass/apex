@@ -45,3 +45,4 @@ android/
 # Expo
 .expo-shared/
 expo-env.d.ts
+apps/web/out/
