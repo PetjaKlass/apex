@@ -539,3 +539,14 @@
 - **Verifiziert:** Production-URL liefert 200 + echtes Apex-HTML (data-theme/accent, Fonts, APEX-Splash, AppGate). Jeder Push deployt jetzt automatisch.
 - **Einzige offene (optionale) Einstellung:** Das apex-Projekt hat **Vercel Deployment Protection** an → öffentlicher Zugriff zeigt eine Vercel-Login-Wand. Petja (Vercel-Owner) erreicht es eingeloggt sofort; für öffentlichen/Multi-Device-Zugriff: Vercel → apex → Settings → Deployment Protection → Vercel Authentication aus.
 - **Damit Ende Phase 13** (Deploy + Dogfooding-Start). Ab Phase 14 (Aufgaben-Bereich) läuft der ursprüngliche Fahrplan in der Web-App weiter.
+
+## Verifikation vor Phase 14 (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-30.** Voller Durchgang vor Phase 14.
+- **Build/Tests:** Monorepo typecheck 7/7 ✓, lint ✓, design-tokens 53/53 + i18n 8/8 ✓; apps/web `next build` (static export) grün.
+- **Live-Deploy:** apex-Projekt READY, jeder Push deployt automatisch; Production-URL liefert echtes Apex-HTML. Zusatz-Alias apex-eta-blush.vercel.app.
+- **Daten-Flüsse (gegen Live-DB geprüft):** petja.klass onboarded=true mit 2 Tasks/2 OBT/2 Habits/2 Goals; frischer Sign-up (xxxslavesandy@) existiert → Registrierung + Onboarding-Schreibpfad funktionieren end-to-end.
+- **Unabhängiges Review (Subagent):** meldete 3 „Blocker" zum Daten-Layer — ALLE drei FALSCH, weil gegen das veraltete docs/data-model.md geprüft statt gegen die Live-DB. Live verifiziert: habits.icon existiert (nullable, kein emoji), goals.archived_at existiert. docs/data-model.md (Zeile 228) korrigiert (emoji→icon).
+- **1 ECHTER Bug gefunden + behoben:** drei className-Templates ohne Leerzeichen (`task-row${'done'}`→`task-rowdone`, ebenso ob-card/ob-dot) → Selected-States (erledigte Aufgabe, gewählte Rolle, gewählter Akzent) wurden nicht gestylt. Korrigiert (Leerzeichen ergänzt), build grün.
+- **Minors bewusst zurückgestellt (kein Blocker):** Mutations-Fehler werden nicht im UI gemeldet (Supabase wirft nicht, Writes funktionieren); Theme/Akzent nicht persistiert; Sidebar-Nav noch inert (= Phase 14+); optimistischer tasksDone-Edge self-correcting.
+- **Fazit:** Grünes Licht für Phase 14.

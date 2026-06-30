@@ -225,7 +225,7 @@ habits (
   id              uuid PK,
   workspace_id    uuid NOT NULL references workspaces(id) ON DELETE CASCADE,
   area_id         uuid references areas(id) ON DELETE SET NULL,
-  emoji           text NOT NULL,
+  icon            text,                        -- LIVE: nullable "icon" (NICHT "emoji")
   title           text NOT NULL,
   identity_statement text NOT NULL,            -- "I am someone who..."
   frequency_type  text NOT NULL,               -- 'daily' | 'x_per_week' | 'specific_days' | 'weekly'
