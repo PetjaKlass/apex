@@ -550,3 +550,16 @@
 - **1 ECHTER Bug gefunden + behoben:** drei className-Templates ohne Leerzeichen (`task-row${'done'}`→`task-rowdone`, ebenso ob-card/ob-dot) → Selected-States (erledigte Aufgabe, gewählte Rolle, gewählter Akzent) wurden nicht gestylt. Korrigiert (Leerzeichen ergänzt), build grün.
 - **Minors bewusst zurückgestellt (kein Blocker):** Mutations-Fehler werden nicht im UI gemeldet (Supabase wirft nicht, Writes funktionieren); Theme/Akzent nicht persistiert; Sidebar-Nav noch inert (= Phase 14+); optimistischer tasksDone-Edge self-correcting.
 - **Fazit:** Grünes Licht für Phase 14.
+
+## Web-App Polish nach Live-Test (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-30, Petjas Live-Test-Feedback.**
+- **Reset-Bug behoben (Hauptpunkt):** AppGate koppelte den onboarded-Effekt an das Session-OBJEKT und setzte onboarded bei jeder Änderung auf null. Supabase erneuert das Token bei Tab-Fokus → neues Objekt → Splash → Onboarding-Unmount → Reset auf Schritt 1. Fix: Effekt nur an stabile `session.user.id` koppeln, kein Blanking bei Token-Refresh.
+- **„Lames gelbes Quadrat" = unsichtbares Logo:** `.ob-brand .brand-mark{color:accent}` machte das Peak-Icon accent-auf-accent. → cremefarbenes Peak auf Gold (sichtbares Markenzeichen).
+- **Selected-States (Rolle/Akzent):** waren der className-Leerzeichen-Bug (`ob-cardsel`) — bereits im vorigen Commit gefixt; jetzt zusätzlich verifiziert. Karte/Punkt verlieren nicht mehr ihre Basis-Klasse → Text bleibt in der Karte, kein Versatz beim Akzentpunkt.
+- **Segmented gleitet:** Solo/Duo, Horizont, Häufigkeit haben jetzt einen animierten Thumb, der weich zur Auswahl gleitet (statt hartem Sprung).
+- **Linke Seite lebendiger:** Glow weicher + langsam animiert (Drift/Atmen), plus zweiter gegenläufiger Glow.
+- **Consent verschoben:** Nutzungsbedingungen/Datenschutz jetzt bei der **Registrierung** (Pflicht-Checkbox) statt am Onboarding-Anfang.
+- **Copy:** Identitäts-Titel „Wer wirst du gerade?" → „Welche Rolle beschreibt dich gerade?"; Rollen-Untertexte geschliffen.
+- **Klargestellt:** Andere Bereiche (Aufgaben/Gewohnheiten/…) sind noch nicht klickbar = genau die Arbeit ab Phase 14. Dashboard selbst ist interaktiv.
+- **Verifiziert:** typecheck ✓ · `next build` grün.

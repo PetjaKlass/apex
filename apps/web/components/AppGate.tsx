@@ -34,21 +34,31 @@ export function AppGate() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  // WICHTIG: nur an die User-ID koppeln, NICHT an das Session-Objekt.
+  // Supabase erneuert das Token bei Tab-Fokus → neues Session-Objekt → früher wurde
+  // onboarded auf null gesetzt → Splash → Onboarding unmountet → Reset auf Schritt 1.
+  // Mit der stabilen uid läuft der Effekt nur bei echtem Login/Logout.
+  const uid = session?.user?.id ?? null;
   useEffect(() => {
-    if (!session) {
+    if (!uid) {
       setOnboarded(null);
       return;
     }
-    setOnboarded(null);
+    let cancelled = false;
     supabase
       .from('profiles')
       .select('onboarded_at')
-      .eq('id', session.user.id)
+      .eq('id', uid)
       .maybeSingle()
-      .then(({ data }) => setOnboarded(!!data?.onboarded_at));
-  }, [session]);
+      .then(({ data }) => {
+        if (!cancelled) setOnboarded(!!data?.onboarded_at);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [uid]);
 
-  if (loading || (session && onboarded === null)) return <Splash />;
+  if (loading || (uid && onboarded === null)) return <Splash />;
   if (!session) return <SignIn />;
   if (!onboarded) return <Onboarding userId={session.user.id} onDone={() => setOnboarded(true)} />;
   return <AppShell userId={session.user.id} />;

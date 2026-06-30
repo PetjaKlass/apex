@@ -16,6 +16,7 @@ export function SignIn() {
   const [mode, setMode] = useState<'in' | 'up'>('in');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [consent, setConsent] = useState(false);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -48,6 +49,8 @@ export function SignIn() {
       </div>
     );
 
+  const upDisabled = mode === 'up' && !consent;
+
   return (
     <div className="auth-wrap">
       <form className="auth-card card" onSubmit={submit}>
@@ -77,12 +80,22 @@ export function SignIn() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {mode === 'up' && (
-          <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 8 }}>
-            Mindestens 8 Zeichen.
-          </p>
+          <>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 8 }}>
+              Mindestens 8 Zeichen.
+            </p>
+            <label className="ob-check" style={{ marginTop: 16, fontSize: 13 }}>
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+              />
+              <span>Ich akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.</span>
+            </label>
+          </>
         )}
         {err && <p className="auth-err">{err}</p>}
-        <button className="btn btn-primary" type="submit" disabled={busy}>
+        <button className="btn btn-primary" type="submit" disabled={busy || upDisabled}>
           {busy ? '…' : mode === 'in' ? 'Anmelden' : 'Konto erstellen'}
         </button>
         <button

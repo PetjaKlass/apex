@@ -14,11 +14,19 @@ type Step = 'welcome' | 'identity' | 'workspace' | 'vision' | 'goal' | 'habit' |
 const ORDER: Step[] = ['identity', 'workspace', 'vision', 'goal', 'habit', 'obt'];
 
 const IDENTITIES: [string, string, string][] = [
-  ['founder', 'Der Solo-Founder', 'Baut allein ein Unternehmen, setzt auf sich selbst.'],
-  ['operator', 'Der Operator', 'Ergebnisgetrieben, allergisch gegen Beschäftigungstherapie.'],
-  ['creator', 'Der Creator', 'Bringt Arbeit in die Welt, zu eigenen Bedingungen.'],
+  [
+    'founder',
+    'Der Solo-Founder',
+    'Baut allein ein Unternehmen — und verlässt sich auf sich selbst.',
+  ],
+  [
+    'operator',
+    'Der Operator',
+    'Ergebnisgetrieben. Hat kein Interesse an Beschäftigung ohne Wirkung.',
+  ],
+  ['creator', 'Der Creator', 'Bringt eigene Werke in die Welt — zu eigenen Bedingungen.'],
   ['athlete', 'Der Selbst-Athlet', 'Trainiert Körper und Geist wie ein Handwerk.'],
-  ['builder', 'Der stille Macher', 'Verzinst sich in der Stille, Ergebnisse sprechen.'],
+  ['builder', 'Der stille Macher', 'Wirkt im Stillen. Die Ergebnisse sprechen für sich.'],
 ];
 const ACCENTS: [string, string][] = [
   ['gold', '#C9993A'],
@@ -27,6 +35,39 @@ const ACCENTS: [string, string][] = [
   ['sapphire', '#4A7FA5'],
   ['emerald', '#3A7D58'],
 ];
+
+function Seg({
+  options,
+  value,
+  onChange,
+}: {
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const idx = Math.max(
+    0,
+    options.findIndex((o) => o.value === value)
+  );
+  const n = options.length;
+  return (
+    <div className="ob-seg">
+      <div
+        className="ob-seg-thumb"
+        style={{ width: `calc((100% - 8px) / ${n})`, transform: `translateX(${idx * 100}%)` }}
+      />
+      {options.map((o) => (
+        <button
+          key={o.value}
+          className={value === o.value ? 'on' : ''}
+          onClick={() => onChange(o.value)}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 function Scaffold({
   eyebrow,
@@ -48,6 +89,7 @@ function Scaffold({
     <div className="ob">
       <div className="ob-left">
         <div className="ob-glow" aria-hidden="true" />
+        <div className="ob-glow2" aria-hidden="true" />
         <div className="ob-brand">
           <div className="brand-mark">
             <Icon id="i-peak" s={17} />
@@ -128,20 +170,11 @@ export function Onboarding({ userId, onDone }: { userId: string; onDone: () => v
         title="Du bist nicht hier, um Aufgaben zu verwalten."
         subtitle="Apex verbindet, was du heute tust, mit dem Menschen, der du wirst. Fünf Minuten jetzt setzen den Rahmen."
       >
-        <label className="ob-check">
-          <input
-            type="checkbox"
-            checked={d.consent}
-            onChange={(e) => set('consent', e.target.checked)}
-          />
-          <span>Ich akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.</span>
-        </label>
+        <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.6, marginBottom: 4 }}>
+          Sechs kurze Schritte. Du kannst alles überspringen und später ergänzen.
+        </p>
         <div className="ob-actions">
-          <button
-            className="btn btn-primary"
-            disabled={!d.consent}
-            onClick={() => setStep('identity')}
-          >
+          <button className="btn btn-primary" onClick={() => setStep('identity')}>
             Beginnen
           </button>
         </div>
@@ -153,7 +186,7 @@ export function Onboarding({ userId, onDone }: { userId: string; onDone: () => v
     return (
       <Scaffold
         eyebrow="Identität"
-        title="Wer wirst du gerade?"
+        title="Welche Rolle beschreibt dich gerade?"
         subtitle="Das prägt, wie Apex mit dir spricht. Eine Wahl — jederzeit änderbar."
         step="identity"
         onBack={back}
@@ -173,7 +206,7 @@ export function Onboarding({ userId, onDone }: { userId: string; onDone: () => v
           className="auth-input"
           value={isCustom ? (d.identity ?? '') : ''}
           onChange={(e) => set('identity', e.target.value || null)}
-          placeholder="…"
+          placeholder="z. B. Der Marathon-Gründer"
         />
         <div className="ob-actions">
           <button
@@ -210,20 +243,14 @@ export function Onboarding({ userId, onDone }: { userId: string; onDone: () => v
           placeholder="Personal"
         />
         <div className="ob-label">Allein oder zu zweit</div>
-        <div className="ob-seg">
-          <button
-            className={d.workspaceType === 'solo' ? 'on' : ''}
-            onClick={() => set('workspaceType', 'solo')}
-          >
-            Solo
-          </button>
-          <button
-            className={d.workspaceType === 'duo' ? 'on' : ''}
-            onClick={() => set('workspaceType', 'duo')}
-          >
-            Duo
-          </button>
-        </div>
+        <Seg
+          options={[
+            { value: 'solo', label: 'Solo' },
+            { value: 'duo', label: 'Duo' },
+          ]}
+          value={d.workspaceType}
+          onChange={(v) => set('workspaceType', v as 'solo' | 'duo')}
+        />
         <div className="ob-label">Akzent</div>
         <div className="ob-dots">
           {ACCENTS.map(([k, hex]) => (
@@ -276,17 +303,15 @@ export function Onboarding({ userId, onDone }: { userId: string; onDone: () => v
           placeholder="In drei Jahren bin ich jemand, der…"
         />
         <div className="ob-label">Horizont</div>
-        <div className="ob-seg">
-          {(['1y', '3y', '5y'] as Horizon[]).map((h) => (
-            <button
-              key={h}
-              className={d.visionHorizon === h ? 'on' : ''}
-              onClick={() => set('visionHorizon', h)}
-            >
-              {h === '1y' ? '1 Jahr' : h === '3y' ? '3 Jahre' : '5 Jahre'}
-            </button>
-          ))}
-        </div>
+        <Seg
+          options={[
+            { value: '1y', label: '1 Jahr' },
+            { value: '3y', label: '3 Jahre' },
+            { value: '5y', label: '5 Jahre' },
+          ]}
+          value={d.visionHorizon}
+          onChange={(v) => set('visionHorizon', v as Horizon)}
+        />
         <div className="ob-actions">
           <button className="btn btn-primary" onClick={() => setStep('goal')}>
             Weiter
@@ -360,17 +385,15 @@ export function Onboarding({ userId, onDone }: { userId: string; onDone: () => v
           placeholder="Ich bin jemand, der jeden Tag lernt"
         />
         <div className="ob-label">Häufigkeit</div>
-        <div className="ob-seg">
-          {(['daily', 'x_per_week', 'weekly'] as FrequencyType[]).map((f) => (
-            <button
-              key={f}
-              className={d.habitFrequency === f ? 'on' : ''}
-              onClick={() => set('habitFrequency', f)}
-            >
-              {f === 'daily' ? 'Täglich' : f === 'x_per_week' ? 'Mehrmals' : 'Wöchentlich'}
-            </button>
-          ))}
-        </div>
+        <Seg
+          options={[
+            { value: 'daily', label: 'Täglich' },
+            { value: 'x_per_week', label: 'Mehrmals' },
+            { value: 'weekly', label: 'Wöchentlich' },
+          ]}
+          value={d.habitFrequency}
+          onChange={(v) => set('habitFrequency', v as FrequencyType)}
+        />
         <div className="ob-actions">
           <button className="btn btn-primary" onClick={() => setStep('obt')}>
             Weiter
