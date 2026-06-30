@@ -530,3 +530,12 @@
 - **Bewusst weggelassen:** Rituale-Widget (keine Tabelle im aktuellen Schema) — kommt mit der Rituale-Phase.
 - **Verifiziert:** typecheck ✓ · `next build` grün (EXIT=0).
 - **Nächste Stufe:** Stufe 5 — Deploy (Vercel).
+
+## Web-App Stufe 5 — Deploy (LIVE) (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-30.** apps/web LIVE auf Vercel: **https://apex-peter-klass-projects.vercel.app** (Projekt „apex", git-verbunden mit PetjaKlass/apex).
+- **Lösung ohne Dashboard-Konfig:** Das git-verbundene apex-Projekt baut vom Repo-Root (`pnpm run build` = Monorepo-Turbo → schlug fehl). Statt Dashboard-Root-Dir (nur Petja): App auf **statischen Export** (`output: 'export'`, App ist komplett client-seitig) + **root `vercel.json`** (`buildCommand: pnpm -F @apex/web build`, `outputDirectory: apps/web/out`). Push → Deploy READY.
+- **Supabase-Werte** als Fallback in lib/supabase.ts (publishable/anon = per Design client-öffentlich) → Deploy läuft ohne Dashboard-Env.
+- **Verifiziert:** Production-URL liefert 200 + echtes Apex-HTML (data-theme/accent, Fonts, APEX-Splash, AppGate). Jeder Push deployt jetzt automatisch.
+- **Einzige offene (optionale) Einstellung:** Das apex-Projekt hat **Vercel Deployment Protection** an → öffentlicher Zugriff zeigt eine Vercel-Login-Wand. Petja (Vercel-Owner) erreicht es eingeloggt sofort; für öffentlichen/Multi-Device-Zugriff: Vercel → apex → Settings → Deployment Protection → Vercel Authentication aus.
+- **Damit Ende Phase 13** (Deploy + Dogfooding-Start). Ab Phase 14 (Aufgaben-Bereich) läuft der ursprüngliche Fahrplan in der Web-App weiter.
