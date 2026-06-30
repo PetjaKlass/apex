@@ -24,14 +24,23 @@ function dateLabel(): string {
 }
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
-function TaskRow({ t }: { t: Task }) {
+function TaskRow({ t, onToggle }: { t: Task; onToggle: (id: string, doneNow: boolean) => void }) {
   const [pc, pl] = prio(t.priority);
   const done = t.status === 'done';
   const due = t.scheduled_for === todayISO() ? 'Heute' : (t.scheduled_for ?? null);
   const tags = t.tags ?? [];
   return (
-    <div className={`task-row${done ? 'done' : ''}`} role="button" tabIndex={0}>
-      <span className="task-check" aria-label="Aufgabe abschließen">
+    <div className={`task-row${done ? 'done' : ''}`}>
+      <span
+        className="task-check"
+        role="button"
+        tabIndex={0}
+        aria-label={done ? 'Erledigt rückgängig' : 'Aufgabe abschließen'}
+        onClick={() => onToggle(t.id, !done)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') onToggle(t.id, !done);
+        }}
+      >
         {done ? <Icon id="i-check" s={11} /> : null}
       </span>
       <span className="task-body">
@@ -76,7 +85,15 @@ function TaskRow({ t }: { t: Task }) {
   );
 }
 
-function HabitCard({ h, done }: { h: Habit; done: boolean }) {
+function HabitCard({
+  h,
+  done,
+  onToggle,
+}: {
+  h: Habit;
+  done: boolean;
+  onToggle: (id: string, doneNow: boolean) => void;
+}) {
   return (
     <div className="card habit-card">
       <div className="habit-head">
@@ -88,22 +105,37 @@ function HabitCard({ h, done }: { h: Habit; done: boolean }) {
           <div className="habit-identity">{h.identity_statement}</div>
         </span>
       </div>
-      <button className={`btn ${done ? 'btn-ghost' : 'btn-secondary'} btn-sm habit-action`}>
-        {done ? 'Heute erledigt' : 'Abschließen'}
+      <button
+        className={`btn ${done ? 'btn-ghost' : 'btn-secondary'} btn-sm habit-action`}
+        onClick={() => onToggle(h.id, !done)}
+      >
+        {done ? 'Heute erledigt ✓' : 'Abschließen'}
       </button>
     </div>
   );
 }
 
-export function Dashboard({ data, loading }: { data: DashboardData | null; loading: boolean }) {
+export function Dashboard({
+  data,
+  loading,
+  onToggleTask,
+  onToggleHabit,
+}: {
+  data: DashboardData | null;
+  loading: boolean;
+  onToggleTask: (id: string, doneNow: boolean) => void;
+  onToggleHabit: (id: string, doneNow: boolean) => void;
+}) {
   const m = calcMomentum({
     tasksDone: data?.tasksDone ?? 0,
     habitsLogged: data?.habitLogIds.size ?? 0,
     obtDone: data?.obt?.status === 'done',
   });
   const obt = data?.obt ?? null;
+  const obtDone = obt?.status === 'done';
   const tasks = data?.tasks ?? [];
   const habits = data?.habits ?? [];
+  const goals = data?.goals ?? [];
   const ringCirc = 326.7;
 
   return (
@@ -147,9 +179,14 @@ export function Dashboard({ data, loading }: { data: DashboardData | null; loadi
       <div className="dash-grid">
         <div className="dash-col">
           {obt ? (
-            <div className="obt">
+            <div className="obt" style={obtDone ? { opacity: 0.78 } : undefined}>
               <span className="eyebrow">One Big Thing</span>
-              <h2 className="obt-title">{obt.title}</h2>
+              <h2
+                className="obt-title"
+                style={obtDone ? { textDecoration: 'line-through' } : undefined}
+              >
+                {obt.title}
+              </h2>
               <div className="obt-meta">
                 {obt.estimated_minutes ? (
                   <span className="chip">
@@ -167,19 +204,18 @@ export function Dashboard({ data, loading }: { data: DashboardData | null; loadi
                   <Icon id="i-timer" s={15} />
                   Fokus starten
                 </button>
-                <button className="btn btn-secondary">Erledigt</button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => onToggleTask(obt.id, !obtDone)}
+                >
+                  {obtDone ? 'Erledigt ✓' : 'Erledigt'}
+                </button>
               </div>
             </div>
           ) : (
             <div className="obt" style={{ opacity: 0.7 }}>
               <span className="eyebrow">One Big Thing</span>
               <h2 className="obt-title">Noch kein Fokus für heute.</h2>
-              <div className="obt-actions">
-                <button className="btn btn-primary">
-                  <Icon id="i-plus" s={15} />
-                  Fokus wählen
-                </button>
-              </div>
             </div>
           )}
 
@@ -189,7 +225,7 @@ export function Dashboard({ data, loading }: { data: DashboardData | null; loadi
             </h3>
             <div className="task-list">
               {tasks.length ? (
-                tasks.map((t) => <TaskRow t={t} key={t.id} />)
+                tasks.map((t) => <TaskRow t={t} onToggle={onToggleTask} key={t.id} />)
               ) : (
                 <p className="hint" style={{ padding: 'var(--s-2) 0' }}>
                   {loading ? 'Lädt…' : 'Keine Aufgaben für heute.'}
@@ -210,7 +246,12 @@ export function Dashboard({ data, loading }: { data: DashboardData | null; loadi
                 habits
                   .slice(0, 2)
                   .map((h) => (
-                    <HabitCard h={h} done={data?.habitLogIds.has(h.id) ?? false} key={h.id} />
+                    <HabitCard
+                      h={h}
+                      done={data?.habitLogIds.has(h.id) ?? false}
+                      onToggle={onToggleHabit}
+                      key={h.id}
+                    />
                   ))
               ) : (
                 <p className="hint">{loading ? 'Lädt…' : 'Noch keine Gewohnheiten.'}</p>
@@ -255,6 +296,28 @@ export function Dashboard({ data, loading }: { data: DashboardData | null; loadi
                 </span>
               </div>
             </div>
+          </div>
+
+          <div className="card">
+            <h3 className="section-h">Quartalsziele</h3>
+            {goals.length ? (
+              goals.map((g) => {
+                const pct = g.progress_pct ?? 0;
+                return (
+                  <div className="goal-row" key={g.id}>
+                    <div className="goal-top">
+                      <span className="goal-name">{g.title}</span>
+                      <span className="goal-pct">{pct} %</span>
+                    </div>
+                    <div className="progress">
+                      <span style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="hint">{loading ? 'Lädt…' : 'Noch keine Ziele.'}</p>
+            )}
           </div>
 
           <div className="card">

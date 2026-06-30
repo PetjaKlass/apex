@@ -521,3 +521,12 @@
 - **Verifiziert:** typecheck ✓ · `next build` grün (EXIT=0).
 - **Test:** Login mit petja.klass@gmail.com (onboarded_at=null) → landet jetzt im Onboarding; nach Abschluss → Dashboard. Oder „Registrieren" für einen frischen Account.
 - **Bewusst Stufe-4/5:** Dashboard-Interaktionen (abhaken/loggen → DB), Widgets Quartalsziele/Rituale, dann Deploy.
+
+## Web-App Stufe 4 — Dashboard-Interaktionen + Widgets (TATSÄCHLICHE AUSFÜHRUNG)
+
+- **2026-06-29.** useDashboard um Mutationen erweitert (optimistisches UI + Reload, Logik 1:1 aus product): toggleTask (tasks.status done/todo + completed_at), toggleHabit (habit_logs insert/delete by habit_id+user_id+logged_for, mit workspace_id). Untypisierter db-Cast für Tabellen außerhalb der Phase-08-Typen.
+- **Dashboard interaktiv:** Task-Check klickbar (Enter/Space), Gewohnheits-Button loggt, OBT „Erledigt" hakt ab. Stat-Cards (Momentum/Heute erledigt/Gewohnheiten) reagieren sofort (optimistisch). Momentum/Level recomputen aus echten Zahlen.
+- **Widget Quartalsziele:** echte goals (progress_pct) aus Supabase.
+- **Bewusst weggelassen:** Rituale-Widget (keine Tabelle im aktuellen Schema) — kommt mit der Rituale-Phase.
+- **Verifiziert:** typecheck ✓ · `next build` grün (EXIT=0).
+- **Nächste Stufe:** Stufe 5 — Deploy (Vercel).

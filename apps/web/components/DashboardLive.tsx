@@ -16,6 +16,13 @@ export function DashboardLive({ userId }: { userId: string }) {
       .then(({ data }) => setWsId(data?.[0]?.id));
   }, []);
 
-  const { data, loading } = useDashboard(wsId, userId);
-  return <Dashboard data={data} loading={loading} />;
+  const { data, loading, toggleTask, toggleHabit } = useDashboard(wsId, userId);
+  return (
+    <Dashboard
+      data={data}
+      loading={loading}
+      onToggleTask={(id, done) => void toggleTask(id, done)}
+      onToggleHabit={(id, done) => void toggleHabit(id, done)}
+    />
+  );
 }
